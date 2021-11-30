@@ -32,7 +32,7 @@ std::string irc::read(int fd)
 	pfd.fd = fd;
 	pfd.events = POLLIN;
 	if (poll(&pfd, 1, -1) == -1)
-		return 0;
+		return std::string();
 	char buffer[BUF_SIZE + 1];
 	ssize_t msg_len = recv(pfd.fd, &buffer, BUF_SIZE, 0);
 	buffer[msg_len] = 0;
@@ -45,7 +45,7 @@ std::string irc::next(std::string &str, std::string delimiter)
 {
 	size_t pos = str.find(delimiter);
 	if (pos == std::string::npos)
-		return 0;
+		return std::string();
 	std::string tmp(str.substr(0, pos));
 	str.erase(0, pos + delimiter.length());
 	return tmp;

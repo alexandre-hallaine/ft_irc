@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include "../Connection/Connection.hpp"
+#include "../Commands/CommandsBook.hpp"
 
 namespace irc
 {
@@ -10,6 +11,7 @@ namespace irc
 	private:
 		settings settings;
 		Connection connection;
+		CommandsBook commands;
 
 	public:
 		Server(unsigned short port, std::string password);

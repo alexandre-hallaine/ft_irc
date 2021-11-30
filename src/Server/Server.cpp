@@ -4,7 +4,7 @@
 #include <arpa/inet.h>
 
 irc::Server::Server(unsigned short port, std::string password)
-	: settings(), connection(port)
+	: settings(), connection(port), commands()
 {
 	settings.port = port;
 	settings.password = password;
@@ -22,7 +22,10 @@ void irc::Server::run()
 			if (str.empty())
 				break;
 			while (str.length())
-				std::cout << "msg: " << line(str) << std::endl;
+			{
+				std::string tmp(line(str));
+				commands.call(next(tmp, " "), tmp);
+			}
 		}
 	}
 }

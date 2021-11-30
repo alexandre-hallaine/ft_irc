@@ -6,9 +6,12 @@ DIRECTORY_OBJECT	=	objects
 
 FILES_CHECK			=	struct/user.hpp \
 						struct/settings.hpp \
+						Commands/CommandsBook.hpp \
 						Connection/Connection.hpp \
 						Server/Server.hpp
-FILES_SOURCE		=	Connection/Connection.cpp \
+FILES_SOURCE		=	Commands/List/CAP.cpp \
+						Commands/CommandsBook.cpp \
+						Connection/Connection.cpp \
 						Server/Server.cpp \
 						main.cpp
 
