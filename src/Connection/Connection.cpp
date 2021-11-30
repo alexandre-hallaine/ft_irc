@@ -15,7 +15,7 @@ irc::Connection::Connection(unsigned short port)
 	listen(tcp_socket, port);
 }
 
-struct user irc::Connection::next()
+struct user irc::Connection::waiting()
 {
 	struct sockaddr_in address;
 	socklen_t csin_len = sizeof(address);
@@ -26,7 +26,7 @@ struct user irc::Connection::next()
 	return user;
 }
 
-std::string irc::Connection::read(int fd)
+std::string irc::read(int fd)
 {
 	struct pollfd pfd;
 	pfd.fd = fd;
@@ -37,3 +37,17 @@ std::string irc::Connection::read(int fd)
 	buffer[msg_len] = 0;
 	return std::string(buffer);
 }
+
+void irc::write(int fd, std::string str) { send(fd, str.c_str(), str.length(), 0); }
+
+std::string irc::next(std::string &str, std::string delimiter)
+{
+	size_t pos = str.find(delimiter);
+	if (pos == std::string::npos)
+		return 0;
+	std::string tmp(str.substr(0, pos));
+	str.erase(0, pos + delimiter.length());
+	return tmp;
+}
+
+std::string irc::line(std::string &str) { return next(str, std::string("\r\n")); }
