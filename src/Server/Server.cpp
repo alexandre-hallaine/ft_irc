@@ -3,8 +3,6 @@
 #include <iostream>
 #include <arpa/inet.h>
 
-#include "unistd.h"
-
 irc::Server::Server(unsigned short port, std::string password)
 	: settings(), connection(port)
 {
@@ -19,5 +17,6 @@ void irc::Server::run()
 
 	char buffer[BUF_SIZE + 1];
 	ssize_t msg_len = recv(user.fd, &buffer, BUF_SIZE, 0);
-	write(1, buffer, msg_len);
+	buffer[msg_len] = 0;
+	std::cout << "first msg: " << buffer << std::endl;
 }
