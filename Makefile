@@ -1,16 +1,23 @@
 NAME				=	ircserv
 
+DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_SOURCE		=	main.cpp
+FILES_CHECK			=	Connection/Connection.hpp \
+						Server/Server.hpp
+FILES_SOURCE		=	Connection/Connection.cpp \
+						Server/Server.cpp \
+						main.cpp
 
 COMPILE				=	clang++
 COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors
 
+ARGUMENTS			=	6667 azerty
+
 all: $(NAME)
 
-$(DIRECTORY_OBJECT)/%.o: $(DIRECTORY_SOURCE)/%.cpp
+$(DIRECTORY_OBJECT)/%.o: $(DIRECTORY_SOURCE)/%.cpp $(FILES_CHECK:%=$(DIRECTORY_CHECK)/%)
 	@printf "\e[33m"
 	@printf "Compile\t$< -> $@\n"
 	mkdir -p $(dir $@)
@@ -23,7 +30,7 @@ $(NAME): $(FILES_SOURCE:%.cpp=$(DIRECTORY_OBJECT)/%.o)
 
 run: all
 	@printf "\e[0m"
-	./$(NAME)
+	./$(NAME) $(ARGUMENTS)
 
 clean:
 	@printf "\e[31m"
