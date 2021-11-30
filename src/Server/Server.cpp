@@ -24,7 +24,7 @@ void irc::Server::run()
 			while (str.length())
 			{
 				std::string tmp(line(str));
-				commands.call(next(tmp, " "), tmp);
+				commands.call(next(tmp, " "), tmp, &user);
 			}
 		}
 	}

@@ -10,6 +10,8 @@ FILES_CHECK			=	struct/user.hpp \
 						Connection/Connection.hpp \
 						Server/Server.hpp
 FILES_SOURCE		=	Commands/List/CAP.cpp \
+						Commands/List/NICK.cpp \
+						Commands/List/USER.cpp \
 						Commands/CommandsBook.cpp \
 						Connection/Connection.cpp \
 						Server/Server.cpp \

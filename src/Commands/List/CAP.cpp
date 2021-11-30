@@ -1,4 +1,7 @@
 #include "../CommandsBook.hpp"
-#include <iostream>
 
-void irc::CAP(std::string args) { (void)args; }
+void irc::CAP(std::string args, struct user *user)
+{
+	(void)args;
+	(void)user;
+}
