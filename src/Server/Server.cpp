@@ -12,12 +12,17 @@ irc::Server::Server(unsigned short port, std::string password)
 
 void irc::Server::run()
 {
-	struct user user = connection.waiting();
-	std::cout << "new client #" << user.fd << " from " << inet_ntoa(user.address.sin_addr) << ":" << ntohs(user.address.sin_port) << std::endl;
 	while (true)
 	{
-		std::string str = read(user.fd);
-		while (str.length())
-			std::cout << "msg: " << line(str) << std::endl;
+		struct user user = connection.waiting();
+		std::cout << "new client #" << user.fd << " from " << inet_ntoa(user.address.sin_addr) << ":" << ntohs(user.address.sin_port) << std::endl;
+		while (true)
+		{
+			std::string str = read(user.fd);
+			if (str.empty())
+				break;
+			while (str.length())
+				std::cout << "msg: " << line(str) << std::endl;
+		}
 	}
 }

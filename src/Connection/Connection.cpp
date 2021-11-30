@@ -31,7 +31,8 @@ std::string irc::read(int fd)
 	struct pollfd pfd;
 	pfd.fd = fd;
 	pfd.events = POLLIN;
-	poll(&pfd, 1, -1);
+	if (poll(&pfd, 1, -1) == -1)
+		return 0;
 	char buffer[BUF_SIZE + 1];
 	ssize_t msg_len = recv(pfd.fd, &buffer, BUF_SIZE, 0);
 	buffer[msg_len] = 0;
