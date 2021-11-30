@@ -4,6 +4,8 @@
 #include "../struct/settings.hpp"
 #include "../struct/user.hpp"
 
+#define BUF_SIZE 4096
+
 namespace irc
 {
 	class Connection
@@ -14,6 +16,7 @@ namespace irc
 	public:
 		Connection(unsigned short port);
 		struct user next();
+		std::string read(int fd);
 	};
 }
 #endif

@@ -14,9 +14,5 @@ void irc::Server::run()
 {
 	struct user user = connection.next();
 	std::cout << "new client #" << user.fd << " from " << inet_ntoa(user.address.sin_addr) << ":" << ntohs(user.address.sin_port) << std::endl;
-
-	char buffer[BUF_SIZE + 1];
-	ssize_t msg_len = recv(user.fd, &buffer, BUF_SIZE, 0);
-	buffer[msg_len] = 0;
-	std::cout << "first msg: " << buffer << std::endl;
+	std::cout << "first msg: " << connection.read(user.fd) << std::endl;
 }

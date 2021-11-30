@@ -1,6 +1,7 @@
 #include "Connection.hpp"
 #include <iostream>
 #include <sys/socket.h>
+#include <poll.h>
 
 irc::Connection::Connection(unsigned short port)
 	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0))
@@ -23,4 +24,16 @@ struct user irc::Connection::next()
 	user.fd = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
 	user.address = address;
 	return user;
+}
+
+std::string irc::Connection::read(int fd)
+{
+	struct pollfd pfd;
+	pfd.fd = fd;
+	pfd.events = POLLIN;
+	poll(&pfd, 1, -1);
+	char buffer[BUF_SIZE + 1];
+	ssize_t msg_len = recv(pfd.fd, &buffer, BUF_SIZE, 0);
+	buffer[msg_len] = 0;
+	return std::string(buffer);
 }
