@@ -1,8 +1,6 @@
 #include "Connection.hpp"
 #include <iostream>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 irc::Connection::Connection(unsigned short port)
 	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0))
@@ -16,10 +14,13 @@ irc::Connection::Connection(unsigned short port)
 	listen(tcp_socket, port);
 }
 
-void irc::Connection::next()
+struct user irc::Connection::next()
 {
 	struct sockaddr_in address;
 	socklen_t csin_len = sizeof(address);
-	int user = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
-	std::cout << "new client #" << user << " from " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << std::endl;
+	std::cout << "waiting for a connection..." << std::endl;
+	struct user user;
+	user.fd = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
+	user.address = address;
+	return user;
 }

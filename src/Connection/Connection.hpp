@@ -2,6 +2,7 @@
 #define CONNECTION_HPP
 
 #include "../struct/settings.hpp"
+#include "../struct/user.hpp"
 
 namespace irc
 {
@@ -12,7 +13,7 @@ namespace irc
 
 	public:
 		Connection(unsigned short port);
-		void next();
+		struct user next();
 	};
 }
 #endif

@@ -4,7 +4,9 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	Connection/Connection.hpp \
+FILES_CHECK			=	struct/user.hpp \
+						struct/settings.hpp \
+						Connection/Connection.hpp \
 						Server/Server.hpp
 FILES_SOURCE		=	Connection/Connection.cpp \
 						Server/Server.cpp \

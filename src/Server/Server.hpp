@@ -3,6 +3,8 @@
 
 #include "../Connection/Connection.hpp"
 
+#define BUF_SIZE 4096
+
 namespace irc
 {
 	class Server
