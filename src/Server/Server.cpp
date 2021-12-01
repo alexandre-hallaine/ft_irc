@@ -1,62 +1,66 @@
 #include "Server.hpp"
-#include "../User/User.hpp"
-#include <iostream>
-#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <fcntl.h>
+#include <poll.h>
+
+void irc::Server::pending()
+{
+	struct pollfd pfd;
+	pfd.fd = tcp_socket;
+	pfd.events = POLLIN;
+	poll(&pfd, 1, -1);
+}
+void irc::Server::registerUsers()
+{
+	if (users.empty())
+		pending();
+	while (true)
+	{
+		struct sockaddr_in address;
+		socklen_t csin_len = sizeof(address);
+		int fd = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
+		if (fd == -1)
+			break;
+		users.push_back(new User(fd));
+	}
+}
 
 irc::Server::Server(unsigned short port, std::string password)
-	: settings(), users(), channels()
+	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), channels(), packet(channels, *this)
 {
-	settings.port = port;
-	settings.password = password;
-	connection = new Connection(port);
-	commands = new CommandsBook();
+	(void)password;
+	fcntl(tcp_socket, F_SETFL, O_NONBLOCK);
+
+	struct sockaddr_in address;
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_port = htons(port);
+
+	bind(tcp_socket, (struct sockaddr *)&address, sizeof(address));
+	listen(tcp_socket, port);
 }
-irc::Server::~Server() { delete connection; }
+
+irc::Server::~Server()
+{
+	std::vector<User *>::iterator it = users.begin();
+	std::vector<User *>::iterator ite = users.end();
+	while (it != ite)
+		delete *it;
+}
 
 void irc::Server::run()
 {
 	while (true)
 	{
-		User *user;
-		if (!users.size())
-		{
-			std::cout << "No one, waiting for connections..." << std::endl;
-			user = connection->force_waiting();
-		}
-		else
-			user = connection->waiting();
-		if (user->getFd() != -1)
-		{
-			addUser(user);
-			std::cout << "new client #" << user->getFd() << " from " << inet_ntoa(user->getAddress().sin_addr) << ":" << ntohs(user->getAddress().sin_port) << std::endl;
-		}
+		registerUsers();
 
-		std::list<User *>::iterator it = users.begin();
-		std::list<User *>::iterator ite = users.end();
+		std::vector<User *>::iterator it = users.begin();
+		std::vector<User *>::iterator ite = users.end();
 		while (it != ite)
 		{
-			std::string str = read((*it)->getFd());
-			while (str.length())
-			{
-				std::string tmp(line(str));
-				commands->call(next(tmp, " "), tmp, *it);
-			}
+			packet.request((*it)->read(), *it);
 			it++;
 		}
 	}
 }
-
-void irc::Server::addUser(User *user)
-{
-	user->setServer(this);
-	users.push_back(user);
-}
-void irc::Server::rmUser(User *user) { users.remove(user); }
-void irc::Server::addChannel(std::string name, User *user) { channels[name].push_back(user); }
-void irc::Server::rmChannel(std::string name, User *user)
-{
-	channels[name].remove(user);
-	if (channels[name].empty())
-		channels.erase(channels.find(name));
-}
-std::list<irc::User *> irc::Server::getChannel(std::string name) { return channels.at(name); }

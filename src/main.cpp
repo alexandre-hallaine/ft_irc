@@ -4,11 +4,11 @@
 
 int main(int argc, char **argv)
 {
-	if (argc < 3 || argc > 4)
+	if (argc != 3)
 	{
-		std::cout << "./ircserv [host:port_network:password_network] <port> <password>" << std::endl;
+		std::cout << "./ircserv <port> <password>" << std::endl;
 		return 1;
 	}
-	irc::Server(atoi(argv[argc - 2]), argv[argc - 1]).run();
+	irc::Server(atoi(argv[1]), argv[2]).run();
 	return 0;
 }

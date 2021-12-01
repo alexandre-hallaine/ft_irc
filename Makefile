@@ -4,21 +4,17 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	struct/settings.hpp \
+FILES_CHECK			=	Packet/PacketManager.hpp \
 						User/User.hpp \
-						Commands/CommandsBook.hpp \
-						Connection/Connection.hpp \
+						Channel/Channel.hpp \
+						Channel/ChannelManager.hpp \
 						Server/Server.hpp
-FILES_SOURCE		=	Commands/List/CAP.cpp \
-						Commands/List/NICK.cpp \
-						Commands/List/USER.cpp \
-						Commands/List/JOIN.cpp \
-						Commands/List/PART.cpp \
-						Commands/List/PRIVMSG.cpp \
-						Commands/List/PING.cpp \
+FILES_SOURCE		=	Packet/Commands/CAP.cpp \
+						Packet/Commands/NICK.cpp \
+						Packet/PacketManager.cpp \
 						User/User.cpp \
-						Commands/CommandsBook.cpp \
-						Connection/Connection.cpp \
+						Channel/Channel.cpp \
+						Channel/ChannelManager.cpp \
 						Server/Server.cpp \
 						main.cpp
 

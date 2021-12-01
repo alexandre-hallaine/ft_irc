@@ -1,36 +1,26 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include <netinet/in.h>
 #include <string>
+
+#define BUFFER_SIZE 4096
 
 namespace irc
 {
-	class Server;
 	class User
 	{
 	private:
 		int fd;
-		struct sockaddr_in address;
-		std::string nick;
-		Server *server;
+		std::string nickname;
 
 	public:
-		User();
-		User(int fd, struct sockaddr_in address);
-		User(const User &other);
-		User &operator=(const User &other);
+		User(int fd);
 
-		void setServer(Server *server);
-		void setNick(std::string nick);
+		std::string read();
+		void write(std::string str);
 
-		int getFd();
-		struct sockaddr_in getAddress();
-		std::string getNick();
-
-		void joinChannel(std::string name);
-		void leaveChannel(std::string name);
+		void setNickname(std::string nick);
+		std::string getNickname();
 	};
 }
-#include "../Server/Server.hpp"
 #endif

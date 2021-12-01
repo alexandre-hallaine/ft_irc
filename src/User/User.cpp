@@ -1,29 +1,25 @@
 #include "User.hpp"
+#include <poll.h>
+#include <sys/socket.h>
 
-irc::User::User()
-	: fd(), address() {}
-irc::User::User(int fd, struct sockaddr_in address)
-	: fd(fd), address(address) {}
-irc::User::User(const User &other)
-	: fd(other.fd), address(other.address), nick(other.nick) {}
-irc::User &irc::User::operator=(const User &other)
+irc::User::User(int fd)
+	: fd(fd), nickname() {}
+
+std::string irc::User::read()
 {
-	if (&other != this)
-	{
-		fd = other.fd;
-		address = other.address;
-		nick = other.nick;
-	}
-	return *this;
+	struct pollfd pfd;
+	pfd.fd = fd;
+	pfd.events = POLLIN;
+	if (poll(&pfd, 1, 50) == -1)
+		return std::string();
+	char buffer[BUFFER_SIZE + 1];
+	ssize_t msg_len = recv(pfd.fd, &buffer, BUFFER_SIZE, 0);
+	if (msg_len == -1)
+		return std::string();
+	buffer[msg_len] = 0;
+	return std::string(buffer);
 }
+void irc::User::write(std::string str) { send(fd, str.c_str(), str.length(), 0); }
 
-void irc::User::setNick(std::string nick) { this->nick = nick; }
-
-void irc::User::setServer(Server *server) { this->server = server; }
-
-int irc::User::getFd() { return fd; }
-struct sockaddr_in irc::User::getAddress() { return address; }
-std::string irc::User::getNick() { return nick; }
-
-void irc::User::joinChannel(std::string name) { server->addChannel(name, this); }
-void irc::User::leaveChannel(std::string name) { server->rmChannel(name, this); }
+void irc::User::setNickname(std::string nick) { nickname = nick; }
+std::string irc::User::getNickname() { return nickname; }
