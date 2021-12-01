@@ -13,6 +13,8 @@ void irc::CommandsBook::call(std::string name, std::string args, struct user *us
 {
 	if (name.empty())
 		return;
+	if (DEBUG)
+		std::cout << "cmd: " << name << ", args: " << args << std::endl;
 	if (map.count(name))
 		map[name](args, user);
 	else

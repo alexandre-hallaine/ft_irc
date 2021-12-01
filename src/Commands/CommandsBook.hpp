@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+#define DEBUG 1
+
 namespace irc
 {
 	void CAP(std::string, struct user *user);

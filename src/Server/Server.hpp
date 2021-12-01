@@ -3,6 +3,7 @@
 
 #include "../Connection/Connection.hpp"
 #include "../Commands/CommandsBook.hpp"
+#include <vector>
 
 namespace irc
 {
@@ -12,6 +13,7 @@ namespace irc
 		settings settings;
 		Connection connection;
 		CommandsBook commands;
+		std::vector<user> users;
 
 	public:
 		Server(unsigned short port, std::string password);
