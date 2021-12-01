@@ -4,39 +4,56 @@
 #include <arpa/inet.h>
 
 irc::Server::Server(unsigned short port, std::string password)
-	: settings(), connection(port), commands(), users()
+	: settings(), users(), channels()
 {
 	settings.port = port;
 	settings.password = password;
+	connection = new Connection(port);
+	commands = new CommandsBook();
 }
+irc::Server::~Server() { delete connection; }
 
 void irc::Server::run()
 {
 	while (true)
 	{
-		User user;
+		User *user;
 		if (!users.size())
-			user = connection.force_waiting();
+			user = connection->force_waiting();
 		else
-			user = connection.waiting();
-		if (user.getFd() != -1)
+			user = connection->waiting();
+		if (user->getFd() != -1)
 		{
-			users.push_back(user);
-			std::cout << "new client #" << user.getFd() << " from " << inet_ntoa(user.getAddress().sin_addr) << ":" << ntohs(user.getAddress().sin_port) << std::endl;
+			addUser(user);
+			std::cout << "new client #" << user->getFd() << " from " << inet_ntoa(user->getAddress().sin_addr) << ":" << ntohs(user->getAddress().sin_port) << std::endl;
 		}
 
-		size_t index = 0;
-		size_t len = users.size();
-		while (index < len)
+		std::list<User *>::iterator it = users.begin();
+		std::list<User *>::iterator ite = users.end();
+		while (it != ite)
 		{
-			User &user = users.at(index);
-			std::string str = read(user.getFd());
+			std::string str = read((*it)->getFd());
 			while (str.length())
 			{
 				std::string tmp(line(str));
-				commands.call(next(tmp, " "), tmp, user);
+				commands->call(next(tmp, " "), tmp, *it);
 			}
-			index++;
+			it++;
 		}
 	}
 }
+
+void irc::Server::addUser(User *user)
+{
+	user->setServer(this);
+	users.push_back(user);
+}
+void irc::Server::rmUser(User *user) { users.remove(user); }
+void irc::Server::addChannel(std::string name, User *user) { channels[name].push_back(user); }
+void irc::Server::rmChannel(std::string name, User *user)
+{
+	channels[name].remove(user);
+	if (channels[name].empty())
+		channels.erase(channels.find(name));
+}
+std::list<irc::User *> irc::Server::getChannel(std::string name) { return channels.at(name); }

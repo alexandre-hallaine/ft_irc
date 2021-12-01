@@ -15,8 +15,8 @@ namespace irc
 
 	public:
 		Connection(unsigned short port);
-		User waiting();
-		User force_waiting();
+		User *waiting();
+		User *force_waiting();
 	};
 
 	std::string read(int fd);

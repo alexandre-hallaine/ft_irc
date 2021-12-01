@@ -9,19 +9,22 @@
 
 namespace irc
 {
-	void CAP(std::string, User &user);
-	void NICK(std::string, User &user);
-	void USER(std::string, User &user);
+	void CAP(std::string, User *user);
+	void NICK(std::string, User *user);
+	void USER(std::string, User *user);
+	void JOIN(std::string, User *user);
+	void PART(std::string, User *user);
+	void PRIVMSG(std::string, User *user);
 
 	class CommandsBook
 	{
 	private:
-		typedef void (*cmd)(std::string, User &user);
+		typedef void (*cmd)(std::string, User *user);
 		std::map<std::string, cmd> map;
 
 	public:
 		CommandsBook();
-		void call(std::string name, std::string args, User &user);
+		void call(std::string name, std::string args, User *user);
 	};
 }
 #endif

@@ -7,9 +7,12 @@ irc::CommandsBook::CommandsBook()
 	map["CAP"] = &CAP;
 	map["NICK"] = &NICK;
 	map["USER"] = &USER;
+	map["JOIN"] = &JOIN;
+	map["PART"] = &PART;
+	map["PRIVMSG"] = &PRIVMSG;
 }
 
-void irc::CommandsBook::call(std::string name, std::string args, User &user)
+void irc::CommandsBook::call(std::string name, std::string args, User *user)
 {
 	if (name.empty())
 		return;

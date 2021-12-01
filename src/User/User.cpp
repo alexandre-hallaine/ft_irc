@@ -19,6 +19,11 @@ irc::User &irc::User::operator=(const User &other)
 
 void irc::User::setNick(std::string nick) { this->nick = nick; }
 
+void irc::User::setServer(Server *server) { this->server = server; }
+
 int irc::User::getFd() { return fd; }
 struct sockaddr_in irc::User::getAddress() { return address; }
 std::string irc::User::getNick() { return nick; }
+
+void irc::User::joinChannel(std::string name) { server->addChannel(name, this); }
+void irc::User::leaveChannel(std::string name) { server->rmChannel(name, this); }

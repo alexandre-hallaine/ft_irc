@@ -9,10 +9,13 @@ FILES_CHECK			=	struct/settings.hpp \
 						Commands/CommandsBook.hpp \
 						Connection/Connection.hpp \
 						Server/Server.hpp
-FILES_SOURCE		=	User/User.cpp \
-						Commands/List/CAP.cpp \
+FILES_SOURCE		=	Commands/List/CAP.cpp \
 						Commands/List/NICK.cpp \
 						Commands/List/USER.cpp \
+						Commands/List/JOIN.cpp \
+						Commands/List/PART.cpp \
+						Commands/List/PRIVMSG.cpp \
+						User/User.cpp \
 						Commands/CommandsBook.cpp \
 						Connection/Connection.cpp \
 						Server/Server.cpp \
