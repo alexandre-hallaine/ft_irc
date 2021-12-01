@@ -1,7 +1,7 @@
 #ifndef COMMANDSBOOK_HPP
 #define COMMANDSBOOK_HPP
 
-#include "../struct/user.hpp"
+#include "../User/User.hpp"
 #include <map>
 #include <string>
 
@@ -9,19 +9,19 @@
 
 namespace irc
 {
-	void CAP(std::string, struct user *user);
-	void NICK(std::string, struct user *user);
-	void USER(std::string, struct user *user);
+	void CAP(std::string, User &user);
+	void NICK(std::string, User &user);
+	void USER(std::string, User &user);
 
 	class CommandsBook
 	{
 	private:
-		typedef void (*cmd)(std::string, struct user *user);
+		typedef void (*cmd)(std::string, User &user);
 		std::map<std::string, cmd> map;
 
 	public:
 		CommandsBook();
-		void call(std::string name, std::string args, struct user *user);
+		void call(std::string name, std::string args, User &user);
 	};
 }
 #endif

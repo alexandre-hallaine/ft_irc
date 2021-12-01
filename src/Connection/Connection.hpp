@@ -2,7 +2,7 @@
 #define CONNECTION_HPP
 
 #include "../struct/settings.hpp"
-#include "../struct/user.hpp"
+#include "../User/User.hpp"
 
 #define BUF_SIZE 4096
 
@@ -15,8 +15,8 @@ namespace irc
 
 	public:
 		Connection(unsigned short port);
-		struct user waiting();
-		struct user force_waiting();
+		User waiting();
+		User force_waiting();
 	};
 
 	std::string read(int fd);

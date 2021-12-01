@@ -13,7 +13,7 @@ namespace irc
 		settings settings;
 		Connection connection;
 		CommandsBook commands;
-		std::vector<user> users;
+		std::vector<User> users;
 
 	public:
 		Server(unsigned short port, std::string password);

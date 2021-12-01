@@ -3,16 +3,16 @@
 #include <sstream>
 #include <iostream>
 
-void irc::CAP(std::string args, struct user *user)
+void irc::CAP(std::string args, User &user)
 {
 	if (args == "LS")
-		write(user->fd, "CAP * LS :\r\n");
+		write(user.getFd(), "CAP * LS :\r\n");
 	else if (args == "END")
 	{
 		std::string motd("Work :D");
 
 		std::stringstream stream;
-		stream << "001 " << user->nick << " :" << motd << "\r\n";
-		write(user->fd, stream.str());
+		stream << "001 " << user.getNick() << " :" << motd << "\r\n";
+		write(user.getFd(), stream.str());
 	}
 }

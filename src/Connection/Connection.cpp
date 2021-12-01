@@ -17,18 +17,16 @@ irc::Connection::Connection(unsigned short port)
 	listen(tcp_socket, port);
 }
 
-struct user irc::Connection::waiting()
+irc::User irc::Connection::waiting()
 {
 	struct sockaddr_in address;
 	socklen_t csin_len = sizeof(address);
-	struct user user;
-	user.fd = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
-	user.address = address;
-	fcntl(user.fd, F_SETFL, O_NONBLOCK);
+	User user(accept(tcp_socket, (struct sockaddr *)&address, &csin_len), address);
+	fcntl(user.getFd(), F_SETFL, O_NONBLOCK);
 	return user;
 }
 
-struct user irc::Connection::force_waiting()
+irc::User irc::Connection::force_waiting()
 {
 	struct pollfd pfd;
 	pfd.fd = tcp_socket;

@@ -4,12 +4,13 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	struct/user.hpp \
-						struct/settings.hpp \
+FILES_CHECK			=	struct/settings.hpp \
+						User/User.hpp \
 						Commands/CommandsBook.hpp \
 						Connection/Connection.hpp \
 						Server/Server.hpp
-FILES_SOURCE		=	Commands/List/CAP.cpp \
+FILES_SOURCE		=	User/User.cpp \
+						Commands/List/CAP.cpp \
 						Commands/List/NICK.cpp \
 						Commands/List/USER.cpp \
 						Commands/CommandsBook.cpp \

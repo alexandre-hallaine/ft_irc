@@ -9,7 +9,7 @@ irc::CommandsBook::CommandsBook()
 	map["USER"] = &USER;
 }
 
-void irc::CommandsBook::call(std::string name, std::string args, struct user *user)
+void irc::CommandsBook::call(std::string name, std::string args, User &user)
 {
 	if (name.empty())
 		return;
