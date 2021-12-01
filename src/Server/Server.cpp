@@ -19,7 +19,10 @@ void irc::Server::run()
 	{
 		User *user;
 		if (!users.size())
+		{
+			std::cout << "No one, waiting for connections..." << std::endl;
 			user = connection->force_waiting();
+		}
 		else
 			user = connection->waiting();
 		if (user->getFd() != -1)

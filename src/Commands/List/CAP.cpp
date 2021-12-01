@@ -1,6 +1,4 @@
 #include "../../Connection/Connection.hpp"
-#include <string>
-#include <sstream>
 
 void irc::CAP(std::string args, User *user)
 {

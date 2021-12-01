@@ -10,6 +10,7 @@ irc::CommandsBook::CommandsBook()
 	map["JOIN"] = &JOIN;
 	map["PART"] = &PART;
 	map["PRIVMSG"] = &PRIVMSG;
+	map["PING"] = &PING;
 }
 
 void irc::CommandsBook::call(std::string name, std::string args, User *user)

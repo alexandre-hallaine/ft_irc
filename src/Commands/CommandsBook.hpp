@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#define DEBUG 0
+#define DEBUG 1
 
 namespace irc
 {
@@ -15,6 +15,7 @@ namespace irc
 	void JOIN(std::string, User *user);
 	void PART(std::string, User *user);
 	void PRIVMSG(std::string, User *user);
+	void PING(std::string, User *user);
 
 	class CommandsBook
 	{

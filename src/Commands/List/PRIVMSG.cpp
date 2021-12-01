@@ -1,5 +1,4 @@
-#include "../../Connection/Connection.hpp"
-#include <sstream>
+#include "../../User/User.hpp"
 
 void irc::PRIVMSG(std::string args, User *user)
 {

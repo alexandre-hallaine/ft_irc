@@ -3,6 +3,7 @@
 
 #include "../struct/settings.hpp"
 #include "../User/User.hpp"
+#include <sstream>
 
 #define BUF_SIZE 4096
 
@@ -20,7 +21,7 @@ namespace irc
 	};
 
 	std::string read(int fd);
-	void write(int fd, std::string);
+	void write(int fd, std::string str);
 	std::string next(std::string &str, std::string delimiter);
 	std::string line(std::string &str);
 }

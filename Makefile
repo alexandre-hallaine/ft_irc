@@ -15,6 +15,7 @@ FILES_SOURCE		=	Commands/List/CAP.cpp \
 						Commands/List/JOIN.cpp \
 						Commands/List/PART.cpp \
 						Commands/List/PRIVMSG.cpp \
+						Commands/List/PING.cpp \
 						User/User.cpp \
 						Commands/CommandsBook.cpp \
 						Connection/Connection.cpp \
