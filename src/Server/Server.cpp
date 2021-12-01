@@ -12,13 +12,9 @@ irc::Server::Server(unsigned short port, std::string password)
 
 void irc::Server::run()
 {
-	struct user user;
-
-	size_t index;
-	size_t len;
-
 	while (true)
 	{
+		struct user user;
 		if (!users.size())
 			user = connection.force_waiting();
 		else
@@ -29,11 +25,11 @@ void irc::Server::run()
 			std::cout << "new client #" << user.fd << " from " << inet_ntoa(user.address.sin_addr) << ":" << ntohs(user.address.sin_port) << std::endl;
 		}
 
-		index = 0;
-		len = users.size();
+		size_t index = 0;
+		size_t len = users.size();
 		while (index < len)
 		{
-			user = users.at(index);
+			struct user &user = users.at(index);
 			std::string str = read(user.fd);
 			while (str.length())
 			{

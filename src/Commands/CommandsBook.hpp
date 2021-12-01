@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#define DEBUG 1
+#define DEBUG 0
 
 namespace irc
 {
