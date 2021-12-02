@@ -13,6 +13,7 @@ namespace irc
 	struct packetParams
 	{
 		std::vector<std::string> args;
+		std::string value;
 		User *user;
 		ChannelManager *channels;
 		Server *server;
@@ -24,6 +25,7 @@ namespace irc
 	void USER(struct packetParams params);
 	void PING(struct packetParams params);
 	void JOIN(struct packetParams params);
+	void PRIVMSG(struct packetParams params);
 
 	class PacketManager
 	{
