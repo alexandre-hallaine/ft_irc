@@ -26,8 +26,10 @@ void irc::User::setHostname(std::string hostname) { this->hostname = hostname; }
 void irc::User::setServername(std::string servername) { this->servername = servername; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
+void irc::User::setModes(std::string modes) { this->modes = modes; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getServername() { return servername; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getNickname() { return nickname; }
+std::string irc::User::getModes() { return modes; }

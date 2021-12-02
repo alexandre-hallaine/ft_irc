@@ -16,6 +16,7 @@ namespace irc
 		std::string servername;
 		std::string realname;
 		std::string nickname;
+		std::string modes;
 
 	public:
 		User(int fd);
@@ -28,11 +29,13 @@ namespace irc
 		void setServername(std::string servername);
 		void setRealname(std::string realname);
 		void setNickname(std::string nickname);
+		void setModes(std::string modes);
 		std::string getUsername();
 		std::string getHostname();
 		std::string getServername();
 		std::string getRealname();
 		std::string getNickname();
+		std::string getModes();
 
 		bool operator==(const User &b) const;
 	};

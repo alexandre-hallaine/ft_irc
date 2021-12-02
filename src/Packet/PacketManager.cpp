@@ -40,6 +40,7 @@ irc::PacketManager::PacketManager(ChannelManager &channels, Server &server)
 	functions["USER"] = USER;
 	functions["PING"] = PING;
 	functions["JOIN"] = JOIN;
+	functions["MODE"] = MODE;
 }
 
 void irc::PacketManager::request(std::string query, User *user)

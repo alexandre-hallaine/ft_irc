@@ -16,6 +16,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/USER.cpp \
 						Packet/Commands/PING.cpp \
 						Packet/Commands/JOIN.cpp \
+						Packet/Commands/MODE.cpp \
 						Packet/PacketManager.cpp \
 						User/User.cpp \
 						Channel/Channel.cpp \
