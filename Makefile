@@ -13,6 +13,9 @@ FILES_CHECK			=	Packet/PacketManager.hpp \
 FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/NICK.cpp \
 						Packet/Commands/QUIT.cpp \
+						Packet/Commands/USER.cpp \
+						Packet/Commands/PING.cpp \
+						Packet/Commands/JOIN.cpp \
 						Packet/PacketManager.cpp \
 						User/User.cpp \
 						Channel/Channel.cpp \
