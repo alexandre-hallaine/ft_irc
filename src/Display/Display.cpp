@@ -11,7 +11,7 @@ void irc::Display::update()
 	std::map<unsigned char, std::string>::iterator ite = lines.end();
 	while (it != ite)
 	{
-		std::cout << it->second << std::endl;
+		std::cout << it->second << "\033[0m" << std::endl;
 		it++;
 	}
 }

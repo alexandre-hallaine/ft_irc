@@ -22,7 +22,9 @@ void irc::Server::registerUsers()
 {
 	if (users.empty())
 	{
-		display.setLine(1, "No user, waiting for a connection...");
+		std::stringstream ss;
+		ss << WARNING << "No user, waiting for a connection...";
+		display.setLine(1, ss.str());
 		pending();
 	}
 	while (true)
@@ -41,7 +43,7 @@ irc::Server::Server(unsigned short port, std::string password)
 	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), display(), channels(display), packet(channels, *this)
 {
 	(void)password;
-	display.setLine(0, "Welcome to our IRC!");
+	display.setLine(0, "Welcome to our \033[1;37mIRC\n");
 
 	fcntl(tcp_socket, F_SETFL, O_NONBLOCK);
 

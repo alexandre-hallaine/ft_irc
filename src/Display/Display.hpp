@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 
+#define WARNING "\033[0;33m"
+#define ERROR "\033[0;31m"
+
 namespace irc
 {
 	class Display
