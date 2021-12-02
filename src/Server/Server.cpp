@@ -12,6 +12,12 @@ void irc::Server::pending()
 	pfd.events = POLLIN;
 	poll(&pfd, 1, -1);
 }
+void irc::Server::displayUsers()
+{
+	std::stringstream ss;
+	ss << "Users: " << users.size();
+	display.setLine(1, ss.str());
+}
 void irc::Server::registerUsers()
 {
 	if (users.empty())
@@ -27,9 +33,7 @@ void irc::Server::registerUsers()
 		if (fd == -1)
 			break;
 		users.push_back(new User(fd));
-		std::stringstream ss;
-		ss << "Users: " << users.size();
-		display.setLine(1, ss.str());
+		displayUsers();
 	}
 }
 
@@ -49,7 +53,6 @@ irc::Server::Server(unsigned short port, std::string password)
 	bind(tcp_socket, (struct sockaddr *)&address, sizeof(address));
 	listen(tcp_socket, port);
 }
-
 irc::Server::~Server()
 {
 	std::vector<User *>::iterator it = users.begin();
@@ -71,5 +74,21 @@ void irc::Server::run()
 			packet.request((*it)->read(), *it);
 			it++;
 		}
+	}
+}
+void irc::Server::kill(User *user)
+{
+	std::vector<User *>::iterator it = users.begin();
+	std::vector<User *>::iterator ite = users.end();
+	while (it != ite)
+	{
+		if (*it == user)
+		{
+			users.erase(it);
+			delete *it;
+			displayUsers();
+			return;
+		}
+		it++;
 	}
 }

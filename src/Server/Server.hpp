@@ -21,12 +21,15 @@ namespace irc
 
 	private:
 		void pending();
+		void displayUsers();
 		void registerUsers();
 
 	public:
 		Server(unsigned short port, std::string password);
 		~Server();
+
 		void run();
+		void kill(User *user);
 	};
 }
 #endif

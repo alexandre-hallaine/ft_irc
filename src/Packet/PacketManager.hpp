@@ -20,6 +20,7 @@ namespace irc
 
 	void CAP(struct packetParams params);
 	void NICK(struct packetParams params);
+	void QUIT(struct packetParams params);
 
 	class PacketManager
 	{

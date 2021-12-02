@@ -9,7 +9,6 @@ void irc::Display::update()
 
 	std::map<unsigned char, std::string>::iterator it = lines.begin();
 	std::map<unsigned char, std::string>::iterator ite = lines.end();
-
 	while (it != ite)
 	{
 		std::cout << it->second << std::endl;
