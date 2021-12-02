@@ -4,6 +4,7 @@
 #include "../User/User.hpp"
 #include "../Channel/ChannelManager.hpp"
 #include "../Packet/PacketManager.hpp"
+#include "../Display/Display.hpp"
 #include <string>
 #include <vector>
 
@@ -16,6 +17,7 @@ namespace irc
 		std::vector<User *> users;
 		ChannelManager channels;
 		PacketManager packet;
+		Display display;
 
 	private:
 		void pending();

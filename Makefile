@@ -8,6 +8,7 @@ FILES_CHECK			=	Packet/PacketManager.hpp \
 						User/User.hpp \
 						Channel/Channel.hpp \
 						Channel/ChannelManager.hpp \
+						Display/Display.hpp \
 						Server/Server.hpp
 FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/NICK.cpp \
@@ -15,6 +16,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						User/User.cpp \
 						Channel/Channel.cpp \
 						Channel/ChannelManager.cpp \
+						Display/Display.cpp \
 						Server/Server.cpp \
 						main.cpp
 

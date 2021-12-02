@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <sstream>
 
 void irc::Server::pending()
 {
@@ -14,7 +15,10 @@ void irc::Server::pending()
 void irc::Server::registerUsers()
 {
 	if (users.empty())
+	{
+		display.setLine(1, "No user, waiting for a connection...");
 		pending();
+	}
 	while (true)
 	{
 		struct sockaddr_in address;
@@ -23,13 +27,18 @@ void irc::Server::registerUsers()
 		if (fd == -1)
 			break;
 		users.push_back(new User(fd));
+		std::stringstream ss;
+		ss << "Users: " << users.size();
+		display.setLine(1, ss.str());
 	}
 }
 
 irc::Server::Server(unsigned short port, std::string password)
-	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), channels(), packet(channels, *this)
+	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), channels(), packet(channels, *this), display()
 {
 	(void)password;
+	display.setLine(0, "Welcome to our IRC!");
+
 	fcntl(tcp_socket, F_SETFL, O_NONBLOCK);
 
 	struct sockaddr_in address;
