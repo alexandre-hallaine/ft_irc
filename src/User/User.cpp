@@ -1,9 +1,10 @@
 #include "User.hpp"
+#include <fcntl.h>
 #include <poll.h>
 #include <sys/socket.h>
 
 irc::User::User(int fd)
-	: fd(fd), nickname() {}
+	: fd(fd), nickname() { fcntl(fd, F_SETFL, O_NONBLOCK); }
 
 std::string irc::User::read()
 {

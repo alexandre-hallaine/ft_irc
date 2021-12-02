@@ -16,6 +16,15 @@ std::vector<std::string> irc::PacketManager::split(std::string str, std::string 
 void irc::PacketManager::call(std::string line, User *user)
 {
 	struct packetParams params;
+
+	std::string delimiter = ":";
+	size_t pos;
+	if ((pos = line.rfind(delimiter)) != std::string::npos)
+	{
+		params.value = line.substr(pos + delimiter.size(), line.size() - pos - delimiter.size());
+		line.erase(pos, line.size() - pos);
+	}
+
 	params.args = split(line, " ");
 	if (!params.args[0].size())
 		return;
@@ -40,7 +49,11 @@ irc::PacketManager::PacketManager(ChannelManager &channels, Server &server)
 	functions["USER"] = USER;
 	functions["PING"] = PING;
 	functions["JOIN"] = JOIN;
+<<<<<<< HEAD
 	functions["MODE"] = MODE;
+=======
+	functions["PRIVMSG"] = PRIVMSG;
+>>>>>>> refs/remotes/origin/master
 }
 
 void irc::PacketManager::request(std::string query, User *user)
