@@ -38,7 +38,7 @@ void irc::Server::registerUsers()
 }
 
 irc::Server::Server(unsigned short port, std::string password)
-	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), channels(), packet(channels, *this), display()
+	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), display(), channels(display), packet(channels, *this)
 {
 	(void)password;
 	display.setLine(0, "Welcome to our IRC!");

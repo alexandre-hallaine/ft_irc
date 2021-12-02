@@ -15,9 +15,9 @@ namespace irc
 	private:
 		int tcp_socket;
 		std::vector<User *> users;
+		Display display;
 		ChannelManager channels;
 		PacketManager packet;
-		Display display;
 
 	private:
 		void pending();
