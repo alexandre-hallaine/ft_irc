@@ -39,8 +39,7 @@ void irc::MODE(struct irc::packetParams params)
 		params.user->write(ss.str());
 		return ;
 	}
-
-	while (i != params.args[2].size())
+	while (params.args.back() != params.args[1] && i != params.args[2].size())
 	{
 		if (params.args[2][i] == '-')
 			is_minus = true;

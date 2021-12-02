@@ -49,11 +49,7 @@ irc::PacketManager::PacketManager(ChannelManager &channels, Server &server)
 	functions["USER"] = USER;
 	functions["PING"] = PING;
 	functions["JOIN"] = JOIN;
-<<<<<<< HEAD
 	functions["MODE"] = MODE;
-=======
-	functions["PRIVMSG"] = PRIVMSG;
->>>>>>> refs/remotes/origin/master
 }
 
 void irc::PacketManager::request(std::string query, User *user)
