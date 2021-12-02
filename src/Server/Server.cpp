@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <sstream>
+#include <unistd.h>
 
 void irc::Server::pending()
 {
@@ -61,6 +62,7 @@ irc::Server::~Server()
 	std::vector<User *>::iterator ite = users.end();
 	while (it != ite)
 		delete *it;
+	close(tcp_socket);
 }
 
 void irc::Server::run()

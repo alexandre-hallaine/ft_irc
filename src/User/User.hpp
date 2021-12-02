@@ -16,28 +16,30 @@ namespace irc
 		std::string servername;
 		std::string realname;
 		std::string nickname;
-		std::string modes;
+		std::string mode;
 
 	public:
 		User(int fd);
+		~User();
 
 		std::string read();
-		void write(std::string str);
+		void write(std::string query);
+		void write(unsigned short code, std::string arg1 = "", std::string arg2 = "", std::string arg3 = "", std::string arg4 = "");
 
 		void setUsername(std::string username);
 		void setHostname(std::string hostname);
 		void setServername(std::string servername);
 		void setRealname(std::string realname);
 		void setNickname(std::string nickname);
-		void setModes(std::string modes);
+		void setMode(std::string mode);
 		std::string getUsername();
 		std::string getHostname();
 		std::string getServername();
 		std::string getRealname();
 		std::string getNickname();
-		std::string getModes();
+		std::string getMode();
 
-		bool operator==(const User &b) const;
+		bool operator==(const User &user) const;
 	};
 }
 #endif

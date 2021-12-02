@@ -21,23 +21,24 @@ void check_mode(std::string *mode, char option, bool is_minus)
 }
 
 void irc::MODE(struct irc::packetParams params)
-{ 
+{
 	if (params.args.size() == 1)
-		return ;
-	
+		return;
+
 	std::stringstream ss;
-	std::string mode = params.user->getModes();
+	std::string mode = params.user->getMode();
 	bool is_minus = false;
 	size_t i = 0;
 
 	if (mode.size() == 0)
 		mode = "+";
-	
+
 	if (params.args[1] != params.user->getNickname())
 	{
-		ss << "Cannot change mode for other users" << "\r\n";
+		ss << "Cannot change mode for other users"
+		   << "\r\n";
 		params.user->write(ss.str());
-		return ;
+		return;
 	}
 	while (params.args.back() != params.args[1] && i != params.args[2].size())
 	{
@@ -54,13 +55,11 @@ void irc::MODE(struct irc::packetParams params)
 			check_mode(&mode, 'w', is_minus);
 		else
 		{
-			ss << "Unknown mode character " << params.args[2][i] << "\r\n";
-			params.user->write(ss.str());
-			ss.str(std::string());
+			ss << params.args[2][i];
+			params.user->write(472, ss.str());
 		}
 		i++;
 	}
-	params.user->setModes(mode);
-	ss << "Your user mode is [" << params.user->getModes() << "]" << "\r\n";
-	params.user->write(ss.str());
+	params.user->setMode(mode);
+	params.user->write(221, mode);
 }

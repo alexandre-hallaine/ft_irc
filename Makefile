@@ -5,6 +5,7 @@ DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
 FILES_CHECK			=	Packet/PacketManager.hpp \
+						User/replies.hpp \
 						User/User.hpp \
 						Channel/Channel.hpp \
 						Channel/ChannelManager.hpp \
@@ -18,6 +19,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/JOIN.cpp \
 						Packet/Commands/MODE.cpp \
 						Packet/PacketManager.cpp \
+						User/replies.cpp \
 						User/User.cpp \
 						Channel/Channel.cpp \
 						Channel/ChannelManager.cpp \
