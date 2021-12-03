@@ -17,6 +17,7 @@ namespace irc
 		std::string realname;
 		std::string nickname;
 		std::string mode;
+		std::string user_modes;
 
 		std::string generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
@@ -40,6 +41,7 @@ namespace irc
 		std::string getRealname();
 		std::string getNickname();
 		std::string getMode();
+		std::string getUser_modes();
 
 		bool operator==(const User &user) const;
 	};

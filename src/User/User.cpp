@@ -48,5 +48,6 @@ std::string irc::User::getServername() { return servername; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getMode() { return mode; }
+std::string irc::User::getUser_modes() { return ("iws"); }
 
 bool irc::User::operator==(const User &user) const { return fd == user.fd; }

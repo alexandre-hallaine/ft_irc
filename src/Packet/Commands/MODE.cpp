@@ -2,9 +2,8 @@
 #include <sstream>
 #include <iostream>
 
-void check_mode(std::string *mode, char option, bool is_minus)
+void check_mode(std::string *mode, char option, bool is_minus, std::string options)
 {
-	std::string options = "iws";
 	size_t i = 0;
 
 	while (i != options.size())
@@ -48,11 +47,11 @@ void irc::MODE(struct irc::packetParams params)
 			is_minus = false;
 		//else if (params.args[2][i] == 'o')
 		else if (params.args[2][i] == 'i')
-			check_mode(&mode, 'i', is_minus);
+			check_mode(&mode, 'i', is_minus, params.user->getUser_modes());
 		else if (params.args[2][i] == 's')
-			check_mode(&mode, 's', is_minus);
+			check_mode(&mode, 's', is_minus, params.user->getUser_modes());
 		else if (params.args[2][i] == 'w')
-			check_mode(&mode, 'w', is_minus);
+			check_mode(&mode, 'w', is_minus, params.user->getUser_modes());
 		else
 		{
 			ss << params.args[2][i];
