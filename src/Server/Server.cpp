@@ -51,6 +51,7 @@ std::string irc::Server::init_time()
 irc::Server::Server(unsigned short port, std::string password)
 	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), display(), channels(display), packet(channels, *this)
 {
+	time = init_time();
 	(void)password;
 	display.setLine(0, "Welcome to our \033[1;37mIRC\n");
 
@@ -75,7 +76,6 @@ irc::Server::~Server()
 
 void irc::Server::run()
 {
-	time = init_time();
 	while (true)
 	{
 		registerUsers();
