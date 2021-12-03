@@ -18,11 +18,13 @@ namespace irc
 		Display display;
 		ChannelManager channels;
 		PacketManager packet;
+		std::string time;
 
 	private:
 		void pending();
 		void displayUsers();
 		void registerUsers();
+		std::string init_time();
 
 	public:
 		Server(unsigned short port, std::string password);
@@ -30,6 +32,9 @@ namespace irc
 
 		void run();
 		void kill(User *user);
+		std::string getServername();
+		std::string getVersion();
+		std::string getTime();
 	};
 }
 #endif

@@ -5,6 +5,7 @@
 #include <poll.h>
 #include <sstream>
 #include <unistd.h>
+#include <ctime>
 
 void irc::Server::pending()
 {
@@ -40,6 +41,13 @@ void irc::Server::registerUsers()
 	}
 }
 
+std::string irc::Server::init_time()
+{
+	time_t t = std::time(0);
+	struct tm *now = std::localtime(&t);
+	return (asctime(now));
+}
+
 irc::Server::Server(unsigned short port, std::string password)
 	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), display(), channels(display), packet(channels, *this)
 {
@@ -67,6 +75,7 @@ irc::Server::~Server()
 
 void irc::Server::run()
 {
+	time = init_time();
 	while (true)
 	{
 		registerUsers();
@@ -96,3 +105,12 @@ void irc::Server::kill(User *user)
 		it++;
 	}
 }
+
+std::string irc::Server::getServername()
+{return ("SHIBRC");}
+
+std::string irc::Server::getVersion()
+{return ("1.69");}
+
+std::string irc::Server::getTime()
+{return (time);}
