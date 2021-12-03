@@ -1,5 +1,10 @@
 #include "User.hpp"
 
+std::string RPL_WELCOME(std::string nick, std::string user, std::string host) { return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host; }
+std::string RPL_YOURHOST(std::string servername, std::string ver) { return ":Your host is " + servername + ", running version " + ver; }
+std::string RPL_CREATED(std::string date) { return ":This server was created " + date; }
+std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes) { return ":" + servername + " " + version + " " + umodes + " " + cmodes; }
+std::string RPL_BOUNCE(std::string server, std::string port) { return ":Try server " + server + ", port " + port; }
 std::string RPL_TRACELINK(std::string version, std::string destination, std::string server) { return "Link " + version + " " + destination + " " + server; }
 std::string RPL_TRACECONNECTING(std::string class1, std::string server) { return "Try. " + class1 + " " + server; }
 std::string RPL_TRACEHANDSHAKE(std::string class1, std::string server) { return "H.S. " + class1 + " " + server; }
@@ -124,6 +129,17 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 {
 	switch (code)
 	{
+	case 001:
+		return RPL_WELCOME(arg1, arg2, arg3);
+	case 002:
+		return RPL_YOURHOST(arg1, arg2);
+	case 003:
+		return RPL_CREATED(arg1);
+	case 004:
+		return RPL_MYINFO(arg1, arg2, arg3, arg4);
+	case 005:
+		return RPL_BOUNCE(arg1, arg2);
+
 	case 200:
 		return RPL_TRACELINK(arg1, arg2, arg3);
 	case 201:
