@@ -1,4 +1,5 @@
-#include "replies.hpp"
+#include "User.hpp"
+
 std::string RPL_NONE();
 std::string RPL_USERHOST(std::string reply, std::string space);
 std::string RPL_ISON(std::string nick, std::string space);
@@ -110,8 +111,13 @@ std::string ERR_NOOPERHOST() { return ":No O-lines for your host"; }
 std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
 std::string ERR_USERSDONTMATCH() { return ":Cant change mode for other users"; }
 
-std::string irc::generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
+std::string irc::User::generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
+	(void)arg3;
+	(void)arg4;
+	(void)arg5;
+	(void)arg6;
+	(void)arg7;
 	switch (code)
 	{
 	case 401:

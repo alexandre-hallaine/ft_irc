@@ -5,7 +5,6 @@ DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
 FILES_CHECK			=	Packet/PacketManager.hpp \
-						User/replies.hpp \
 						User/User.hpp \
 						Channel/Channel.hpp \
 						Channel/ChannelManager.hpp \
