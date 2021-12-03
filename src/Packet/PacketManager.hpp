@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#define DEBUG false
+
 namespace irc
 {
 	class Server;

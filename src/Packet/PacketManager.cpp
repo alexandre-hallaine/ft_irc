@@ -15,10 +15,12 @@ std::vector<std::string> irc::PacketManager::split(std::string str, std::string 
 }
 void irc::PacketManager::call(std::string line, User *user)
 {
-	struct packetParams params;
+	if (DEBUG)
+		std::cout << line;
 
 	std::string delimiter = ":";
 	size_t pos;
+	struct packetParams params;
 	if ((pos = line.rfind(delimiter)) != std::string::npos)
 	{
 		params.value = line.substr(pos + delimiter.size(), line.size() - pos - delimiter.size());
@@ -30,7 +32,8 @@ void irc::PacketManager::call(std::string line, User *user)
 		return;
 	if (!functions.count(params.args[0]))
 	{
-		std::cout << "Unknown command: " << line << std::endl;
+		if (!DEBUG)
+			std::cout << "Unknown command: " << line << std::endl;
 		return;
 	}
 
