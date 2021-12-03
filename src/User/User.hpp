@@ -18,13 +18,15 @@ namespace irc
 		std::string nickname;
 		std::string mode;
 
+		std::string generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
+
 	public:
 		User(int fd);
 		~User();
 
 		std::string read();
 		void write(std::string query);
-		void write(unsigned short code, std::string arg1 = "", std::string arg2 = "", std::string arg3 = "", std::string arg4 = "");
+		void write(unsigned short code, std::string arg1 = "", std::string arg2 = "", std::string arg3 = "", std::string arg4 = "", std::string arg5 = "", std::string arg6 = "", std::string arg7 = "");
 
 		void setUsername(std::string username);
 		void setHostname(std::string hostname);

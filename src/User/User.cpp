@@ -1,5 +1,4 @@
 #include "User.hpp"
-#include "replies.hpp"
 #include <fcntl.h>
 #include <poll.h>
 #include <sys/socket.h>
@@ -26,7 +25,7 @@ std::string irc::User::read()
 	return std::string(buffer);
 }
 void irc::User::write(std::string query) { send(fd, query.c_str(), query.length(), 0); }
-void irc::User::write(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
+void irc::User::write(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
 	std::stringstream sscode;
 	sscode << code;
@@ -34,7 +33,7 @@ void irc::User::write(unsigned short code, std::string arg1, std::string arg2, s
 	while (scode.length() < 3)
 		scode = "0" + scode;
 
-	write(":" + hostname + " " + scode + " " + nickname + " " + generate(code, arg1, arg2, arg3, arg4) + "\r\n");
+	write(":" + hostname + " " + scode + " " + nickname + " " + generate(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7) + "\r\n");
 }
 
 void irc::User::setUsername(std::string username) { this->username = username; }
