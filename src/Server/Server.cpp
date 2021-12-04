@@ -106,14 +106,7 @@ void irc::Server::kill(User *user)
 	}
 }
 
-std::string irc::Server::getServername()
-{return ("SHIBRC");}
-
-std::string irc::Server::getVersion()
-{return ("1.69");}
-
-std::string irc::Server::getTime()
-{return (time);}
-
-std::vector<User *> irc::Server::getUsers()
-{return (users);}
+std::string irc::Server::getServername() { return ("SHIBRC"); }
+std::string irc::Server::getVersion() { return ("1.69"); }
+std::string irc::Server::getTime() { return (time); }
+std::vector<irc::User *> &irc::Server::getUsers() { return users; }
