@@ -27,8 +27,7 @@ void irc::CAP(struct irc::packetParams params)
 				if (line.size() > 80)
 				{
 					params.user->write(422);
-					params.user->write(376);
-					return ;
+					return params.user->write(376);
 				}	
 				motd.push_back(line);
 			}

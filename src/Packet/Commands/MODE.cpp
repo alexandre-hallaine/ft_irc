@@ -33,12 +33,8 @@ void irc::MODE(struct irc::packetParams params)
 		mode = "+";
 
 	if (params.args[1] != params.user->getNickname())
-	{
-		ss << "Cannot change mode for other users"
-		   << "\r\n";
-		params.user->write(ss.str());
-		return;
-	}
+		return params.user->write(502);
+
 	while (params.args.back() != params.args[1] && i != params.args[2].size())
 	{
 		if (params.args[2][i] == '-')
@@ -56,6 +52,7 @@ void irc::MODE(struct irc::packetParams params)
 		{
 			ss << params.args[2][i];
 			params.user->write(472, ss.str());
+			ss.str(std::string());
 		}
 		i++;
 	}
