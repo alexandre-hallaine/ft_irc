@@ -35,6 +35,7 @@ namespace irc
 		std::string getServername();
 		std::string getVersion();
 		std::string getTime();
+		std::vector<User *> getUsers();
 	};
 }
 #endif

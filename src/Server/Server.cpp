@@ -114,3 +114,6 @@ std::string irc::Server::getVersion()
 
 std::string irc::Server::getTime()
 {return (time);}
+
+std::vector<User *> irc::Server::getUsers()
+{return (users);}
