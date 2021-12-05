@@ -6,6 +6,8 @@
 #include <sstream>
 #include <unistd.h>
 #include <ctime>
+#include <cstdio>
+#include <cstdlib>
 
 void irc::Server::pending()
 {
@@ -49,21 +51,44 @@ std::string irc::Server::init_time()
 }
 
 irc::Server::Server(unsigned short port, std::string password)
-	: tcp_socket(socket(AF_INET, SOCK_STREAM, 0)), users(), display(), channels(display), packet(channels, *this)
+	: users(), display(), channels(display), packet(channels, *this)
 {
+	if ((tcp_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+	{
+		perror("socket failed");
+		exit(EXIT_FAILURE);
+	}
+	int opt = 1;
+	if (setsockopt(tcp_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	{
+		perror("setsockopt");
+		exit(EXIT_FAILURE);
+	}
 	time = init_time();
 	(void)password;
 	display.setLine(0, "Welcome to our \033[1;37mIRC\n");
 
-	fcntl(tcp_socket, F_SETFL, O_NONBLOCK);
+	if (fcntl(tcp_socket, F_SETFL, O_NONBLOCK) < 0)
+	{
+		perror("fcntl");
+		exit(EXIT_FAILURE);
+	}
 
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
 	address.sin_port = htons(port);
 
-	bind(tcp_socket, (struct sockaddr *)&address, sizeof(address));
-	listen(tcp_socket, port);
+	if (bind(tcp_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
+	{
+		perror("bind");
+		exit(EXIT_FAILURE);
+	}
+	if (listen(tcp_socket, port) < 0)
+	{
+		perror("listen");
+		exit(EXIT_FAILURE);
+	}
 }
 irc::Server::~Server()
 {
