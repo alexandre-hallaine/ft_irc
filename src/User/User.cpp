@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <sstream>
 
-irc::User::User(int fd)
-	: fd(fd), nickname("*") { fcntl(fd, F_SETFL, O_NONBLOCK); }
+irc::User::User(int fd, std::string hote)
+	: fd(fd), nickname("*"), hote(hote) { fcntl(fd, F_SETFL, O_NONBLOCK); }
 
 irc::User::~User() { close(fd); }
 
@@ -47,6 +47,7 @@ std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getServername() { return servername; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getNickname() { return nickname; }
+std::string irc::User::getHote() { return hote; }
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getUser_modes() { return ("iws"); }
 

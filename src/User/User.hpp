@@ -16,13 +16,14 @@ namespace irc
 		std::string servername;
 		std::string realname;
 		std::string nickname;
+		std::string hote;
 		std::string mode;
 		std::string user_modes;
 
 		std::string generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
 	public:
-		User(int fd);
+		User(int fd, std::string hote);
 		~User();
 
 		std::string read();
@@ -40,6 +41,7 @@ namespace irc
 		std::string getServername();
 		std::string getRealname();
 		std::string getNickname();
+		std::string getHote();
 		std::string getMode();
 		std::string getUser_modes();
 

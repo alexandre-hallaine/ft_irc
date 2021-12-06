@@ -28,6 +28,7 @@ namespace irc
 	void PING(struct packetParams params);
 	void JOIN(struct packetParams params);
 	void MODE(struct packetParams params);
+	void WHOIS(struct packetParams params);
 
 	class PacketManager
 	{

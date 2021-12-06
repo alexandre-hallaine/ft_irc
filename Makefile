@@ -17,6 +17,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/PING.cpp \
 						Packet/Commands/JOIN.cpp \
 						Packet/Commands/MODE.cpp \
+						Packet/Commands/WHOIS.cpp \
 						Packet/PacketManager.cpp \
 						User/replies.cpp \
 						User/User.cpp \
@@ -27,7 +28,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						main.cpp
 
 COMPILE				=	clang++
-COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors
+COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g 
 
 ARGUMENTS			=	6667 azerty
 

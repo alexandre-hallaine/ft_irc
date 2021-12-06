@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
 #include <poll.h>
 #include <sstream>
@@ -38,7 +39,7 @@ void irc::Server::registerUsers()
 		int fd = accept(tcp_socket, (struct sockaddr *)&address, &csin_len);
 		if (fd == -1)
 			break;
-		users.push_back(new User(fd));
+		users.push_back(new User(fd, inet_ntoa(address.sin_addr)));
 		displayUsers();
 	}
 }
