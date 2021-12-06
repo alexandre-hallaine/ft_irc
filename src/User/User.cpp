@@ -33,7 +33,7 @@ void irc::User::write(unsigned short code, std::string arg1, std::string arg2, s
 	while (scode.length() < 3)
 		scode = "0" + scode;
 
-	write(":" + hostname + " " + scode + " " + nickname + " " + generate(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7) + "\r\n");
+	write(":" + servername + " " + scode + " " + nickname + " " + generate(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7) + "\r\n");
 }
 
 void irc::User::setUsername(std::string username) { this->username = username; }
