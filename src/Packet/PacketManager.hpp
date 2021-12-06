@@ -2,7 +2,7 @@
 #define PACKETMANAGER_HPP
 
 #include "../User/User.hpp"
-#include "../Channel/ChannelManager.hpp"
+#include "../Server/Channel/ChannelManager.hpp"
 #include <vector>
 #include <string>
 

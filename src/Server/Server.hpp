@@ -2,9 +2,9 @@
 #define SERVER_HPP
 
 #include "../User/User.hpp"
-#include "../Channel/ChannelManager.hpp"
 #include "../Packet/PacketManager.hpp"
-#include "../Display/Display.hpp"
+#include "Channel/ChannelManager.hpp"
+#include "Display/Display.hpp"
 #include <string>
 #include <vector>
 

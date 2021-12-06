@@ -6,9 +6,9 @@ DIRECTORY_OBJECT	=	objects
 
 FILES_CHECK			=	Packet/PacketManager.hpp \
 						User/User.hpp \
-						Channel/Channel.hpp \
-						Channel/ChannelManager.hpp \
-						Display/Display.hpp \
+						Server/Channel/Channel.hpp \
+						Server/Channel/ChannelManager.hpp \
+						Server/Display/Display.hpp \
 						Server/Server.hpp
 FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/NICK.cpp \
@@ -21,9 +21,9 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/PacketManager.cpp \
 						User/replies.cpp \
 						User/User.cpp \
-						Channel/Channel.cpp \
-						Channel/ChannelManager.cpp \
-						Display/Display.cpp \
+						Server/Channel/Channel.cpp \
+						Server/Channel/ChannelManager.cpp \
+						Server/Display/Display.cpp \
 						Server/Server.cpp \
 						main.cpp
 

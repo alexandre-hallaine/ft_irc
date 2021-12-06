@@ -1,7 +1,7 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "../User/User.hpp"
+#include "../../User/User.hpp"
 #include <vector>
 #include <string>
 
