@@ -8,15 +8,10 @@
 #include <fcntl.h>
 #include <cstdlib>
 #include <iostream>
-
-irc::Server::Server()
-	: config(), display() {}
+#include <poll.h>
 
 void irc::Server::init()
 {
-	upTime = currentTime();
-	display.setLine(0, "Welcome to our \033[1;37mIRC\n");
-
 	int enable = 1;
 	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 		exit(EXIT_FAILURE);
@@ -34,10 +29,29 @@ void irc::Server::init()
 		exit(EXIT_FAILURE);
 	if (listen(fd, address.sin_port) < 0)
 		exit(EXIT_FAILURE);
-
-	std::cout << config.get("motd") << std::endl;
+}
+void irc::Server::checkConnection()
+{
+	if (!users.size())
+	{
+		display.warning(1, "No user, waiting for a connection...");
+		struct pollfd pfd;
+		pfd.fd = fd;
+		pfd.events = POLLIN;
+		poll(&pfd, 1, -1);
+	}
 }
 
-void irc::Server::loop() { init(); }
+irc::Server::Server()
+	: config(), display(), users(), upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
+
+void irc::Server::loop()
+{
+	init();
+	while (!stop)
+	{
+		checkConnection();
+	}
+}
 
 irc::Config &irc::Server::getConfig() { return config; }
