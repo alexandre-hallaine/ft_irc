@@ -4,11 +4,20 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	
-FILES_SOURCE		=	
+FILES_CHECK			=	utils/utils.hpp \
+						Server/Config/Config.hpp \
+						Server/Display/Display.hpp \
+						Server/Runtime.hpp \
+						Server/Server.hpp
+FILES_SOURCE		=	utils/utils.cpp \
+						Server/Config/Config.cpp \
+						Server/Display/Display.cpp \
+						Server/Runtime.cpp \
+						Server/Server.cpp \
+						main.cpp
 
 COMPILE				=	clang++
-COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g 
+COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g
 
 ARGUMENTS			=	6667 azerty
 
