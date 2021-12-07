@@ -4,28 +4,8 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	Packet/PacketManager.hpp \
-						User/User.hpp \
-						Server/Channel/Channel.hpp \
-						Server/Channel/ChannelManager.hpp \
-						Server/Display/Display.hpp \
-						Server/Server.hpp
-FILES_SOURCE		=	Packet/Commands/CAP.cpp \
-						Packet/Commands/NICK.cpp \
-						Packet/Commands/QUIT.cpp \
-						Packet/Commands/USER.cpp \
-						Packet/Commands/PING.cpp \
-						Packet/Commands/JOIN.cpp \
-						Packet/Commands/MODE.cpp \
-						Packet/Commands/WHOIS.cpp \
-						Packet/PacketManager.cpp \
-						User/replies.cpp \
-						User/User.cpp \
-						Server/Channel/Channel.cpp \
-						Server/Channel/ChannelManager.cpp \
-						Server/Display/Display.cpp \
-						Server/Server.cpp \
-						main.cpp
+FILES_CHECK			=	
+FILES_SOURCE		=	
 
 COMPILE				=	clang++
 COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g 
