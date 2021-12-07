@@ -7,6 +7,7 @@
 #include <ctime>
 #include <fcntl.h>
 #include <cstdlib>
+#include <iostream>
 
 irc::Server::Server()
 	: config(), display() {}
@@ -33,6 +34,10 @@ void irc::Server::init()
 		exit(EXIT_FAILURE);
 	if (listen(fd, address.sin_port) < 0)
 		exit(EXIT_FAILURE);
+
+	std::cout << config.get("motd") << std::endl;
 }
 
 void irc::Server::loop() { init(); }
+
+irc::Config &irc::Server::getConfig() { return config; }

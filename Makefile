@@ -7,13 +7,13 @@ DIRECTORY_OBJECT	=	objects
 FILES_CHECK			=	utils/utils.hpp \
 						Server/Config/Config.hpp \
 						Server/Display/Display.hpp \
-						Server/Runtime.hpp \
-						Server/Server.hpp
+						Server/Server.hpp \
+						Server/Runtime.hpp
 FILES_SOURCE		=	utils/utils.cpp \
 						Server/Config/Config.cpp \
 						Server/Display/Display.cpp \
-						Server/Runtime.cpp \
 						Server/Server.cpp \
+						Server/Runtime.cpp \
 						main.cpp
 
 COMPILE				=	clang++
@@ -55,5 +55,10 @@ leaks: all
 	@printf "\e[0m"
 	valgrind make run
 
-.PHONY: all run clean fclean re rrun leaks
+debugflags:
+	$(eval COMPILATION_FLAG=-D DEBUG)
+
+debug: debugflags rrun
+
+.PHONY: all run clean fclean re rrun leaks debugflags debug
 .SILENT:

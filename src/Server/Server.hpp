@@ -8,10 +8,8 @@ namespace irc
 {
 	class Server
 	{
-	protected:
-		Config config;
-
 	private:
+		Config config;
 		Display display;
 		int fd;
 		std::string upTime;
@@ -22,6 +20,8 @@ namespace irc
 		Server();
 
 		void loop();
+
+		Config &getConfig();
 	};
 }
 #endif

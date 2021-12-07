@@ -13,7 +13,7 @@ namespace irc
 
 		void run();
 
-		Config &getConfig();
+		using Server::getConfig;
 	};
 }
 #endif

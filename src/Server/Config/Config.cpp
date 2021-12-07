@@ -1,12 +1,12 @@
 #include "Config.hpp"
 #include <fstream>
-#include <iostream>
+#include <cstdlib>
 
 void irc::Config::init(std::string config)
 {
 	std::ifstream ifs(config.c_str(), std::ifstream::in);
 	if (!ifs.good())
-		std::cout << "error: while file check";
+		exit(EXIT_FAILURE);
 
 	std::string delimiter = "=";
 	size_t position;

@@ -1,10 +1,14 @@
 #include "Display.hpp"
+#include "../../utils/utils.hpp"
 #include <iostream>
 
 void irc::Display::clearScreen() { std::cout << "\033[2J" << std::flush; }
 
 void irc::Display::update()
 {
+	if (DEBUG)
+		return;
+
 	clearScreen();
 
 	std::map<unsigned char, std::string>::iterator it = lines.begin();
@@ -17,7 +21,7 @@ void irc::Display::update()
 }
 
 irc::Display::Display()
-	: lines() { clearScreen(); }
+	: lines() { update(); }
 
 void irc::Display::setLine(unsigned char pos, std::string line)
 {
