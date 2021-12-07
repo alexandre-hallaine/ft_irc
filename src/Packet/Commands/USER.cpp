@@ -6,4 +6,7 @@ void irc::USER(struct irc::packetParams params)
 	params.user->setHostname(params.args[2]);
 	params.user->setServername(params.args[3]);
 	params.user->setRealname(params.value);
+	params.user->setRegistered(true);
+	if (params.user->getNickname() != "*")
+		CAP(params);
 }

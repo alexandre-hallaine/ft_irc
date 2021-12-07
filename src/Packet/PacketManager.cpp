@@ -46,7 +46,6 @@ void irc::PacketManager::call(std::string line, User *user)
 irc::PacketManager::PacketManager(ChannelManager &channels, Server &server)
 	: channels(channels), server(server), functions()
 {
-	functions["CAP"] = CAP;
 	functions["NICK"] = NICK;
 	functions["QUIT"] = QUIT;
 	functions["USER"] = USER;

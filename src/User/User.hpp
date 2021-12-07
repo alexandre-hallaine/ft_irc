@@ -19,6 +19,7 @@ namespace irc
 		std::string hote;
 		std::string mode;
 		std::string user_modes;
+		bool registered;
 
 		std::string generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
@@ -44,6 +45,8 @@ namespace irc
 		std::string getHote();
 		std::string getMode();
 		std::string getUser_modes();
+		bool getRegistered();
+		void setRegistered(bool registered);
 
 		bool operator==(const User &user) const;
 	};

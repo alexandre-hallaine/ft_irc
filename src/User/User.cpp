@@ -6,7 +6,7 @@
 #include <sstream>
 
 irc::User::User(int fd, std::string hote)
-	: fd(fd), nickname("*"), hote(hote) { fcntl(fd, F_SETFL, O_NONBLOCK); }
+	: fd(fd), nickname("*"), hote(hote), registered(false) { fcntl(fd, F_SETFL, O_NONBLOCK); }
 
 irc::User::~User() { close(fd); }
 
@@ -50,5 +50,7 @@ std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getHote() { return hote; }
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getUser_modes() { return ("iws"); }
+bool irc::User::getRegistered() { return registered; }
+void irc::User::setRegistered(bool registered) { this->registered = registered; }
 
 bool irc::User::operator==(const User &user) const { return fd == user.fd; }
