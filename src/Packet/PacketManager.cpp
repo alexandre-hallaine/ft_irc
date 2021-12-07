@@ -53,6 +53,7 @@ irc::PacketManager::PacketManager(ChannelManager &channels, Server &server)
 	functions["JOIN"] = JOIN;
 	functions["MODE"] = MODE;
 	functions["WHOIS"] = WHOIS;
+	functions["WHOWAS"] = WHOWAS;
 }
 
 void irc::PacketManager::request(std::string query, User *user)

@@ -29,6 +29,7 @@ namespace irc
 	void JOIN(struct packetParams params);
 	void MODE(struct packetParams params);
 	void WHOIS(struct packetParams params);
+	void WHOWAS(struct packetParams params);
 
 	class PacketManager
 	{
