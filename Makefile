@@ -19,6 +19,7 @@ FILES_SOURCE		=	Packet/Commands/CAP.cpp \
 						Packet/Commands/MODE.cpp \
 						Packet/Commands/WHOIS.cpp \
 						Packet/Commands/WHOWAS.cpp \
+						Packet/Commands/WHO.cpp \
 						Packet/PacketManager.cpp \
 						User/replies.cpp \
 						User/User.cpp \

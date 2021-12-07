@@ -59,7 +59,7 @@ std::string RPL_TOPIC(std::string channel, std::string topic) { return channel +
 std::string RPL_INVITING(std::string channel, std::string nick) { return channel + " " + nick; }
 std::string RPL_SUMMONING(std::string user) { return user + " :Summoning user to IRC"; }
 std::string RPL_VERSION(std::string version, std::string debuglevel, std::string server, std::string comments) { return version + "." + debuglevel + " " + server + " :" + comments; }
-std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string hopcout, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " <H|G>[*][@|+] :" + hopcout + " " + real; }
+std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string hopcout, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " H :" + hopcout + " " + real; }
 std::string RPL_NAMREPLY(std::string channel, std::string nick_list) { return channel + " :" + nick_list; }
 std::string RPL_ENDOFNAMES(std::string channel) { return channel + " :End of /NAMES list"; }
 std::string RPL_LINKS(std::string mask, std::string server, std::string hopcount, std::string info) { return mask + " " + server + " :" + hopcount + " " + info; }
