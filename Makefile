@@ -8,12 +8,19 @@ FILES_CHECK			=	utils/utils.hpp \
 						Server/Config/Config.hpp \
 						Server/Display/Display.hpp \
 						Server/Server.hpp \
-						Server/Runtime.hpp
+						Server/Runtime.hpp \
+						User/Command/Command.hpp \
+						User/User.hpp
 FILES_SOURCE		=	utils/utils.cpp \
 						Server/Config/Config.cpp \
 						Server/Display/Display.cpp \
 						Server/Server.cpp \
 						Server/Runtime.cpp \
+						User/replies.cpp \
+						User/Command/CAP.cpp \
+						User/Command/Command.cpp \
+						User/replies.cpp \
+						User/User.cpp \
 						main.cpp
 
 COMPILE				=	clang++

@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "../User/User.hpp"
 #include "../utils/utils.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -8,7 +9,7 @@
 #include <fcntl.h>
 #include <cstdlib>
 #include <iostream>
-#include <poll.h>
+#include <sstream>
 
 void irc::Server::init()
 {
@@ -30,15 +31,24 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		exit(EXIT_FAILURE);
 }
+void irc::Server::displayUsers()
+{
+	std::stringstream ss;
+	ss << "Users: " << users.size();
+	display.write(1, ss.str());
+}
 void irc::Server::checkConnection()
 {
-	if (!users.size())
+	displayUsers();
+	while (true)
 	{
-		display.warning(1, "No user, waiting for a connection...");
-		struct pollfd pfd;
-		pfd.fd = fd;
-		pfd.events = POLLIN;
-		poll(&pfd, 1, -1);
+		struct sockaddr_in address;
+		socklen_t csin_len = sizeof(address);
+		int fd = accept(this->fd, (struct sockaddr *)&address, &csin_len);
+		if (fd == -1)
+			break;
+		users[fd] = new User(fd, address);
+		displayUsers();
 	}
 }
 
