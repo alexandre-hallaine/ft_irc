@@ -4,9 +4,6 @@
 #include <map>
 #include <string>
 
-#define WARNING "\033[0;33m"
-#define ERROR "\033[0;31m"
-
 namespace irc
 {
 	class Display
@@ -16,11 +13,14 @@ namespace irc
 
 		void clearScreen();
 		void update();
+		void write(unsigned char pos, std::string prefix, std::string line);
 
 	public:
 		Display();
 
-		void setLine(unsigned char pos, std::string line);
+		void write(unsigned char pos, std::string line);
+		void warning(unsigned char pos, std::string line);
+		void error(unsigned char pos, std::string line);
 	};
 }
 #endif

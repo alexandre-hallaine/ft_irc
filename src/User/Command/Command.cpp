@@ -1,0 +1,47 @@
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include <sstream>
+
+irc::Command::Command(User *user, Server *server, std::string message)
+	: user(user), server(server)
+{
+	std::string delimiter(":");
+	size_t position;
+	if ((position = message.find(delimiter)) != std::string::npos)
+	{
+		std::string tmp = message.substr(0, position);
+		message.erase(0, position + delimiter.length());
+		trailer = message;
+		message = tmp;
+	}
+
+	parameters = split(message, " ");
+	prefix = *(parameters.begin());
+	parameters.erase(parameters.begin());
+
+	size_t index = 0;
+	while (index < prefix.length())
+	{
+		prefix[index] = std::toupper(prefix[index]);
+		++index;
+	}
+}
+
+irc::User &irc::Command::getUser() { return *user; }
+irc::Server &irc::Command::getServer() { return *server; }
+
+std::string irc::Command::getPrefix() { return prefix; }
+std::vector<std::string> irc::Command::getParameters() { return parameters; }
+std::string irc::Command::getTrailer() { return trailer; }
+
+void irc::Command::reply(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
+{
+	std::stringstream sscode;
+	sscode << code;
+	std::string scode = sscode.str();
+	while (scode.length() < 3)
+		scode = "0" + scode;
+
+	user->write(":" + user->getPrefix() + " " + scode + " " + getReplies(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+}

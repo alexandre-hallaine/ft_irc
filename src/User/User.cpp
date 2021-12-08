@@ -1,58 +1,151 @@
 #include "User.hpp"
+#include "Command/Command.hpp"
+#include "../utils/utils.hpp"
+#include "../Server/Server.hpp"
 #include <fcntl.h>
 #include <poll.h>
+#include <iostream>
 #include <sys/socket.h>
-#include <unistd.h>
-#include <sstream>
+#include <algorithm>
+#include <netdb.h>
+#include <arpa/inet.h>
 
-irc::User::User(int fd, std::string hote)
-	: fd(fd), nickname("*"), hote(hote), registered(false) { fcntl(fd, F_SETFL, O_NONBLOCK); }
+#define BUFFER_SIZE 4096
+#define MESSAGE_END "\r\n"
 
-irc::User::~User() { close(fd); }
+void NICK(irc::Command *command);
+void USER(irc::Command *command);
+void MOTD(irc::Command *command);
 
-std::string irc::User::read()
+void irc::User::push()
+{
+	std::string buffer;
+	std::vector<std::string>::iterator it = pending.begin();
+	std::vector<std::string>::iterator ite = pending.end();
+	while (it != ite)
+	{
+		if (DEBUG)
+			std::cout << fd << " > " << *it << std::endl;
+		buffer += *it + MESSAGE_END;
+		++it;
+	}
+	pending.clear();
+
+	send(fd, buffer.c_str(), buffer.length(), 0);
+}
+void post_registration(irc::Command *command)
+{
+	command->reply(1, command->getUser().getPrefix());
+	command->reply(2, command->getUser().getHost(), command->getServer().getConfig().get("version"));
+	command->reply(3, command->getServer().getUpTime());
+	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"),
+				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
+
+	//not needed
+	MOTD(command);
+}
+void irc::User::callCommands()
+{
+	bool canReplie = getPrefix().length();
+
+	std::vector<Command *> remove = std::vector<Command *>();
+	std::vector<Command *>::iterator it = commands.begin();
+	std::vector<Command *>::iterator ite = commands.end();
+	while (it != ite)
+	{
+		Command *command = *it;
+		if (canReplie || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
+		{
+			if (command_function.count(command->getPrefix()))
+				command_function[command->getPrefix()](command);
+			else if (DEBUG)
+				std::cout << "Unknown command: " << command->getPrefix() << std::endl;
+			remove.push_back(command);
+		}
+		++it;
+	}
+
+	if (!canReplie && getPrefix().length())
+		post_registration(*commands.begin());
+	push();
+
+	it = remove.begin();
+	ite = remove.end();
+	while (it != ite)
+	{
+		std::vector<Command *>::iterator item = std::find(commands.begin(), commands.end(), *it);
+		if (item != commands.end())
+			commands.erase(item);
+		++it;
+	}
+}
+
+irc::User::User(int fd, struct sockaddr_in address)
+	: fd(fd)
+{
+	fcntl(fd, F_SETFL, O_NONBLOCK);
+
+	char host[NI_MAXHOST];
+	if (getnameinfo((struct sockaddr *)&address, sizeof(address), host, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
+		error("getnameinfo");
+	this->host = host;
+
+	command_function["NICK"] = NICK;
+	command_function["USER"] = USER;
+	command_function["MOTD"] = MOTD;
+}
+
+void irc::User::pendingMessages(Server *server)
 {
 	struct pollfd pfd;
 	pfd.fd = fd;
 	pfd.events = POLLIN;
 	if (poll(&pfd, 1, 50) == -1)
-		return std::string();
+		return;
+
 	char buffer[BUFFER_SIZE + 1];
-	ssize_t msg_len = recv(pfd.fd, &buffer, BUFFER_SIZE, 0);
-	if (msg_len == -1)
-		return std::string();
-	buffer[msg_len] = 0;
-	return std::string(buffer);
-}
-void irc::User::write(std::string query) { send(fd, query.c_str(), query.length(), 0); }
-void irc::User::write(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
-{
-	std::stringstream sscode;
-	sscode << code;
-	std::string scode = sscode.str();
-	while (scode.length() < 3)
-		scode = "0" + scode;
+	ssize_t size;
+	if ((size = recv(pfd.fd, &buffer, BUFFER_SIZE, 0)) == -1)
+		return;
+	buffer[size] = 0;
 
-	write(":" + servername + " " + scode + " " + nickname + " " + generate(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7) + "\r\n");
-}
+	std::string receive(buffer);
+	packet += receive;
+	std::string delimiter(MESSAGE_END);
 
-void irc::User::setUsername(std::string username) { this->username = username; }
-void irc::User::setHostname(std::string hostname) { this->hostname = hostname; }
-void irc::User::setServername(std::string servername) { this->servername = servername; }
-void irc::User::setRealname(std::string realname) { this->realname = realname; }
+	size_t position;
+	while ((position = packet.find(delimiter)) != std::string::npos)
+	{
+		std::string message = packet.substr(0, position);
+		packet.erase(0, position + delimiter.length());
+		if (!message.length())
+			continue;
+
+		if (DEBUG)
+			std::cout << fd << " < " << message << std::endl;
+		commands.push_back(new Command(this, server, message));
+	}
+	callCommands();
+}
+void irc::User::write(std::string message) { pending.push_back(message); }
+
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
-void irc::User::setMode(std::string mode) { this->mode = mode; }
-void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
-std::string irc::User::getUsername() { return username; }
-std::string irc::User::getHostname() { return hostname; }
-std::string irc::User::getServername() { return servername; }
-std::string irc::User::getRealname() { return realname; }
+void irc::User::setUsername(std::string username) { this->username = username; }
+void irc::User::setRealname(std::string realname) { this->realname = realname; }
+std::string irc::User::getHost() { return host; }
+std::string irc::User::getPrefix()
+{
+	if (!nickname.length())
+		return std::string();
+	std::string prefix = nickname;
+	if (host.length())
+	{
+		if (username.length())
+			prefix += "!" + username;
+		prefix += "@" + host;
+	}
+	return prefix;
+}
 std::string irc::User::getNickname() { return nickname; }
-std::string irc::User::getHote() { return hote; }
-std::string irc::User::getMode() { return mode; }
-std::string irc::User::getUser_modes() { return ("iws"); }
-std::string irc::User::getPastnick() { return pastnick; }
-bool irc::User::getRegistered() { return registered; }
-void irc::User::setRegistered(bool registered) { this->registered = registered; }
-
-bool irc::User::operator==(const User &user) const { return fd == user.fd; }
+std::string irc::User::getUsername() { return username; }
+std::string irc::User::getRealname() { return realname; }

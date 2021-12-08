@@ -1,6 +1,5 @@
-#include "Server/Server.hpp"
+#include "Server/Runtime.hpp"
 #include <iostream>
-#include <cstdlib>
 
 int main(int argc, char **argv)
 {
@@ -9,6 +8,9 @@ int main(int argc, char **argv)
 		std::cout << "./ircserv <port> <password>" << std::endl;
 		return 1;
 	}
-	irc::Server(atoi(argv[1]), argv[2]).run();
+	irc::Runtime runtime = irc::Runtime();
+	runtime.getConfig().set("port", argv[1]);
+	runtime.getConfig().set("password", argv[2]);
+	runtime.run();
 	return 0;
 }
