@@ -5,6 +5,7 @@
 #include "Display/Display.hpp"
 #include <string>
 #include <map>
+#include <vector>
 
 namespace irc
 {
@@ -31,6 +32,7 @@ namespace irc
 
 		Config &getConfig();
 		std::string getUpTime();
+		std::vector<User *> getUsers();
 	};
 }
 #endif

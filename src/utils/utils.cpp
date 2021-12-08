@@ -29,3 +29,6 @@ std::vector<std::string> irc::split(std::string str, std::string delimiter)
 
 	return values;
 }
+bool irc::isLetter(char c) { return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'); }
+bool irc::isSpecial(char c) { return (c >= '[' && c <= '`') || (c >= '{' && c <= '}'); }
+bool irc::isDigit(char c) { return (c >= '0' && c <= '9'); }

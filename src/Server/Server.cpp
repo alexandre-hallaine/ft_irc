@@ -78,3 +78,16 @@ void irc::Server::loop()
 
 irc::Config &irc::Server::getConfig() { return config; }
 std::string irc::Server::getUpTime() { return upTime; }
+std::vector<irc::User *> irc::Server::getUsers()
+{
+	std::vector<User *> users = std::vector<User *>();
+
+	std::map<int, User *>::iterator it = this->users.begin();
+	std::map<int, User *>::iterator ite = this->users.end();
+	while (it != ite)
+	{
+		users.push_back(it->second);
+		++it;
+	}
+	return users;
+}
