@@ -1,17 +1,24 @@
 #include "User.hpp"
-
+#include <vector>
+/******************************************************************************/
+/*                                   0**                                      */
+/******************************************************************************/
 std::string RPL_WELCOME(std::string nick, std::string user, std::string host) { return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host; }
 std::string RPL_YOURHOST(std::string servername, std::string ver) { return ":Your host is " + servername + ", running version " + ver; }
 std::string RPL_CREATED(std::string date) { return ":This server was created " + date; }
-std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes) { return ":" + servername + " " + version + " " + umodes + " " + cmodes; }
+// std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes) { return ":" + servername + " " + version + " " + umodes + " " + cmodes; }
+std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes) { return servername + " " + version + " " + umodes + " " + cmodes; }
 std::string RPL_BOUNCE(std::string server, std::string port) { return ":Try server " + server + ", port " + port; }
+/******************************************************************************/
+/*                                   2**                                      */
+/******************************************************************************/
 std::string RPL_TRACELINK(std::string version, std::string destination, std::string server) { return "Link " + version + " " + destination + " " + server; }
 std::string RPL_TRACECONNECTING(std::string class1, std::string server) { return "Try. " + class1 + " " + server; }
 std::string RPL_TRACEHANDSHAKE(std::string class1, std::string server) { return "H.S. " + class1 + " " + server; }
 std::string RPL_TRACEUNKNOWN(std::string class1, std::string ip) { return "???? " + class1 + " " + ip; }
 std::string RPL_TRACEOPERATOR(std::string class1, std::string nick) { return "Oper " + class1 + " " + nick; }
 std::string RPL_TRACEUSER(std::string class1, std::string nick) { return "User " + class1 + " " + nick; }
-std::string RPL_TRACESERVER(std::string class1, std::string int1, std::string int2, std::string server, std::string nick, std::string host) { return "Serv " + class1 + " " + int1 + "S " + int2 + "C " + server + " " + nick + "*!*@ " + host; }
+std::string RPL_TRACESERVER(std::string class1, std::string int1, std::string int2, std::string server, std::string nick, std::string user, std::string host) { return "Serv " + class1 + " " + int1 + "S " + int2 + "C " + server + " " + nick + "!" + user + "@ " + host; }
 std::string RPL_TRACENEWTYPE(std::string type, std::string name) { return type + " 0 " + name; }
 std::string RPL_STATSLINKINFO(std::string name, std::string q, std::string smessages, std::string sbytes, std::string rsmessages, std::string rbytes, std::string time) { return name + " " + q + " " + smessages + " " + sbytes + " " + rsmessages + " " + rbytes + " " + time; }
 std::string RPL_STATSCOMMANDS(std::string command, std::string count) { return command + " " + count; }
@@ -36,6 +43,11 @@ std::string RPL_ADMINLOC1(std::string info) { return ":" + info; }
 std::string RPL_ADMINLOC2(std::string info) { return ":" + info; }
 std::string RPL_ADMINEMAIL(std::string info) { return ":" + info; }
 std::string RPL_TRACELOG(std::string file, std::string level) { return "File " + file + " " + level; }
+std::string RPL_TRACEEND(std::string server, std::string version) { return server + " " + version + " :End of TRACE"; }
+std::string RPL_TRYAGAIN(std::string cmd) { return cmd + " :Please wait a while and try again."; }
+/******************************************************************************/
+/*                                   3**                                      */
+/******************************************************************************/
 std::string RPL_NONE() { return ""; }
 std::string RPL_AWAY(std::string nick, std::string message) { return nick + " :" + message; }
 std::string RPL_USERHOST(std::string reply_list) { return ":" + reply_list; }
@@ -54,16 +66,21 @@ std::string RPL_LISTSTART() { return "Channel :Users  Name"; }
 std::string RPL_LIST(std::string channel, std::string topic) { return channel + " :" + topic; }
 std::string RPL_LISTEND() { return ":End of /LIST"; }
 std::string RPL_CHANNELMODEIS(std::string channel, std::string mode, std::string params) { return channel + " " + mode + " " + params; }
+std::string RPL_UNIQOPIS(std::string channel, std::string nick) { return channel + " " + nick; }
 std::string RPL_NOTOPIC(std::string channel) { return channel + " :No topic is set"; }
 std::string RPL_TOPIC(std::string channel, std::string topic) { return channel + " :" + topic; }
-std::string RPL_INVITING(std::string channel, std::string nick) { return channel + " " + nick; }
+std::string RPL_INVITING(std::string channel, std::string nick) { return nick + " " + channel; }
 std::string RPL_SUMMONING(std::string user) { return user + " :Summoning user to IRC"; }
-std::string RPL_VERSION(std::string version, std::string debuglevel, std::string server, std::string comments) { return version + "." + debuglevel + " " + server + " :" + comments; }
+std::string RPL_INVITELIST(std::string channel, std::string inviter) { return channel + " " + inviter; }
+std::string RPL_ENDOFINVITELIST(std::string channel) { return channel + " :End of channel invite list"; }
+std::string RPL_EXCEPTLIST(std::string channel, std::string mask) { return channel + " " + mask; }
+std::string RPL_ENDOFEXCEPTLIST(std::string channel) { return channel + " :End of channel exception list"; }
+std::string RPL_VERSION(std::string version, std::string server, std::string comments) { return version + " " + server + " :" + comments; }
 std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string hopcout, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " H :" + hopcout + " " + real; }
 std::string RPL_NAMREPLY(std::string channel, std::string nick_list) { return channel + " :" + nick_list; }
-std::string RPL_ENDOFNAMES(std::string channel) { return channel + " :End of /NAMES list"; }
 std::string RPL_LINKS(std::string mask, std::string server, std::string hopcount, std::string info) { return mask + " " + server + " :" + hopcount + " " + info; }
 std::string RPL_ENDOFLINKS(std::string mask) { return mask + " :End of /LINKS list"; }
+std::string RPL_ENDOFNAMES(std::string channel) { return channel + " :End of /NAMES list"; }
 std::string RPL_BANLIST(std::string channel, std::string banip) { return channel + " " + banip; }
 std::string RPL_ENDOFBANLIST(std::string channel) { return channel + " :End of channel ban list"; }
 std::string RPL_ENDOFWHOWAS(std::string nick) { return nick + " :End of WHOWAS"; }
@@ -74,12 +91,15 @@ std::string RPL_MOTDSTART(std::string server) { return ":- " + server + " Messag
 std::string RPL_ENDOFMOTD() { return ":End of /MOTD command"; }
 std::string RPL_YOUREOPER() { return ":You are now an IRC operator"; }
 std::string RPL_REHASHING(std::string file) { return file + " :Rehashing"; }
+std::string RPL_YOURESERVICE(std::string nick) { return ":You are service " + nick; }
 std::string RPL_TIME(std::string server, std::string time) { return server + " :" + time; }
-std::string RPL_USERSSTART() { return ":UserID   Terminal  Host"; }
+std::string RPL_USERSSTART() { return ":UserID Terminal Host"; }
 std::string RPL_USERS() { return ":%-8s %-9s %-8s"; }
 std::string RPL_ENDOFUSERS() { return ":End of users"; }
 std::string RPL_NOUSERS() { return ":Nobody logged in"; }
-
+/******************************************************************************/
+/*                                   4**                                      */
+/******************************************************************************/
 std::string ERR_NOSUCHNICK(std::string nickname) { return nickname + " :No such nick/channel"; }
 std::string ERR_NOSUCHSERVER(std::string server) { return server + " :No such server"; }
 std::string ERR_NOSUCHCHANNEL(std::string channel) { return channel + " :No such channel"; }
@@ -87,11 +107,13 @@ std::string ERR_CANNOTSENDTOCHAN(std::string channel) { return channel + " :Cann
 std::string ERR_TOOMANYCHANNELS(std::string channel) { return channel + " :You have joined too many channels"; }
 std::string ERR_WASNOSUCHNICK(std::string nickname) { return nickname + " :There was no such nickname"; }
 std::string ERR_TOOMANYTARGETS(std::string target) { return target + " :Duplicate recipients. No message delivered"; }
+std::string ERR_NOSUCHSERVICE(std::string service) { return service + " :No such service"; }
 std::string ERR_NOORIGIN() { return ":No origin specified"; }
 std::string ERR_NORECIPIENT(std::string command) { return ":No recipient given (" + command + ")"; }
 std::string ERR_NOTEXTTOSEND() { return ":No text to send"; }
 std::string ERR_NOTOPLEVEL(std::string mask) { return mask + " :No toplevel domain specified"; }
 std::string ERR_WILDTOPLEVEL(std::string mask) { return mask + " :Wildcard in toplevel domain"; }
+std::string ERR_BADMASK(std::string mask) { return mask + " :Bad Server/host mask"; }
 std::string ERR_UNKNOWNCOMMAND(std::string command) { return command + " :Unknown command"; }
 std::string ERR_NOMOTD() { return ":MOTD File is missing"; }
 std::string ERR_NOADMININFO(std::string server) { return server + " :No administrative info available"; }
@@ -118,12 +140,37 @@ std::string ERR_UNKNOWNMODE(std::string c) { return c + " :is unknown mode char 
 std::string ERR_INVITEONLYCHAN(std::string channel) { return channel + " :Cannot join channel (+i)"; }
 std::string ERR_BANNEDFROMCHAN(std::string channel) { return channel + " :Cannot join channel (+b)"; }
 std::string ERR_BADCHANNELKEY(std::string channel) { return channel + " :Cannot join channel (+k)"; }
+std::string ERR_BADCHANMASK(std::string channel) { return channel + " :Bad Channel Mask"; }
+std::string ERR_NOCHANMODES(std::string channel) { return channel + " :Channel doesn't support modes"; }
+std::string ERR_BANLISTFULL(std::string channel) { return channel + " :Channel list is full"; }
 std::string ERR_NOPRIVILEGES() { return ":Permission Denied- You're not an IRC operator"; }
-std::string ERR_CHANOPRIVSNEEDED(std::string channel) { return channel + " :You're not channel operator"; }
+std::string ERR_UNIQOPRIVSNEEDED(std::string channel) { return channel + " :You're not channel operator"; }
 std::string ERR_CANTKILLSERVER() { return ":You cant kill a server!"; }
+std::string ERR_RESTRICTED() { return ":Your connection is restricted!"; }
+std::string ERR_UNIQOPPRIVSNEEDED() { return ":You're not the original channel operator"; }
 std::string ERR_NOOPERHOST() { return ":No O-lines for your host"; }
 std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
+/******************************************************************************/
+/*                                   5**                                      */
+/******************************************************************************/
 std::string ERR_USERSDONTMATCH() { return ":Cant change mode for other users"; }
+/******************************************************************************/
+/*                                   6**                                      */
+/******************************************************************************/
+std::string RPL_STARTTLS() { return ":STARTTLS successful, proceed with TLS handshake"; }
+std::string ERR_STARTTLS() { return ":STARTTLS failed (Wrong moon phase)"; }
+/******************************************************************************/
+/*                                   9**                                      */
+/******************************************************************************/
+std::string RPL_LOGGEDIN(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged in"; }
+std::string RPL_LOGGEDOUT(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged out"; }
+std::string ERR_NICKLOCKED() { return ":You must use a nick assigned to you"; }
+std::string RPL_SASLSUCCESS() { return ":SASL authentication successful"; }
+std::string ERR_SASLFAIL() { return ":SASL authentication failed"; }
+std::string ERR_SASLTOOLONG() { return ":SASL message too long"; }
+std::string ERR_SASLABORTED() { return ":SASL authentication aborted"; }
+std::string ERR_SASLALREADY() { return ":You have already authenticated using SASL"; }
+std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available SASL mechanisms"; }
 
 std::string irc::User::generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
@@ -153,7 +200,7 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 	case 205:
 		return RPL_TRACEUSER(arg1, arg2);
 	case 206:
-		return RPL_TRACESERVER(arg1, arg2, arg3, arg4, arg5, arg6);
+		return RPL_TRACESERVER(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 208:
 		return RPL_TRACENEWTYPE(arg1, arg2);
 	case 211:
@@ -202,6 +249,10 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return RPL_ADMINEMAIL(arg1);
 	case 261:
 		return RPL_TRACELOG(arg1, arg2);
+	case 262:
+		return RPL_TRACEEND(arg1, arg2);
+	case 263:
+		return RPL_TRYAGAIN(arg1);
 	case 300:
 		return RPL_NONE();
 	case 301:
@@ -238,6 +289,8 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return RPL_LISTEND();
 	case 324:
 		return RPL_CHANNELMODEIS(arg1, arg2, arg3);
+	case 325:
+		return RPL_UNIQOPIS(arg1, arg2);
 	case 331:
 		return RPL_NOTOPIC(arg1);
 	case 332:
@@ -246,18 +299,24 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return RPL_INVITING(arg1, arg2);
 	case 342:
 		return RPL_SUMMONING(arg1);
+	case 346:
+		return RPL_INVITELIST(arg1, arg2);
+	case 347:
+		return RPL_ENDOFINVITELIST(arg1);
+	case 348:
+		return RPL_EXCEPTLIST(arg1, arg2);
 	case 351:
-		return RPL_VERSION(arg1, arg2, arg3, arg4);
+		return RPL_VERSION(arg1, arg2, arg3);
 	case 352:
 		return RPL_WHOREPLY(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 353:
 		return RPL_NAMREPLY(arg1, arg2);
-	case 366:
-		return RPL_ENDOFNAMES(arg1);
 	case 364:
 		return RPL_LINKS(arg1, arg2, arg3, arg4);
 	case 365:
 		return RPL_ENDOFLINKS(arg1);
+	case 366:
+		return RPL_ENDOFNAMES(arg1);
 	case 367:
 		return RPL_BANLIST(arg1, arg2);
 	case 368:
@@ -278,6 +337,8 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return RPL_YOUREOPER();
 	case 382:
 		return RPL_REHASHING(arg1);
+	case 383:
+		return RPL_YOURESERVICE(arg1);
 	case 391:
 		return RPL_TIME(arg1, arg2);
 	case 392:
@@ -303,6 +364,8 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return ERR_WASNOSUCHNICK(arg1);
 	case 407:
 		return ERR_TOOMANYTARGETS(arg1);
+	case 408:
+		return ERR_NOSUCHSERVICE(arg1);
 	case 409:
 		return ERR_NOORIGIN();
 	case 411:
@@ -313,6 +376,8 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return ERR_NOTOPLEVEL(arg1);
 	case 414:
 		return ERR_WILDTOPLEVEL(arg1);
+	case 415:
+		return ERR_BADMASK(arg1);
 	case 421:
 		return ERR_UNKNOWNCOMMAND(arg1);
 	case 422:
@@ -365,18 +430,53 @@ std::string irc::User::generate(unsigned short code, std::string arg1, std::stri
 		return ERR_BANNEDFROMCHAN(arg1);
 	case 475:
 		return ERR_BADCHANNELKEY(arg1);
+	case 476:
+		return ERR_BADCHANMASK(arg1);
+	case 477:
+		return ERR_NOCHANMODES(arg1);
+	case 478:
+		return ERR_BANLISTFULL(arg1);
 	case 481:
 		return ERR_NOPRIVILEGES();
 	case 482:
-		return ERR_CHANOPRIVSNEEDED(arg1);
+		return ERR_UNIQOPRIVSNEEDED(arg1);
 	case 483:
 		return ERR_CANTKILLSERVER();
+	case 484:
+		return ERR_RESTRICTED();
+	case 485:
+		return ERR_UNIQOPPRIVSNEEDED();
 	case 491:
 		return ERR_NOOPERHOST();
+
 	case 501:
 		return ERR_UMODEUNKNOWNFLAG();
 	case 502:
 		return ERR_USERSDONTMATCH();
+
+	case 670:
+		return RPL_STARTTLS();
+	case 691:
+		return ERR_STARTTLS();
+
+	case 900:
+		return RPL_LOGGEDIN(arg1, arg2, arg3);
+	case 901:
+		return RPL_LOGGEDOUT(arg1, arg2, arg3);
+	case 902:
+		return ERR_NICKLOCKED();
+	case 903:
+		return RPL_SASLSUCCESS();
+	case 904:
+		return ERR_SASLFAIL();
+	case 905:
+		return ERR_SASLTOOLONG();
+	case 906:
+		return ERR_SASLABORTED();
+	case 907:
+		return ERR_SASLALREADY();
+	case 908:
+		return RPL_SASLMECHS(arg1);
 	}
 	return std::string();
 }
