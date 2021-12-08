@@ -10,7 +10,6 @@ namespace irc
 {
 	enum Status
 	{
-		registration,
 		online,
 		away
 	};
@@ -36,6 +35,8 @@ namespace irc
 
 		void pendingMessages(Server *server);
 		void write(std::string message);
+
+		std::string getPrefix();
 	};
 }
 #endif

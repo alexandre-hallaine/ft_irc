@@ -10,5 +10,6 @@
 namespace irc
 {
 	std::string currentTime();
+	void error(std::string message);
 }
 #endif

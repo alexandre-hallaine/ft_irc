@@ -16,11 +16,11 @@ void irc::Server::init()
 {
 	int enable = 1;
 	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		exit(EXIT_FAILURE);
+		error("socket");
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &enable, sizeof(enable)))
-		exit(EXIT_FAILURE);
+		error("setsockopt");
 	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
-		exit(EXIT_FAILURE);
+		error("fcntl");
 
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
@@ -28,9 +28,11 @@ void irc::Server::init()
 	address.sin_port = htons(atoi(config.get("port").c_str()));
 
 	if (bind(fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-		exit(EXIT_FAILURE);
+		error("bind");
 	if (listen(fd, address.sin_port) < 0)
-		exit(EXIT_FAILURE);
+		error("listen");
+
+	displayUsers();
 }
 void irc::Server::displayUsers()
 {
@@ -40,7 +42,6 @@ void irc::Server::displayUsers()
 }
 void irc::Server::pendingConnection()
 {
-	displayUsers();
 	while (true)
 	{
 		struct sockaddr_in address;
@@ -56,7 +57,7 @@ void irc::Server::pendingConnection()
 }
 
 irc::Server::Server()
-	: config(), display(), users(), upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
 
 void irc::Server::loop()
 {

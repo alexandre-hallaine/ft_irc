@@ -1,6 +1,5 @@
 #include "Runtime.hpp"
 
-irc::Runtime::Runtime()
-	: Server() {}
+irc::Runtime::Runtime() {}
 
 void irc::Runtime::run() { loop(); }

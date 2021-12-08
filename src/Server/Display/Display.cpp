@@ -27,8 +27,7 @@ void irc::Display::write(unsigned char pos, std::string prefix, std::string line
 	write(pos, ss.str());
 }
 
-irc::Display::Display()
-	: lines() { update(); }
+irc::Display::Display() { update(); }
 
 void irc::Display::write(unsigned char pos, std::string line)
 {

@@ -5,6 +5,9 @@
 #include <poll.h>
 #include <iostream>
 #include <sys/socket.h>
+#include <algorithm>
+#include <netdb.h>
+#include <arpa/inet.h>
 
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
@@ -27,6 +30,8 @@ void irc::User::push()
 }
 void irc::User::callCommands()
 {
+	std::vector<Command *> remove = std::vector<Command *>();
+
 	std::vector<Command *>::iterator it = commands.begin();
 	std::vector<Command *>::iterator ite = commands.end();
 	while (it != ite)
@@ -38,20 +43,43 @@ void irc::User::callCommands()
 			std::cout << "Unknown command: " << command->getPrefix() << std::endl;
 		++it;
 	}
-	commands.clear();
 	push();
+
+	it = remove.begin();
+	ite = remove.end();
+	while (it != ite)
+	{
+		std::vector<Command *>::iterator item = std::find(commands.begin(), commands.end(), *it);
+		if (item != commands.end())
+			commands.erase(item);
+		++it;
+	}
 }
 
 void CAP(irc::Command *command);
+void NICK(irc::Command *command);
 
 irc::User::User(int fd, struct sockaddr_in address)
-	: fd(fd), status(registration), command_function(), commands(), packet(), pending()
+	: fd(fd), status(online)
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
-	(void)address;
+
+	struct addrinfo hints, *result;
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
+	hints.ai_protocol = 0;
+	hints.ai_canonname = NULL;
+	hints.ai_addr = NULL;
+	hints.ai_next = NULL;
+	if (getaddrinfo(inet_ntoa(address.sin_addr), "", &hints, &result) != 0)
+		error("getaddrinfo");
+
+	std::cout << "ai_canonname: " << result->ai_canonname << std::endl;
 	(void)status;
 
 	command_function["CAP"] = CAP;
+	command_function["NICK"] = NICK;
 }
 
 void irc::User::pendingMessages(Server *server)
@@ -63,10 +91,10 @@ void irc::User::pendingMessages(Server *server)
 		return;
 
 	char buffer[BUFFER_SIZE + 1];
-	ssize_t msg_len = recv(pfd.fd, &buffer, BUFFER_SIZE, 0);
-	if (msg_len == -1)
+	ssize_t size;
+	if ((size = recv(pfd.fd, &buffer, BUFFER_SIZE, 0)) == -1)
 		return;
-	buffer[msg_len] = 0;
+	buffer[size] = 0;
 
 	std::string receive(buffer);
 	packet += receive;
@@ -87,3 +115,8 @@ void irc::User::pendingMessages(Server *server)
 	callCommands();
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
+
+std::string getPrefix()
+{
+	return "";
+}
