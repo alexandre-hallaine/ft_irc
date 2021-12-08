@@ -154,15 +154,17 @@ std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
 /*                                   5**                                      */
 /******************************************************************************/
 std::string ERR_USERSDONTMATCH() { return ":Cant change mode for other users"; }
+
+//IRCv3
 /******************************************************************************/
 /*                                   6**                                      */
 /******************************************************************************/
-std::string RPL_STARTTLS() { return ":STARTTLS successful, proceed with TLS handshake"; }
-std::string ERR_STARTTLS() { return ":STARTTLS failed (Wrong moon phase)"; }
+/*std::string RPL_STARTTLS() { return ":STARTTLS successful, proceed with TLS handshake"; }
+std::string ERR_STARTTLS() { return ":STARTTLS failed (Wrong moon phase)"; }*/
 /******************************************************************************/
 /*                                   9**                                      */
 /******************************************************************************/
-std::string RPL_LOGGEDIN(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged in"; }
+/*std::string RPL_LOGGEDIN(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged in"; }
 std::string RPL_LOGGEDOUT(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged out"; }
 std::string ERR_NICKLOCKED() { return ":You must use a nick assigned to you"; }
 std::string RPL_SASLSUCCESS() { return ":SASL authentication successful"; }
@@ -170,7 +172,7 @@ std::string ERR_SASLFAIL() { return ":SASL authentication failed"; }
 std::string ERR_SASLTOOLONG() { return ":SASL message too long"; }
 std::string ERR_SASLABORTED() { return ":SASL authentication aborted"; }
 std::string ERR_SASLALREADY() { return ":You have already authenticated using SASL"; }
-std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available SASL mechanisms"; }
+std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available SASL mechanisms"; }*/
 
 std::string irc::Command::getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
@@ -592,6 +594,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 		params += ERR_USERSDONTMATCH();
 		break;
 
+		/*IRCv3
 	case 670:
 		params += RPL_STARTTLS();
 		break;
@@ -625,7 +628,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 		break;
 	case 908:
 		params += RPL_SASLMECHS(arg1);
-		break;
+		break;*/
 	}
 	return params;
 }

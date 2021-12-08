@@ -16,7 +16,6 @@ FILES_SOURCE		=	utils/utils.cpp \
 						Server/Display/Display.cpp \
 						Server/Server.cpp \
 						Server/Runtime.cpp \
-						User/Command/CAP.cpp \
 						User/Command/NICK.cpp \
 						User/Command/USER.cpp \
 						User/Command/MOTD.cpp \

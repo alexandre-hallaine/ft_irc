@@ -1,6 +1,7 @@
 #include "User.hpp"
 #include "Command/Command.hpp"
 #include "../utils/utils.hpp"
+#include "../Server/Server.hpp"
 #include <fcntl.h>
 #include <poll.h>
 #include <iostream>
@@ -11,6 +12,10 @@
 
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
+
+void NICK(irc::Command *command);
+void USER(irc::Command *command);
+void MOTD(irc::Command *command);
 
 void irc::User::push()
 {
@@ -27,6 +32,17 @@ void irc::User::push()
 	pending.clear();
 
 	send(fd, buffer.c_str(), buffer.length(), 0);
+}
+void post_registration(irc::Command *command)
+{
+	command->reply(1, command->getUser().getPrefix());
+	command->reply(2, command->getUser().getHost(), command->getServer().getConfig().get("version"));
+	command->reply(3, command->getServer().getUpTime());
+	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"),
+				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
+
+	//not needed
+	MOTD(command);
 }
 void irc::User::callCommands()
 {
@@ -48,6 +64,9 @@ void irc::User::callCommands()
 		}
 		++it;
 	}
+
+	if (!canReplie && getPrefix().length())
+		post_registration(*commands.begin());
 	push();
 
 	it = remove.begin();
@@ -59,14 +78,7 @@ void irc::User::callCommands()
 			commands.erase(item);
 		++it;
 	}
-	if (!canReplie && getPrefix().length())
-		callCommands();
 }
-
-void CAP(irc::Command *command);
-void NICK(irc::Command *command);
-void USER(irc::Command *command);
-void MOTD(irc::Command *command);
 
 irc::User::User(int fd, struct sockaddr_in address)
 	: fd(fd)
@@ -78,7 +90,6 @@ irc::User::User(int fd, struct sockaddr_in address)
 		error("getnameinfo");
 	this->host = host;
 
-	command_function["CAP"] = CAP;
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
 	command_function["MOTD"] = MOTD;
