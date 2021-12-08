@@ -2,6 +2,7 @@
 #define USER_HPP
 
 #include <string>
+#include <vector>
 
 #define BUFFER_SIZE 4096
 
@@ -20,6 +21,8 @@ namespace irc
 		std::string mode;
 		std::string user_modes;
 		bool registered;
+		std::string pastnick;
+		
 
 		std::string generate(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
@@ -37,6 +40,7 @@ namespace irc
 		void setRealname(std::string realname);
 		void setNickname(std::string nickname);
 		void setMode(std::string mode);
+		void setPastnick(std::string mode);
 		std::string getUsername();
 		std::string getHostname();
 		std::string getServername();
@@ -45,6 +49,7 @@ namespace irc
 		std::string getHote();
 		std::string getMode();
 		std::string getUser_modes();
+		std::string getPastnick();
 		bool getRegistered();
 		void setRegistered(bool registered);
 

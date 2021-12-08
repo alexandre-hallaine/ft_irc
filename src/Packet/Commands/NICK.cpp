@@ -25,7 +25,12 @@ void irc::NICK(struct irc::packetParams params)
 	}
 	else
 		init = true;
+
+	if (params.user->getNickname() != "*")
+		params.user->setPastnick(" " + params.user->getNickname() + " " + params.user->getPastnick());
+	std::cout << "HISTORY" << params.user->getPastnick() << std::endl;
 	params.user->setNickname(params.args[1]);
+ 
 	if (init && params.user->getRegistered())
 		CAP(params);
 }

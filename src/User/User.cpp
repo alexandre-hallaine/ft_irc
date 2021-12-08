@@ -42,6 +42,7 @@ void irc::User::setServername(std::string servername) { this->servername = serve
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setMode(std::string mode) { this->mode = mode; }
+void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getServername() { return servername; }
@@ -50,6 +51,7 @@ std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getHote() { return hote; }
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getUser_modes() { return ("iws"); }
+std::string irc::User::getPastnick() { return pastnick; }
 bool irc::User::getRegistered() { return registered; }
 void irc::User::setRegistered(bool registered) { this->registered = registered; }
 

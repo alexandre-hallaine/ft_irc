@@ -4,6 +4,7 @@
 #include "../User/User.hpp"
 #include "../Server/Channel/ChannelManager.hpp"
 #include <vector>
+#include <map>
 #include <string>
 
 #define DEBUG false
