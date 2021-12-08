@@ -8,12 +8,6 @@
 
 namespace irc
 {
-	enum Status
-	{
-		online,
-		away
-	};
-
 	class Command;
 	class Server;
 
@@ -21,11 +15,15 @@ namespace irc
 	{
 	private:
 		int fd;
-		Status status;
+		std::string host;
 		std::map<std::string, void (*)(Command *)> command_function;
 		std::vector<Command *> commands;
 		std::string packet;
 		std::vector<std::string> pending;
+
+		std::string nickname;
+		std::string username;
+		std::string realname;
 
 		void push();
 		void callCommands();
@@ -36,7 +34,14 @@ namespace irc
 		void pendingMessages(Server *server);
 		void write(std::string message);
 
+		void setNickname(std::string nickname);
+		void setUsername(std::string username);
+		void setRealname(std::string realname);
+		std::string getHost();
 		std::string getPrefix();
+		std::string getNickname();
+		std::string getUsername();
+		std::string getRealname();
 	};
 }
 #endif

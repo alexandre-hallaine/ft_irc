@@ -77,3 +77,4 @@ void irc::Server::loop()
 }
 
 irc::Config &irc::Server::getConfig() { return config; }
+std::string irc::Server::getUpTime() { return upTime; }

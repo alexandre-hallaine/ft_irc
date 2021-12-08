@@ -30,6 +30,7 @@ namespace irc
 		void loop();
 
 		Config &getConfig();
+		std::string getUpTime();
 	};
 }
 #endif

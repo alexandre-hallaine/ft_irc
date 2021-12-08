@@ -19,7 +19,6 @@ namespace irc
 		std::vector<std::string> parameters;
 		std::string trailer;
 
-		std::vector<std::string> split(std::string str, std::string delimiter);
 		std::string getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
 	public:

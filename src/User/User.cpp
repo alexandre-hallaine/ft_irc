@@ -30,17 +30,22 @@ void irc::User::push()
 }
 void irc::User::callCommands()
 {
-	std::vector<Command *> remove = std::vector<Command *>();
+	bool canReplie = getPrefix().length();
 
+	std::vector<Command *> remove = std::vector<Command *>();
 	std::vector<Command *>::iterator it = commands.begin();
 	std::vector<Command *>::iterator ite = commands.end();
 	while (it != ite)
 	{
 		Command *command = *it;
-		if (command_function.count(command->getPrefix()))
-			command_function[command->getPrefix()](command);
-		else if (DEBUG)
-			std::cout << "Unknown command: " << command->getPrefix() << std::endl;
+		if (canReplie || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
+		{
+			if (command_function.count(command->getPrefix()))
+				command_function[command->getPrefix()](command);
+			else if (DEBUG)
+				std::cout << "Unknown command: " << command->getPrefix() << std::endl;
+			remove.push_back(command);
+		}
 		++it;
 	}
 	push();
@@ -54,32 +59,29 @@ void irc::User::callCommands()
 			commands.erase(item);
 		++it;
 	}
+	if (!canReplie && getPrefix().length())
+		callCommands();
 }
 
 void CAP(irc::Command *command);
 void NICK(irc::Command *command);
+void USER(irc::Command *command);
+void MOTD(irc::Command *command);
 
 irc::User::User(int fd, struct sockaddr_in address)
-	: fd(fd), status(online)
+	: fd(fd)
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 
-	struct addrinfo hints, *result;
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-	hints.ai_protocol = 0;
-	hints.ai_canonname = NULL;
-	hints.ai_addr = NULL;
-	hints.ai_next = NULL;
-	if (getaddrinfo(inet_ntoa(address.sin_addr), "", &hints, &result) != 0)
-		error("getaddrinfo");
-
-	std::cout << "ai_canonname: " << result->ai_canonname << std::endl;
-	(void)status;
+	char host[NI_MAXHOST];
+	if (getnameinfo((struct sockaddr *)&address, sizeof(address), host, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
+		error("getnameinfo");
+	this->host = host;
 
 	command_function["CAP"] = CAP;
 	command_function["NICK"] = NICK;
+	command_function["USER"] = USER;
+	command_function["MOTD"] = MOTD;
 }
 
 void irc::User::pendingMessages(Server *server)
@@ -116,7 +118,23 @@ void irc::User::pendingMessages(Server *server)
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
 
-std::string getPrefix()
+void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
+void irc::User::setUsername(std::string username) { this->username = username; }
+void irc::User::setRealname(std::string realname) { this->realname = realname; }
+std::string irc::User::getHost() { return host; }
+std::string irc::User::getPrefix()
 {
-	return "";
+	if (!nickname.length())
+		return std::string();
+	std::string prefix = nickname;
+	if (host.length())
+	{
+		if (username.length())
+			prefix += "!" + username;
+		prefix += "@" + host;
+	}
+	return prefix;
 }
+std::string irc::User::getNickname() { return nickname; }
+std::string irc::User::getUsername() { return username; }
+std::string irc::User::getRealname() { return realname; }

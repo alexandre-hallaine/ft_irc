@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include <iostream>
+#include "../User.hpp"
 
-void NICK(irc::Command *command)
-{
-	(void)command;
-}
+void NICK(irc::Command *command) { command->getUser().setNickname(command->getParameters()[0]); }

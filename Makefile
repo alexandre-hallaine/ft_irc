@@ -18,6 +18,8 @@ FILES_SOURCE		=	utils/utils.cpp \
 						Server/Runtime.cpp \
 						User/Command/CAP.cpp \
 						User/Command/NICK.cpp \
+						User/Command/USER.cpp \
+						User/Command/MOTD.cpp \
 						User/Command/Command.cpp \
 						User/Command/replies.cpp \
 						User/User.cpp \
