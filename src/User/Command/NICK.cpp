@@ -2,6 +2,7 @@
 #include "../User.hpp"
 #include "../../utils/utils.hpp"
 #include "../../Server/Server.hpp"
+#include <iostream>
 
 void NICK(irc::Command *command)
 {
@@ -28,11 +29,11 @@ void NICK(irc::Command *command)
 	std::vector<irc::User *>::iterator ite = users.end();
 	while (it != ite)
 	{
-		if (nickname == (*it)->getNickname())
-			return command->reply(433, nickname);
+		if (command->getParameters()[0] == (*it)->getNickname())
+			return command->reply(433, command->getParameters()[0]);
 		++it;
 	}
 
+	command->getUser().write(":" + command->getUser().getPrefix() + " NICK " + command->getParameters()[0]);
 	command->getUser().setNickname(command->getParameters()[0]);
-	command->getUser().write(":" + command->getUser().getPrefix() + " NICK " + nickname);
 }
