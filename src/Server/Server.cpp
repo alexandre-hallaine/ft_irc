@@ -3,6 +3,7 @@
 #include "../utils/utils.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -37,7 +38,7 @@ void irc::Server::displayUsers()
 	ss << "Users: " << users.size();
 	display.write(1, ss.str());
 }
-void irc::Server::checkConnection()
+void irc::Server::pendingConnection()
 {
 	displayUsers();
 	while (true)
@@ -49,6 +50,8 @@ void irc::Server::checkConnection()
 			break;
 		users[fd] = new User(fd, address);
 		displayUsers();
+		if (DEBUG)
+			std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 	}
 }
 
@@ -60,7 +63,15 @@ void irc::Server::loop()
 	init();
 	while (!stop)
 	{
-		checkConnection();
+		pendingConnection();
+
+		std::map<int, User *>::iterator it = users.begin();
+		std::map<int, User *>::iterator ite = users.end();
+		while (it != ite)
+		{
+			(*it).second->pendingMessages(this);
+			++it;
+		}
 	}
 }
 

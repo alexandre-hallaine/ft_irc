@@ -1,6 +1,6 @@
 #include "Command.hpp"
 
-void irc::CAP(irc::Command *command)
+void CAP(irc::Command *command)
 {
 	(void)command;
 	//command.getUser().write(1, params.user->getNickname(), params.user->getUsername(), params.user->getHostname());

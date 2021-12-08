@@ -32,13 +32,17 @@ void irc::User::callCommands()
 	while (it != ite)
 	{
 		Command *command = *it;
-		command_function[command->getPrefix()](command);
+		if (command_function.count(command->getPrefix()))
+			command_function[command->getPrefix()](command);
+		else if (DEBUG)
+			std::cout << "Unknown command: " << command->getPrefix() << std::endl;
 		++it;
 	}
+	commands.clear();
 	push();
 }
 
-void irc::CAP(irc::Command *command);
+void CAP(irc::Command *command);
 
 irc::User::User(int fd, struct sockaddr_in address)
 	: fd(fd), status(registration), command_function(), commands(), packet(), pending()

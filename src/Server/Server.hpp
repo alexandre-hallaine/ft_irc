@@ -22,7 +22,7 @@ namespace irc
 
 		void init();
 		void displayUsers();
-		void checkConnection();
+		void pendingConnection();
 
 	public:
 		Server();
