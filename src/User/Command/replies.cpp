@@ -193,7 +193,12 @@ std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available S
 
 std::string irc::Command::getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
-	std::string params = user->getUsername() + " ";
+	std::string params = "";
+	if (user->isRegistered())
+		params += user->getUsername();
+	else
+		params += "*";
+	params += " ";
 	switch (code)
 	{
 	case 001:

@@ -34,6 +34,8 @@ namespace irc
 		void pendingMessages(Server *server);
 		void write(std::string message);
 
+		bool isRegistered();
+
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
 		void setRealname(std::string realname);

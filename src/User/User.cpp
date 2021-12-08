@@ -46,7 +46,7 @@ void post_registration(irc::Command *command)
 }
 void irc::User::callCommands()
 {
-	bool canReplie = getPrefix().length();
+	bool registered = isRegistered();
 
 	std::vector<Command *> remove = std::vector<Command *>();
 	std::vector<Command *>::iterator it = commands.begin();
@@ -54,7 +54,7 @@ void irc::User::callCommands()
 	while (it != ite)
 	{
 		Command *command = *it;
-		if (canReplie || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
+		if (registered || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
 		{
 			if (command_function.count(command->getPrefix()))
 				command_function[command->getPrefix()](command);
@@ -64,9 +64,6 @@ void irc::User::callCommands()
 		}
 		++it;
 	}
-
-	if (!canReplie && getPrefix().length())
-		post_registration(*commands.begin());
 	push();
 
 	it = remove.begin();
@@ -77,6 +74,12 @@ void irc::User::callCommands()
 		if (item != commands.end())
 			commands.erase(item);
 		++it;
+	}
+
+	if (!registered && isRegistered())
+	{
+		post_registration(*commands.begin());
+		callCommands();
 	}
 }
 
@@ -128,6 +131,8 @@ void irc::User::pendingMessages(Server *server)
 	callCommands();
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
+
+bool irc::User::isRegistered() { return nickname.length() && realname.length(); }
 
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
