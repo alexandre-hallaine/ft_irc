@@ -139,7 +139,7 @@ void irc::User::setMode(std::string mode) { this->mode = mode; }
 std::string irc::User::getHost() { return host; }
 std::string irc::User::getPrefix()
 {
-	if (!nickname.length())
+	if (!isRegistered())
 		return std::string();
 	std::string prefix = nickname;
 	if (host.length())
