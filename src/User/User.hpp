@@ -44,6 +44,7 @@ namespace irc
 		std::string getNickname();
 		std::string getUsername();
 		std::string getRealname();
+		int getFd();
 	};
 }
 #endif

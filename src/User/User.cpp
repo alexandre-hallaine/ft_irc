@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   User.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: droge <droge@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 18:58:03 by droge             #+#    #+#             */
+/*   Updated: 2021/12/09 19:11:59 by droge            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "User.hpp"
 #include "Command/Command.hpp"
 #include "../utils/utils.hpp"
@@ -16,6 +28,7 @@
 void NICK(irc::Command *command);
 void USER(irc::Command *command);
 void MOTD(irc::Command *command);
+void QUIT(irc::Command *command);
 
 void irc::User::push()
 {
@@ -97,6 +110,7 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
 	command_function["MOTD"] = MOTD;
+	command_function["QUIT"] = QUIT;
 }
 
 void irc::User::pendingMessages(Server *server)
@@ -155,3 +169,4 @@ std::string irc::User::getPrefix()
 std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getRealname() { return realname; }
+int irc::User::getFd() { return fd; }

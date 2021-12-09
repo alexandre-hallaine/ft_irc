@@ -33,6 +33,8 @@ namespace irc
 		Config &getConfig();
 		std::string getUpTime();
 		std::vector<User *> getUsers();
+
+		void quitUser(User user);
 	};
 }
 #endif

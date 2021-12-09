@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <unistd.h>
 
 void irc::Server::init()
 {
@@ -90,4 +91,11 @@ std::vector<irc::User *> irc::Server::getUsers()
 		++it;
 	}
 	return users;
+}
+
+void irc::Server::quitUser(User user)
+{
+	close(user.getFd());
+	users.erase(users.find(user.getFd()));
+	displayUsers();
 }
