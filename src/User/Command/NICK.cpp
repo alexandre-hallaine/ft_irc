@@ -25,14 +25,9 @@ void NICK(irc::Command *command)
 	}
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
-	std::vector<irc::User *>::iterator it = users.begin();
-	std::vector<irc::User *>::iterator ite = users.end();
-	while (it != ite)
-	{
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
 		if (command->getParameters()[0] == (*it)->getNickname())
 			return command->reply(433, command->getParameters()[0]);
-		++it;
-	}
 
 	command->getUser().write(":" + command->getUser().getPrefix() + " NICK " + command->getParameters()[0]);
 	command->getUser().setNickname(command->getParameters()[0]);
