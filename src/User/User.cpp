@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
@@ -91,6 +92,7 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["MOTD"] = MOTD;
 	command_function["QUIT"] = QUIT;
 }
+irc::User::~User() { close(fd); }
 
 void irc::User::pendingMessages(Server *server)
 {

@@ -34,7 +34,7 @@ namespace irc
 		std::string getUpTime();
 		std::vector<User *> getUsers();
 
-		void quitUser(User user);
+		void quitUser(User &user);
 	};
 }
 #endif

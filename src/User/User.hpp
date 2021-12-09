@@ -30,6 +30,7 @@ namespace irc
 
 	public:
 		User(int fd, struct sockaddr_in address);
+		~User();
 
 		void pendingMessages(Server *server);
 		void write(std::string message);

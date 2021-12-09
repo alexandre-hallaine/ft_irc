@@ -58,7 +58,12 @@ void irc::Server::pendingConnection()
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), stop(false)
+{
+	display.write(0, "Welcome to our \033[1;37mIRC\n");
+	config.set("user_mode", "iws");
+	config.set("channel_mode", "");
+}
 
 void irc::Server::loop()
 {
@@ -83,9 +88,10 @@ std::vector<irc::User *> irc::Server::getUsers()
 	return users;
 }
 
-void irc::Server::quitUser(User user)
+void irc::Server::quitUser(User &user)
 {
-	close(user.getFd());
 	users.erase(users.find(user.getFd()));
+	delete &user;
+
 	displayUsers();
 }
