@@ -136,7 +136,7 @@ void irc::User::setRealname(std::string realname) { this->realname = realname; }
 std::string irc::User::getHost() { return host; }
 std::string irc::User::getPrefix()
 {
-	if (!nickname.length())
+	if (!isRegistered())
 		return std::string();
 	std::string prefix = nickname;
 	if (host.length())
