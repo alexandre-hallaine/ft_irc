@@ -31,7 +31,7 @@ FILES_SOURCE		=	utils/utils.cpp \
 COMPILE				=	clang++
 COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g
 
-ARGUMENTS			=	6667 azerty
+ARGUMENTS			=	6667 password
 
 all: $(NAME)
 
