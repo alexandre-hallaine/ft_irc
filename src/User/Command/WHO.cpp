@@ -16,7 +16,7 @@ void WHO(class irc::Command *command)
 	{	// need to check channel first
 		if ((*it)->getHost() == command->getParameters()[0] || (*it)->getRealname() == command->getParameters()[0] || (*it)->getNickname() == command->getParameters()[0])
 			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHost(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
-		else if (is_star && (command->getParameters()[0].substr(0, pos) == command->getHost().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getRealname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getNickname().substr(0, pos) ))
+		else if (is_star && (command->getParameters()[0].substr(0, pos) == (*it)->getHost().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getRealname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getNickname().substr(0, pos) ))
 			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHost(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
 	}
 	command->reply(315, command->getUser().getUsername());
