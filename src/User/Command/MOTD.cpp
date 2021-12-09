@@ -9,12 +9,7 @@ void MOTD(irc::Command *command)
 	command->reply(375, command->getServer().getConfig().get("name"));
 
 	std::vector<std::string> motd = irc::split(command->getServer().getConfig().get("motd"), "\n");
-	std::vector<std::string>::iterator it = motd.begin();
-	std::vector<std::string>::iterator ite = motd.end();
-	while (it != ite)
-	{
+	for (std::vector<std::string>::iterator it = motd.begin(); it != motd.end(); ++it)
 		command->reply(372, *it);
-		++it;
-	}
 	command->reply(376);
 }

@@ -33,14 +33,11 @@ void QUIT(irc::Command *command);
 void irc::User::push()
 {
 	std::string buffer;
-	std::vector<std::string>::iterator it = pending.begin();
-	std::vector<std::string>::iterator ite = pending.end();
-	while (it != ite)
+	for (std::vector<std::string>::iterator it = pending.begin(); it != pending.end(); ++it)
 	{
 		if (DEBUG)
 			std::cout << fd << " > " << *it << std::endl;
 		buffer += *it + MESSAGE_END;
-		++it;
 	}
 	pending.clear();
 
@@ -63,9 +60,7 @@ void irc::User::callCommands()
 	bool registered = isRegistered();
 
 	std::vector<Command *> remove = std::vector<Command *>();
-	std::vector<Command *>::iterator it = commands.begin();
-	std::vector<Command *>::iterator ite = commands.end();
-	while (it != ite)
+	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
 	{
 		Command *command = *it;
 		if (registered || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
@@ -76,18 +71,14 @@ void irc::User::callCommands()
 				std::cout << "Unknown command: " << command->getPrefix() << std::endl;
 			remove.push_back(command);
 		}
-		++it;
 	}
 	push();
 
-	it = remove.begin();
-	ite = remove.end();
-	while (it != ite)
+	for (std::vector<Command *>::iterator it = remove.begin(); it != remove.end(); ++it)
 	{
 		std::vector<Command *>::iterator item = std::find(commands.begin(), commands.end(), *it);
 		if (item != commands.end())
 			commands.erase(item);
-		++it;
 	}
 
 	if (!registered && isRegistered())

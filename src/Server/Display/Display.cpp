@@ -12,13 +12,8 @@ void irc::Display::update()
 
 	clearScreen();
 
-	std::map<unsigned char, std::string>::iterator it = lines.begin();
-	std::map<unsigned char, std::string>::iterator ite = lines.end();
-	while (it != ite)
-	{
+	for (std::map<unsigned char, std::string>::iterator it = lines.begin(); it != lines.end(); ++it)
 		std::cout << it->second << "\033[0m" << std::endl;
-		it++;
-	}
 }
 void irc::Display::write(unsigned char pos, std::string prefix, std::string line)
 {

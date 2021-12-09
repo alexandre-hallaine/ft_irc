@@ -20,12 +20,8 @@ irc::Command::Command(User *user, Server *server, std::string message)
 	prefix = *(parameters.begin());
 	parameters.erase(parameters.begin());
 
-	size_t index = 0;
-	while (index < prefix.length())
-	{
+	for (size_t index = 0; index < prefix.length(); ++index)
 		prefix[index] = std::toupper(prefix[index]);
-		++index;
-	}
 }
 
 irc::User &irc::Command::getUser() { return *user; }
