@@ -17,12 +17,9 @@ void NICK(irc::Command *command)
 	if (!irc::isLetter(nickname[index]) && !irc::isSpecial(nickname[index]))
 		return command->reply(432, nickname);
 	++index;
-	while (index < command->getParameters()[0].length())
-	{
+	for (; index < command->getParameters()[0].length(); ++index)
 		if (!irc::isLetter(nickname[index]) && !irc::isSpecial(nickname[index]) && !irc::isDigit(nickname[index]) && nickname[index] != '-')
 			return command->reply(432, nickname);
-		++index;
-	}
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)

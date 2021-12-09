@@ -154,23 +154,6 @@ std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
 /*                                   5**                                      */
 /******************************************************************************/
 std::string ERR_USERSDONTMATCH() { return ":Cant change mode for other users"; }
-/******************************************************************************/
-/*                                   6**                                      */
-/******************************************************************************/
-std::string RPL_STARTTLS() { return ":STARTTLS successful, proceed with TLS handshake"; }
-std::string ERR_STARTTLS() { return ":STARTTLS failed (Wrong moon phase)"; }
-/******************************************************************************/
-/*                                   9**                                      */
-/******************************************************************************/
-std::string RPL_LOGGEDIN(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged in"; }
-std::string RPL_LOGGEDOUT(std::string nick, std::string ident, std::string host) { return nick + "!" + ident + "@" + host + " :You are now logged out"; }
-std::string ERR_NICKLOCKED() { return ":You must use a nick assigned to you"; }
-std::string RPL_SASLSUCCESS() { return ":SASL authentication successful"; }
-std::string ERR_SASLFAIL() { return ":SASL authentication failed"; }
-std::string ERR_SASLTOOLONG() { return ":SASL message too long"; }
-std::string ERR_SASLABORTED() { return ":SASL authentication aborted"; }
-std::string ERR_SASLALREADY() { return ":You have already authenticated using SASL"; }
-std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available SASL mechanisms"; }
 
 //IRCv3
 /******************************************************************************/
@@ -193,464 +176,330 @@ std::string RPL_SASLMECHS(std::string mecha) { return mecha + " :are available S
 
 std::string irc::Command::getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
-	std::string params = "";
+	std::string client;
 	if (user->isRegistered())
-		params += user->getUsername();
+		client = user->getNickname();
 	else
-		params += "*";
-	params += " ";
+		client = "*";
+	client += " ";
+
 	switch (code)
 	{
 	case 001:
-		params += RPL_WELCOME(arg1);
-		break;
+		return client + RPL_WELCOME(arg1);
 	case 002:
-		params += RPL_YOURHOST(arg1, arg2);
-		break;
+		return client + RPL_YOURHOST(arg1, arg2);
 	case 003:
-		params += RPL_CREATED(arg1);
-		break;
+		return client + RPL_CREATED(arg1);
 	case 004:
-		params += RPL_MYINFO(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_MYINFO(arg1, arg2, arg3, arg4);
 	case 005:
-		params += RPL_BOUNCE(arg1, arg2);
-		break;
-
+		return client + RPL_BOUNCE(arg1, arg2);
 	case 200:
-		params += RPL_TRACELINK(arg1, arg2, arg3);
-		break;
+		return client + RPL_TRACELINK(arg1, arg2, arg3);
 	case 201:
-		params += RPL_TRACECONNECTING(arg1, arg2);
-		break;
+		return client + RPL_TRACECONNECTING(arg1, arg2);
 	case 202:
-		params += RPL_TRACEHANDSHAKE(arg1, arg2);
-		break;
+		return client + RPL_TRACEHANDSHAKE(arg1, arg2);
 	case 203:
-		params += RPL_TRACEUNKNOWN(arg1, arg2);
-		break;
+		return client + RPL_TRACEUNKNOWN(arg1, arg2);
 	case 204:
-		params += RPL_TRACEOPERATOR(arg1, arg2);
-		break;
+		return client + RPL_TRACEOPERATOR(arg1, arg2);
 	case 205:
-		params += RPL_TRACEUSER(arg1, arg2);
-		break;
+		return client + RPL_TRACEUSER(arg1, arg2);
 	case 206:
-		params += RPL_TRACESERVER(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-		break;
+		return client + RPL_TRACESERVER(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 208:
-		params += RPL_TRACENEWTYPE(arg1, arg2);
-		break;
+		return client + RPL_TRACENEWTYPE(arg1, arg2);
 	case 211:
-		params += RPL_STATSLINKINFO(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-		break;
+		return client + RPL_STATSLINKINFO(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 212:
-		params += RPL_STATSCOMMANDS(arg1, arg2);
-		break;
+		return client + RPL_STATSCOMMANDS(arg1, arg2);
 	case 213:
-		params += RPL_STATSCLINE(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_STATSCLINE(arg1, arg2, arg3, arg4);
 	case 214:
-		params += RPL_STATSNLINE(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_STATSNLINE(arg1, arg2, arg3, arg4);
 	case 215:
-		params += RPL_STATSILINE(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_STATSILINE(arg1, arg2, arg3, arg4);
 	case 216:
-		params += RPL_STATSKLINE(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_STATSKLINE(arg1, arg2, arg3, arg4);
 	case 218:
-		params += RPL_STATSYLINE(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_STATSYLINE(arg1, arg2, arg3, arg4);
 	case 219:
-		params += RPL_ENDOFSTATS(arg1);
-		break;
+		return client + RPL_ENDOFSTATS(arg1);
 	case 221:
-		params += RPL_UMODEIS(arg1);
-		break;
+		return client + RPL_UMODEIS(arg1);
 	case 241:
-		params += RPL_STATSLLINE(arg1, arg2, arg3);
-		break;
+		return client + RPL_STATSLLINE(arg1, arg2, arg3);
 	case 242:
-		params += RPL_STATSUPTIME();
-		break;
+		return client + RPL_STATSUPTIME();
 	case 243:
-		params += RPL_STATSOLINE(arg1, arg2);
-		break;
+		return client + RPL_STATSOLINE(arg1, arg2);
 	case 244:
-		params += RPL_STATSHLINE(arg1, arg2);
-		break;
+		return client + RPL_STATSHLINE(arg1, arg2);
 	case 251:
-		params += RPL_LUSERCLIENT(arg1, arg2, arg3);
-		break;
+		return client + RPL_LUSERCLIENT(arg1, arg2, arg3);
 	case 252:
-		params += RPL_LUSEROP(arg1);
-		break;
+		return client + RPL_LUSEROP(arg1);
 	case 253:
-		params += RPL_LUSERUNKNOWN(arg1);
-		break;
+		return client + RPL_LUSERUNKNOWN(arg1);
 	case 254:
-		params += RPL_LUSERCHANNELS(arg1);
-		break;
+		return client + RPL_LUSERCHANNELS(arg1);
 	case 255:
-		params += RPL_LUSERME(arg1, arg1);
-		break;
+		return client + RPL_LUSERME(arg1, arg1);
 	case 256:
-		params += RPL_ADMINME(arg1);
-		break;
+		return client + RPL_ADMINME(arg1);
 	case 257:
-		params += RPL_ADMINLOC1(arg1);
-		break;
+		return client + RPL_ADMINLOC1(arg1);
 	case 258:
-		params += RPL_ADMINLOC2(arg1);
-		break;
+		return client + RPL_ADMINLOC2(arg1);
 	case 259:
-		params += RPL_ADMINEMAIL(arg1);
-		break;
+		return client + RPL_ADMINEMAIL(arg1);
 	case 261:
-		params += RPL_TRACELOG(arg1, arg2);
-		break;
+		return client + RPL_TRACELOG(arg1, arg2);
 	case 262:
-		params += RPL_TRACEEND(arg1, arg2);
-		break;
+		return client + RPL_TRACEEND(arg1, arg2);
 	case 263:
-		params += RPL_TRYAGAIN(arg1);
-		break;
+		return client + RPL_TRYAGAIN(arg1);
+
 	case 300:
-		params += RPL_NONE();
-		break;
+		return client + RPL_NONE();
 	case 301:
-		params += RPL_AWAY(arg1, arg2);
-		break;
+		return client + RPL_AWAY(arg1, arg2);
 	case 302:
-		params += RPL_USERHOST(arg1);
-		break;
+		return client + RPL_USERHOST(arg1);
 	case 303:
-		params += RPL_ISON(arg1);
-		break;
+		return client + RPL_ISON(arg1);
 	case 305:
-		params += RPL_UNAWAY();
-		break;
+		return client + RPL_UNAWAY();
 	case 306:
-		params += RPL_NOWAWAY();
-		break;
+		return client + RPL_NOWAWAY();
 	case 311:
-		params += RPL_WHOISUSER(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_WHOISUSER(arg1, arg2, arg3, arg4);
 	case 312:
-		params += RPL_WHOISSERVER(arg1, arg2, arg3);
-		break;
+		return client + RPL_WHOISSERVER(arg1, arg2, arg3);
 	case 313:
-		params += RPL_WHOISOPERATOR(arg1);
-		break;
+		return client + RPL_WHOISOPERATOR(arg1);
 	case 314:
-		params += RPL_WHOWASUSER(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_WHOWASUSER(arg1, arg2, arg3, arg4);
 	case 315:
-		params += RPL_ENDOFWHO(arg1);
-		break;
+		return client + RPL_ENDOFWHO(arg1);
 	case 317:
-		params += RPL_WHOISIDLE(arg1, arg2);
-		break;
+		return client + RPL_WHOISIDLE(arg1, arg2);
 	case 318:
-		params += RPL_ENDOFWHOIS(arg1);
-		break;
+		return client + RPL_ENDOFWHOIS(arg1);
 	case 319:
-		params += RPL_WHOISCHANNELS(arg1, arg2);
-		break;
+		return client + RPL_WHOISCHANNELS(arg1, arg2);
 	case 321:
-		params += RPL_LISTSTART();
-		break;
+		return client + RPL_LISTSTART();
 	case 322:
-		params += RPL_LIST(arg1, arg2);
-		break;
+		return client + RPL_LIST(arg1, arg2);
 	case 323:
-		params += RPL_LISTEND();
-		break;
+		return client + RPL_LISTEND();
 	case 324:
-		params += RPL_CHANNELMODEIS(arg1, arg2, arg3);
-		break;
+		return client + RPL_CHANNELMODEIS(arg1, arg2, arg3);
 	case 325:
-		params += RPL_UNIQOPIS(arg1, arg2);
-		break;
+		return client + RPL_UNIQOPIS(arg1, arg2);
 	case 331:
-		params += RPL_NOTOPIC(arg1);
-		break;
+		return client + RPL_NOTOPIC(arg1);
 	case 332:
-		params += RPL_TOPIC(arg1, arg2);
-		break;
+		return client + RPL_TOPIC(arg1, arg2);
 	case 341:
-		params += RPL_INVITING(arg1, arg2);
-		break;
+		return client + RPL_INVITING(arg1, arg2);
 	case 342:
-		params += RPL_SUMMONING(arg1);
-		break;
+		return client + RPL_SUMMONING(arg1);
 	case 346:
-		params += RPL_INVITELIST(arg1, arg2);
-		break;
+		return client + RPL_INVITELIST(arg1, arg2);
 	case 347:
-		params += RPL_ENDOFINVITELIST(arg1);
-		break;
+		return client + RPL_ENDOFINVITELIST(arg1);
 	case 348:
-		params += RPL_EXCEPTLIST(arg1, arg2);
-		break;
+		return client + RPL_EXCEPTLIST(arg1, arg2);
 	case 351:
-		params += RPL_VERSION(arg1, arg2, arg3);
-		break;
+		return client + RPL_VERSION(arg1, arg2, arg3);
 	case 352:
-		params += RPL_WHOREPLY(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-		break;
+		return client + RPL_WHOREPLY(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 353:
-		params += RPL_NAMREPLY(arg1, arg2);
-		break;
+		return client + RPL_NAMREPLY(arg1, arg2);
 	case 364:
-		params += RPL_LINKS(arg1, arg2, arg3, arg4);
-		break;
+		return client + RPL_LINKS(arg1, arg2, arg3, arg4);
 	case 365:
-		params += RPL_ENDOFLINKS(arg1);
-		break;
+		return client + RPL_ENDOFLINKS(arg1);
 	case 366:
-		params += RPL_ENDOFNAMES(arg1);
-		break;
+		return client + RPL_ENDOFNAMES(arg1);
 	case 367:
-		params += RPL_BANLIST(arg1, arg2);
-		break;
+		return client + RPL_BANLIST(arg1, arg2);
 	case 368:
-		params += RPL_ENDOFBANLIST(arg1);
-		break;
+		return client + RPL_ENDOFBANLIST(arg1);
 	case 369:
-		params += RPL_ENDOFWHOWAS(arg1);
-		break;
+		return client + RPL_ENDOFWHOWAS(arg1);
 	case 371:
-		params += RPL_INFO(arg1);
-		break;
+		return client + RPL_INFO(arg1);
 	case 372:
-		params += RPL_MOTD(arg1);
-		break;
+		return client + RPL_MOTD(arg1);
 	case 374:
-		params += RPL_ENDOFINFO();
-		break;
+		return client + RPL_ENDOFINFO();
 	case 375:
-		params += RPL_MOTDSTART(arg1);
-		break;
+		return client + RPL_MOTDSTART(arg1);
 	case 376:
-		params += RPL_ENDOFMOTD();
-		break;
+		return client + RPL_ENDOFMOTD();
 	case 381:
-		params += RPL_YOUREOPER();
-		break;
+		return client + RPL_YOUREOPER();
 	case 382:
-		params += RPL_REHASHING(arg1);
-		break;
+		return client + RPL_REHASHING(arg1);
 	case 383:
-		params += RPL_YOURESERVICE(arg1);
-		break;
+		return client + RPL_YOURESERVICE(arg1);
 	case 391:
-		params += RPL_TIME(arg1, arg2);
-		break;
+		return client + RPL_TIME(arg1, arg2);
 	case 392:
-		params += RPL_USERSSTART();
-		break;
+		return client + RPL_USERSSTART();
 	case 393:
-		params += RPL_USERS();
-		break;
+		return client + RPL_USERS();
 	case 394:
-		params += RPL_ENDOFUSERS();
-		break;
+		return client + RPL_ENDOFUSERS();
 	case 395:
-		params += RPL_NOUSERS();
-		break;
+		return client + RPL_NOUSERS();
 
 	case 401:
-		params += ERR_NOSUCHNICK(arg1);
-		break;
+		return client + ERR_NOSUCHNICK(arg1);
 	case 402:
-		params += ERR_NOSUCHSERVER(arg1);
-		break;
+		return client + ERR_NOSUCHSERVER(arg1);
 	case 403:
-		params += ERR_NOSUCHCHANNEL(arg1);
-		break;
+		return client + ERR_NOSUCHCHANNEL(arg1);
 	case 404:
-		params += ERR_CANNOTSENDTOCHAN(arg1);
-		break;
+		return client + ERR_CANNOTSENDTOCHAN(arg1);
 	case 405:
-		params += ERR_TOOMANYCHANNELS(arg1);
-		break;
+		return client + ERR_TOOMANYCHANNELS(arg1);
 	case 406:
-		params += ERR_WASNOSUCHNICK(arg1);
-		break;
+		return client + ERR_WASNOSUCHNICK(arg1);
 	case 407:
-		params += ERR_TOOMANYTARGETS(arg1);
-		break;
+		return client + ERR_TOOMANYTARGETS(arg1);
 	case 408:
-		params += ERR_NOSUCHSERVICE(arg1);
-		break;
+		return client + ERR_NOSUCHSERVICE(arg1);
 	case 409:
-		params += ERR_NOORIGIN();
-		break;
+		return client + ERR_NOORIGIN();
 	case 411:
-		params += ERR_NORECIPIENT(arg1);
-		break;
+		return client + ERR_NORECIPIENT(arg1);
 	case 412:
-		params += ERR_NOTEXTTOSEND();
-		break;
+		return client + ERR_NOTEXTTOSEND();
 	case 413:
-		params += ERR_NOTOPLEVEL(arg1);
-		break;
+		return client + ERR_NOTOPLEVEL(arg1);
 	case 414:
-		params += ERR_WILDTOPLEVEL(arg1);
-		break;
+		return client + ERR_WILDTOPLEVEL(arg1);
 	case 415:
-		params += ERR_BADMASK(arg1);
-		break;
+		return client + ERR_BADMASK(arg1);
 	case 421:
-		params += ERR_UNKNOWNCOMMAND(arg1);
-		break;
+		return client + ERR_UNKNOWNCOMMAND(arg1);
 	case 422:
-		params += ERR_NOMOTD();
-		break;
+		return client + ERR_NOMOTD();
 	case 423:
-		params += ERR_NOADMININFO(arg1);
-		break;
+		return client + ERR_NOADMININFO(arg1);
 	case 424:
-		params += ERR_FILEERROR(arg1, arg2);
-		break;
+		return client + ERR_FILEERROR(arg1, arg2);
 	case 431:
-		params += ERR_NONICKNAMEGIVEN();
-		break;
+		return client + ERR_NONICKNAMEGIVEN();
 	case 432:
-		params += ERR_ERRONEUSNICKNAME(arg1);
-		break;
+		return client + ERR_ERRONEUSNICKNAME(arg1);
 	case 433:
-		params += ERR_NICKNAMEINUSE(arg1);
-		break;
+		return client + ERR_NICKNAMEINUSE(arg1);
 	case 436:
-		params += ERR_NICKCOLLISION(arg1);
-		break;
+		return client + ERR_NICKCOLLISION(arg1);
 	case 441:
-		params += ERR_USERNOTINCHANNEL(arg1, arg2);
-		break;
+		return client + ERR_USERNOTINCHANNEL(arg1, arg2);
 	case 442:
-		params += ERR_NOTONCHANNEL(arg1);
-		break;
+		return client + ERR_NOTONCHANNEL(arg1);
 	case 443:
-		params += ERR_USERONCHANNEL(arg1, arg2);
-		break;
+		return client + ERR_USERONCHANNEL(arg1, arg2);
 	case 444:
-		params += ERR_NOLOGIN(arg1);
-		break;
+		return client + ERR_NOLOGIN(arg1);
 	case 445:
-		params += ERR_SUMMONDISABLED();
-		break;
+		return client + ERR_SUMMONDISABLED();
 	case 446:
-		params += ERR_USERSDISABLED();
-		break;
+		return client + ERR_USERSDISABLED();
 	case 451:
-		params += ERR_NOTREGISTERED();
-		break;
+		return client + ERR_NOTREGISTERED();
+
 	case 461:
-		params += ERR_NEEDMOREPARAMS(arg1);
-		break;
+		return client + ERR_NEEDMOREPARAMS(arg1);
 	case 462:
-		params += ERR_ALREADYREGISTRED();
-		break;
+		return client + ERR_ALREADYREGISTRED();
 	case 463:
-		params += ERR_NOPERMFORHOST();
-		break;
+		return client + ERR_NOPERMFORHOST();
 	case 464:
-		params += ERR_PASSWDMISMATCH();
-		break;
+		return client + ERR_PASSWDMISMATCH();
 	case 465:
-		params += ERR_YOUREBANNEDCREEP();
-		break;
+		return client + ERR_YOUREBANNEDCREEP();
 	case 467:
-		params += ERR_KEYSET(arg1);
-		break;
+		return client + ERR_KEYSET(arg1);
 	case 471:
-		params += ERR_CHANNELISFULL(arg1);
-		break;
+		return client + ERR_CHANNELISFULL(arg1);
 	case 472:
-		params += ERR_UNKNOWNMODE(arg1);
-		break;
+		return client + ERR_UNKNOWNMODE(arg1);
 	case 473:
-		params += ERR_INVITEONLYCHAN(arg1);
-		break;
+		return client + ERR_INVITEONLYCHAN(arg1);
 	case 474:
-		params += ERR_BANNEDFROMCHAN(arg1);
-		break;
+		return client + ERR_BANNEDFROMCHAN(arg1);
 	case 475:
-		params += ERR_BADCHANNELKEY(arg1);
-		break;
+		return client + ERR_BADCHANNELKEY(arg1);
 	case 476:
-		params += ERR_BADCHANMASK(arg1);
-		break;
+		return client + ERR_BADCHANMASK(arg1);
 	case 477:
-		params += ERR_NOCHANMODES(arg1);
-		break;
+		return client + ERR_NOCHANMODES(arg1);
 	case 478:
-		params += ERR_BANLISTFULL(arg1);
-		break;
+		return client + ERR_BANLISTFULL(arg1);
 	case 481:
-		params += ERR_NOPRIVILEGES();
-		break;
+		return client + ERR_NOPRIVILEGES();
 	case 482:
-		params += ERR_UNIQOPRIVSNEEDED(arg1);
-		break;
+		return client + ERR_UNIQOPRIVSNEEDED(arg1);
 	case 483:
-		params += ERR_CANTKILLSERVER();
-		break;
+		return client + ERR_CANTKILLSERVER();
 	case 484:
-		params += ERR_RESTRICTED();
-		break;
+		return client + ERR_RESTRICTED();
 	case 485:
-		params += ERR_UNIQOPPRIVSNEEDED();
-		break;
+		return client + ERR_UNIQOPPRIVSNEEDED();
 	case 491:
-		params += ERR_NOOPERHOST();
-		break;
+		return client + ERR_NOOPERHOST();
 
 	case 501:
-		params += ERR_UMODEUNKNOWNFLAG();
-		break;
+		return client + ERR_UMODEUNKNOWNFLAG();
 	case 502:
-		params += ERR_USERSDONTMATCH();
-		break;
+		return client + ERR_USERSDONTMATCH();
 
-		/*IRCv3
+	/*IRCv3
 	case 670:
-		params += RPL_STARTTLS();
-		break;
+		return client + RPL_STARTTLS();
+		
 	case 691:
-		params += ERR_STARTTLS();
-		break;
+		return client + ERR_STARTTLS();
+		
 
 	case 900:
-		params += RPL_LOGGEDIN(arg1, arg2, arg3);
-		break;
+		return client + RPL_LOGGEDIN(arg1, arg2, arg3);
+		
 	case 901:
-		params += RPL_LOGGEDOUT(arg1, arg2, arg3);
-		break;
+		return client + RPL_LOGGEDOUT(arg1, arg2, arg3);
+		
 	case 902:
-		params += ERR_NICKLOCKED();
-		break;
+		return client + ERR_NICKLOCKED();
+		
 	case 903:
-		params += RPL_SASLSUCCESS();
-		break;
+		return client + RPL_SASLSUCCESS();
+		
 	case 904:
-		params += ERR_SASLFAIL();
-		break;
+		return client + ERR_SASLFAIL();
+		
 	case 905:
-		params += ERR_SASLTOOLONG();
-		break;
+		return client + ERR_SASLTOOLONG();
+		
 	case 906:
-		params += ERR_SASLABORTED();
-		break;
+		return client + ERR_SASLABORTED();
+		
 	case 907:
-		params += ERR_SASLALREADY();
-		break;
+		return client + ERR_SASLALREADY();
+		
 	case 908:
-		params += RPL_SASLMECHS(arg1);
-		break;*/
+		return client + RPL_SASLMECHS(arg1);
+		*/
+	default:
+		return std::string();
 	}
-	return params;
 }
