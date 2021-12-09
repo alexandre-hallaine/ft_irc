@@ -14,10 +14,8 @@ void WHOWAS(class irc::Command *command)
 	std::vector<irc::User *> users = command->getServer().getUsers();
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
 	{
-		//while ((tmp = (*it)->getPastnick().find(command->getParameters()[0], pos)) != std::string::npos)
 		while ((tmp = (*it)->getPastnick().find(command->getParameters()[0], pos)) != std::string::npos)
 		{
-			//params.user->write(314, params.args[1], (*it)->getUsername(), (*it)->getHote(), (*it)->getRealname());
 			command->reply(314, command->getParameters()[0], (*it)->getUsername(), (*it)->getHost(), (*it)->getRealname());
 			pos = tmp + 1;
 			has_print = true;
