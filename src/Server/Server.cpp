@@ -66,13 +66,8 @@ void irc::Server::loop()
 	{
 		pendingConnection();
 
-		std::map<int, User *>::iterator it = users.begin();
-		std::map<int, User *>::iterator ite = users.end();
-		while (it != ite)
-		{
+		for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 			(*it).second->pendingMessages(this);
-			++it;
-		}
 	}
 }
 
@@ -82,12 +77,7 @@ std::vector<irc::User *> irc::Server::getUsers()
 {
 	std::vector<User *> users = std::vector<User *>();
 
-	std::map<int, User *>::iterator it = this->users.begin();
-	std::map<int, User *>::iterator ite = this->users.end();
-	while (it != ite)
-	{
+	for (std::map<int, User *>::iterator it = this->users.begin(); it != this->users.end(); ++it)
 		users.push_back(it->second);
-		++it;
-	}
 	return users;
 }
