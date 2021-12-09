@@ -1,11 +1,11 @@
-#include "../PacketManager.hpp"
-#include <sstream>
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include "../../Server/Server.hpp"
 
-void irc::PING(struct irc::packetParams params)
+void PING(class irc::Command *command)
 {
-	if (params.args.size() == 1)
-		return params.user->write(409);
-	std::stringstream ss;
-	ss << "PONG " << params.args[1] << "\r\n";
-	params.user->write(ss.str());
+	if (command->getParameters().size() == 0)
+		return command->reply(409);
+	command->getUser().write("PONG " + command->getParameters()[0]);
 }
