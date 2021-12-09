@@ -22,6 +22,7 @@ void MODE(irc::Command *command);
 void PING(irc::Command *command);
 void WHOIS(irc::Command *command);
 void WHOWAS(irc::Command *command);
+void WHO(irc::Command *command);
 
 void irc::User::push()
 {
@@ -99,6 +100,7 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["PING"] = PING;
 	command_function["WHOIS"] = WHOIS;
 	command_function["WHOWAS"] = WHOWAS;
+	command_function["WHO"] = WHO;
 }
 irc::User::~User() { close(fd); }
 

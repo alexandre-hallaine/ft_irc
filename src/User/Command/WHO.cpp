@@ -1,21 +1,24 @@
-#include "../PacketManager.hpp"
-#include <iostream>
-#include <vector>
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include "../../Server/Server.hpp"
 
-void irc::WHO(struct irc::packetParams params)
+void WHO(class irc::Command *command)
 {
+	//missing is hostname
 	bool is_star = false;
 	size_t pos = 0;
 
-	if ((pos = params.args[1].find("*")) != std::string::npos)
+	if ((pos = command->getParameters()[0].find("*")) != std::string::npos)
 		is_star = true;
 
-	for (std::vector<User *>::iterator it = params.server->getUsers().begin(); it != params.server->getUsers().end(); it++)
+	std::vector<irc::User *> users = command->getServer().getUsers();
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
 	{	// need to check channel first
-		if ((*it)->getHostname() == params.args[1] || (*it)->getRealname() == params.args[1] || (*it)->getNickname() == params.args[1])
-			params.user->write(352, "*", params.user->getUsername(), params.user->getHote(), params.user->getHostname(), params.user->getNickname(), "0", params.user->getRealname());
-		else if (is_star && (params.args[1].substr(0, pos) == (*it)->getHostname().substr(0, pos) || params.args[1].substr(0, pos) == (*it)->getRealname().substr(0, pos) || params.args[1].substr(0, pos) == (*it)->getNickname().substr(0, pos) ))
-			params.user->write(352, "*", params.user->getUsername(), params.user->getHote(), params.user->getHostname(), params.user->getNickname(), "0", params.user->getRealname());
+		if ("missing" == command->getParameters()[0] || (*it)->getRealname() == command->getParameters()[0] || (*it)->getNickname() == command->getParameters()[0])
+			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHost(), "missing", command->getUser().getNickname(), "0", command->getUser().getRealname());
+		else if (is_star && (command->getParameters()[0].substr(0, pos) == std::string("missing").substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getRealname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getNickname().substr(0, pos) ))
+			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHost(), "missing", command->getUser().getNickname(), "0", command->getUser().getRealname());
 	}
-	params.user->write(315, params.user->getUsername());
+	command->reply(315, command->getUser().getUsername());
 }

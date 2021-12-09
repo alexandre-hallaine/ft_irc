@@ -24,6 +24,7 @@ FILES_SOURCE		=	utils/utils.cpp \
 						User/Command/PING.cpp \
 						User/Command/WHOIS.cpp \
 						User/Command/WHOWAS.cpp \
+						User/Command/WHO.cpp \
 						User/Command/Command.cpp \
 						User/Command/replies.cpp \
 						User/User.cpp \
