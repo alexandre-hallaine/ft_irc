@@ -1,6 +1,7 @@
-#include "../PacketManager.hpp"
-#include <sstream>
-#include <iostream>
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include "../../Server/Server.hpp"
 
 void check_mode(std::string *mode, char option, bool is_minus, std::string options)
 {
@@ -19,44 +20,38 @@ void check_mode(std::string *mode, char option, bool is_minus, std::string optio
 	}
 }
 
-void irc::MODE(struct irc::packetParams params)
+void MODE(class irc::Command *command)
 {
-	if (params.args.size() == 1)
-		return;
+	if (command->getParameters().size() == 0)
+		return command->reply(461, "MODE");
 
-	std::stringstream ss;
-	std::string mode = params.user->getMode();
+	std::string mode = command->getUser().getMode(); 
 	bool is_minus = false;
 	size_t i = 0;
 
 	if (mode.size() == 0)
 		mode = "+";
 
-	if (params.args[1] != params.user->getNickname())
-		return params.user->write(502);
+	if (command->getParameters()[0] != command->getUser().getNickname())
+		return command->reply(502);
 
-	while (params.args.back() != params.args[1] && i != params.args[2].size())
+	while (command->getParameters().back() != command->getParameters()[0] && i != command->getParameters()[1].size())
 	{
-		if (params.args[2][i] == '-')
+		if (command->getParameters()[1][i] == '-')
 			is_minus = true;
-		else if (params.args[2][i] == '+')
+		else if (command->getParameters()[1][i] == '+')
 			is_minus = false;
-		//else if (params.args[2][i] == 'o')
-		else if (params.args[2][i] == 'i')
-			check_mode(&mode, 'i', is_minus, params.user->getUser_modes());
-		else if (params.args[2][i] == 's')
-			check_mode(&mode, 's', is_minus, params.user->getUser_modes());
-		else if (params.args[2][i] == 'w')
-			check_mode(&mode, 'w', is_minus, params.user->getUser_modes());
+		else if (command->getParameters()[1][i] == 'i')
+			check_mode(&mode, 'i', is_minus, command->getServer().getConfig().get("user_mode")); 
+		else if (command->getParameters()[1][i] == 's')
+			check_mode(&mode, 's', is_minus, command->getServer().getConfig().get("user_mode")); 
+		else if (command->getParameters()[1][i] == 'w')
+			check_mode(&mode, 'w', is_minus, command->getServer().getConfig().get("user_mode")); 
 		else
-		{
-			//ss << params.args[2][i];
-			//params.user->write(472, ss.str());
-			params.user->write(472, std::string(1, params.args[2][i]));
-			//ss.str(std::string());
-		}
+			command->reply(472, std::string(1, command->getParameters()[1][i]));
 		i++;
 	}
-	params.user->setMode(mode);
-	params.user->write(221, mode);
+
+	command->getUser().setMode(mode);
+	command->reply(221, mode);
 }

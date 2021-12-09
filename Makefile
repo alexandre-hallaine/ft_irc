@@ -20,6 +20,7 @@ FILES_SOURCE		=	utils/utils.cpp \
 						User/Command/USER.cpp \
 						User/Command/MOTD.cpp \
 						User/Command/QUIT.cpp \
+						User/Command/MODE.cpp \
 						User/Command/Command.cpp \
 						User/Command/replies.cpp \
 						User/User.cpp \
