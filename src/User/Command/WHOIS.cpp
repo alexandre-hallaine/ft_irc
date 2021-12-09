@@ -1,18 +1,21 @@
-#include "../PacketManager.hpp"
-#include <vector>
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include "../../Server/Server.hpp"
 
-void irc::WHOIS(struct irc::packetParams params)
+void WHOIS(class irc::Command *command)
 {
-	if (params.args.size() == 1)
-		return params.user->write(431);
+	if (command->getParameters().size() == 0)
+		return command->reply(431);
 
-	for (std::vector<User *>::iterator it = params.server->getUsers().begin(); it != params.server->getUsers().end(); it++)
-		if (params.args[1] == (*it)->getNickname())
+	std::vector<irc::User *>users = command->getServer().getUsers();
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
+		if (command->getParameters()[0] == (*it)->getNickname())
 		{
 			//need to check for channels
-			params.user->write(311, params.args[1], params.user->getHostname(), params.user->getHote(), params.user->getRealname());
-			return params.user->write(318, params.args[1]);
+			command->reply(311, command->getParameters()[0], command->getUser().getUsername(), command->getUser().getHost(), command->getUser().getRealname());
+			return command->reply(318, command->getParameters()[0]);
 		}
 
-	return params.user->write(401, params.args[1]);
+	return command->reply(401, command->getParameters()[0]);
 }
