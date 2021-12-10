@@ -27,7 +27,7 @@ void NICK(irc::Command *command)
 			return command->reply(433, command->getParameters()[0]);
 
 	command->getUser().write(":" + command->getUser().getPrefix() + " NICK " + command->getParameters()[0]);
-	if (command->getUser().getNickname() != "*")
+	if (command->getUser().getNickname().length())
 		command->getUser().setPastnick(" " + command->getUser().getNickname()+ " " + command->getUser().getPastnick());
 	command->getUser().setNickname(command->getParameters()[0]);
 }
