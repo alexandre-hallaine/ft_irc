@@ -5,9 +5,9 @@
 
 void check_mode(std::string *mode, char option, bool is_minus)
 {
-	if (mode->find(option) != std::string::npos && is_minus)
+	if (is_minus && mode->find(option) != std::string::npos)
 		mode->erase(mode->begin() + mode->find(option));
-	else if (mode->find(option) == std::string::npos && !is_minus)
+	else if (!is_minus && mode->find(option) == std::string::npos)
 		mode->insert(mode->end(), option);
 }
 
