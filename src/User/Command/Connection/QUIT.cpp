@@ -1,6 +1,6 @@
-#include "Command.hpp"
-#include "../User.hpp"
-#include "../../Server/Server.hpp"
+#include "../Command.hpp"
+#include "../../User.hpp"
+#include "../../../Server/Server.hpp"
 
 void QUIT(irc::Command *command)
 {

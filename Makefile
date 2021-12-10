@@ -16,15 +16,15 @@ FILES_SOURCE		=	utils/utils.cpp \
 						Server/Display/Display.cpp \
 						Server/Server.cpp \
 						Server/Runtime.cpp \
-						User/Command/NICK.cpp \
-						User/Command/USER.cpp \
-						User/Command/MOTD.cpp \
-						User/Command/QUIT.cpp \
-						User/Command/MODE.cpp \
-						User/Command/PING.cpp \
-						User/Command/WHOIS.cpp \
-						User/Command/WHOWAS.cpp \
-						User/Command/WHO.cpp \
+						User/Command/Connection/NICK.cpp \
+						User/Command/Connection/USER.cpp \
+						User/Command/Connection/MODE.cpp \
+						User/Command/Connection/QUIT.cpp \
+						User/Command/Server/MOTD.cpp \
+						User/Command/User/WHOIS.cpp \
+						User/Command/User/WHOWAS.cpp \
+						User/Command/User/WHO.cpp \
+						User/Command/Miscellaneous/PING.cpp \
 						User/Command/Command.cpp \
 						User/Command/replies.cpp \
 						User/User.cpp \

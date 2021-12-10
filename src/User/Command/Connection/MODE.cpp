@@ -1,7 +1,7 @@
-#include "Command.hpp"
-#include "../User.hpp"
-#include "../../utils/utils.hpp"
-#include "../../Server/Server.hpp"
+#include "../Command.hpp"
+#include "../../User.hpp"
+#include "../../../utils/utils.hpp"
+#include "../../../Server/Server.hpp"
 
 void check_mode(std::string *mode, char option, bool is_minus)
 {

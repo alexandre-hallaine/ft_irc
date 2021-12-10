@@ -1,5 +1,5 @@
-#include "Command.hpp"
-#include "../User.hpp"
+#include "../Command.hpp"
+#include "../../User.hpp"
 
 void USER(irc::Command *command)
 {
