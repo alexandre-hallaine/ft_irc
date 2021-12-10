@@ -89,7 +89,7 @@ void post_registration(irc::Command *command)
 				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
 
 	//not needed
-	//lusers
+	LUSERS(command);
 	MOTD(command);
 }
 void irc::User::callCommands()
