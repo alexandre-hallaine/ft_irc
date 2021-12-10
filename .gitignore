@@ -1,3 +1,4 @@
-objects/
+.vscode
+objects
 ircserv
 bot/bot
