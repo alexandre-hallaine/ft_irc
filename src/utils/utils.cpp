@@ -10,10 +10,11 @@ std::string irc::currentTime()
 	return (asctime(now));
 }
 
-void irc::error(std::string message)
+void irc::error(std::string message, bool stop)
 {
 	std::cerr << "error: " << message << std::endl;
-	exit(EXIT_FAILURE);
+	if (stop)
+		exit(EXIT_FAILURE);
 }
 std::vector<std::string> irc::split(std::string str, std::string delimiter)
 {

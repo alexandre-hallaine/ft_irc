@@ -33,12 +33,13 @@ void irc::User::push()
 	}
 	pending.clear();
 
-	send(fd, buffer.c_str(), buffer.length(), 0);
+	if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
+		error("send", false);
 }
 void post_registration(irc::Command *command)
 {
 	command->reply(1, command->getUser().getPrefix());
-	command->reply(2, command->getUser().getHost(), command->getServer().getConfig().get("version"));
+	command->reply(2, command->getUser().getHostname(), command->getServer().getConfig().get("version"));
 	command->reply(3, command->getServer().getUpTime());
 	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"),
 				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
@@ -85,10 +86,12 @@ irc::User::User(int fd, struct sockaddr_in address)
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 
-	char host[NI_MAXHOST];
-	if (getnameinfo((struct sockaddr *)&address, sizeof(address), host, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
-		error("getnameinfo");
-	this->host = host;
+	hostaddr = inet_ntoa(address.sin_addr);
+	char hostname[NI_MAXHOST];
+	if (getnameinfo((struct sockaddr *)&address, sizeof(address), hostname, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
+		error("getnameinfo", false);
+	else
+		this->hostname = hostname;
 
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
@@ -140,17 +143,20 @@ void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 void irc::User::setMode(std::string mode) { this->mode = mode; }
-std::string irc::User::getHost() { return host; }
+
+int irc::User::getFd() { return fd; }
+std::string irc::User::getHostaddr() { return hostname; }
+std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getPrefix()
 {
 	if (!isRegistered())
 		return std::string();
 	std::string prefix = nickname;
-	if (host.length())
+	if (hostname.length())
 	{
 		if (username.length())
 			prefix += "!" + username;
-		prefix += "@" + host;
+		prefix += "@" + hostname;
 	}
 	return prefix;
 }
@@ -158,4 +164,3 @@ std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getMode() { return mode; }
-int irc::User::getFd() { return fd; }

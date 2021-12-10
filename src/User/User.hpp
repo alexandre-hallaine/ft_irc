@@ -15,12 +15,13 @@ namespace irc
 	{
 	private:
 		int fd;
-		std::string host;
 		std::map<std::string, void (*)(Command *)> command_function;
 		std::vector<Command *> commands;
 		std::string packet;
 		std::vector<std::string> pending;
 
+		std::string hostaddr;
+		std::string hostname;
 		std::string nickname;
 		std::string username;
 		std::string realname;
@@ -42,13 +43,15 @@ namespace irc
 		void setUsername(std::string username);
 		void setRealname(std::string realname);
 		void setMode(std::string mode);
-		std::string getHost();
+
+		int getFd();
+		std::string getHostaddr();
+		std::string getHostname();
 		std::string getPrefix();
 		std::string getNickname();
 		std::string getUsername();
 		std::string getRealname();
 		std::string getMode();
-		int getFd();
 	};
 }
 #endif

@@ -13,7 +13,7 @@ void WHOIS(class irc::Command *command)
 		if (command->getParameters()[0] == (*it)->getNickname())
 		{
 			//need to check for channels
-			command->reply(311, command->getParameters()[0], command->getUser().getUsername(), command->getUser().getHost(), command->getUser().getRealname());
+			command->reply(311, command->getParameters()[0], command->getUser().getUsername(), command->getUser().getHostname(), command->getUser().getRealname());
 			return command->reply(318, command->getParameters()[0]);
 		}
 

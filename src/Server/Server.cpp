@@ -17,11 +17,11 @@ void irc::Server::init()
 {
 	int enable = 1;
 	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		error("socket");
+		error("socket", true);
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &enable, sizeof(enable)))
-		error("setsockopt");
+		error("setsockopt", true);
 	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
-		error("fcntl");
+		error("fcntl", true);
 
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
@@ -29,11 +29,14 @@ void irc::Server::init()
 	address.sin_port = htons(atoi(config.get("port").c_str()));
 
 	if (bind(fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-		error("bind");
+		error("bind", true);
 	if (listen(fd, address.sin_port) < 0)
-		error("listen");
+		error("listen", true);
 
 	displayUsers();
+
+	config.set("user_mode", "iws");
+	config.set("channel_mode", "");
 }
 void irc::Server::displayUsers()
 {
@@ -58,12 +61,7 @@ void irc::Server::pendingConnection()
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), stop(false)
-{
-	display.write(0, "Welcome to our \033[1;37mIRC\n");
-	config.set("user_mode", "iws");
-	config.set("channel_mode", "");
-}
+	: upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
 
 void irc::Server::loop()
 {

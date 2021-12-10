@@ -11,7 +11,7 @@
 namespace irc
 {
 	std::string currentTime();
-	void error(std::string message);
+	void error(std::string message, bool stop);
 	std::vector<std::string> split(std::string str, std::string delimiter);
 	bool isLetter(char c);
 	bool isSpecial(char c);

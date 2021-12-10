@@ -8,7 +8,7 @@ void irc::Config::init(std::string config)
 {
 	std::ifstream ifs(config.c_str(), std::ifstream::in);
 	if (!ifs.good())
-		error("ifstream");
+		error("ifstream", true);
 
 	std::string delimiter = "=";
 	size_t position;
@@ -35,8 +35,8 @@ void irc::Config::init(std::string config)
 	ifs.close();
 }
 
-irc::Config::Config(){	init("configs/default.config");}
-irc::Config::Config(std::string config){	init(config);}
+irc::Config::Config() { init("configs/default.config"); }
+irc::Config::Config(std::string config) { init(config); }
 
 void irc::Config::set(std::string key, std::string value) { values[key] = value; }
 std::string irc::Config::get(std::string key) { return values[key]; }
