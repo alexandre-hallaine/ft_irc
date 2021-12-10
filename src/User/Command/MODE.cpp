@@ -3,16 +3,12 @@
 #include "../../utils/utils.hpp"
 #include "../../Server/Server.hpp"
 
-void check_mode(std::string *mode, char option, bool is_minus, std::string options)
+void check_mode(std::string *mode, char option, bool is_minus)
 {
-	for (size_t i = 0; i != options.size(); ++i)
-		if (option == options[i])
-		{
-			if (mode->find(options[i]) != std::string::npos && is_minus)
-				mode->erase(mode->begin() + mode->find(options[i]));
-			else if (mode->find(options[i]) == std::string::npos && !is_minus)
-				mode->insert(mode->end(), options[i]);
-		}
+	if (mode->find(option) != std::string::npos && is_minus)
+		mode->erase(mode->begin() + mode->find(option));
+	else if (mode->find(option) == std::string::npos && !is_minus)
+		mode->insert(mode->end(), option);
 }
 
 void MODE(class irc::Command *command)
@@ -23,26 +19,23 @@ void MODE(class irc::Command *command)
 	std::string mode = command->getUser().getMode();
 	bool is_minus = false;
 
-	if (mode.size() == 0)
-		mode = "+";
-
 	if (command->getParameters()[0] != command->getUser().getNickname())
 		return command->reply(502);
 
-	for (size_t i = 0; command->getParameters().back() != command->getParameters()[0] && i != command->getParameters()[1].size(); ++i)
-		if (command->getParameters()[1][i] == '-')
-			is_minus = true;
-		else if (command->getParameters()[1][i] == '+')
-			is_minus = false;
-		else if (command->getParameters()[1][i] == 'i')
-			check_mode(&mode, 'i', is_minus, command->getServer().getConfig().get("user_mode"));
-		else if (command->getParameters()[1][i] == 's')
-			check_mode(&mode, 's', is_minus, command->getServer().getConfig().get("user_mode"));
-		else if (command->getParameters()[1][i] == 'w')
-			check_mode(&mode, 'w', is_minus, command->getServer().getConfig().get("user_mode"));
-		else
-			command->reply(472, std::string(1, command->getParameters()[1][i]));
+	if (command->getParameters().size() > 1)
+	{
+		std::string request = command->getParameters()[1];
+		for (size_t i = 0; i != request.size(); ++i)
+			if (request[i] == '-')
+				is_minus = true;
+			else if (request[i] == '+')
+				is_minus = false;
+			else if (command->getServer().getConfig().get("user_mode").find(request[i]) == std::string::npos)
+				return command->reply(501);
+			else if (request[i] != 'a' && !(!is_minus && (request[i] == 'o' || request[i] == 'O')))
+				check_mode(&mode, request[i], is_minus);
+	}
 
 	command->getUser().setMode(mode);
-	command->reply(221, mode);
+	return command->reply(221, "+" + mode);
 }

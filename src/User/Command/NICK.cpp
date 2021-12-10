@@ -2,7 +2,6 @@
 #include "../User.hpp"
 #include "../../utils/utils.hpp"
 #include "../../Server/Server.hpp"
-#include <iostream>
 
 void NICK(irc::Command *command)
 {
