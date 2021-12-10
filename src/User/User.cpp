@@ -100,7 +100,7 @@ void irc::User::callCommands()
 	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
 	{
 		Command *command = *it;
-		if (registered || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
+		if (registered || command->getPrefix() == "PASS" || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
 		{
 			if (command_function.count(command->getPrefix()))
 				command_function[command->getPrefix()](command);
@@ -154,10 +154,10 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["LIST"] = LIST;
 	command_function["INVITE"] = INVITE;
 	command_function["KICK"] = KICK;
-	
+
 	command_function["NOTICE"] = NOTICE;
 	command_function["NOTICE"] = PRIVMSG;
-	
+
 	command_function["MOTD"] = MOTD;
 	command_function["LUSERS"] = LUSERS;
 	command_function["VERSION"] = VERSION;
@@ -175,12 +175,12 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["WHO"] = WHO;
 	command_function["WHOIS"] = WHOIS;
 	command_function["WHOWAS"] = WHOWAS;
-	
+
 	command_function["KILL"] = KILL;
 	command_function["PING"] = PING;
 	command_function["PONG"] = PONG;
 	command_function["ERROR"] = ERROR;
-	
+
 	command_function["AWAY"] = AWAY;
 	command_function["REHASH"] = REHASH;
 	command_function["DIE"] = DIE;
@@ -220,8 +220,9 @@ void irc::User::pendingMessages(Server *server)
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
 
-bool irc::User::isRegistered() { return nickname.length() && realname.length(); }
+bool irc::User::isRegistered() { return password && nickname.length() && realname.length(); }
 
+void irc::User::setPassword() { password = true; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }

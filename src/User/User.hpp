@@ -22,6 +22,7 @@ namespace irc
 
 		std::string hostaddr;
 		std::string hostname;
+		bool password;
 		std::string nickname;
 		std::string username;
 		std::string realname;
@@ -40,6 +41,7 @@ namespace irc
 
 		bool isRegistered();
 
+		void setPassword();
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
 		void setRealname(std::string realname);
