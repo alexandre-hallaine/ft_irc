@@ -154,6 +154,12 @@ void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 int irc::User::getFd() { return fd; }
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
+std::string irc::User::getHost()
+{
+	if (hostname.length())
+		return hostname;
+	return hostaddr;
+}
 std::string irc::User::getPrefix()
 {
 	if (!isRegistered())

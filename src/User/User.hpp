@@ -49,6 +49,7 @@ namespace irc
 		int getFd();
 		std::string getHostaddr();
 		std::string getHostname();
+		std::string getHost();
 		std::string getPrefix();
 		std::string getNickname();
 		std::string getUsername();
