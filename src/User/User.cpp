@@ -68,7 +68,6 @@ void irc::User::callCommands()
 			remove.push_back(command);
 		}
 	}
-	push();
 
 	for (std::vector<Command *>::iterator it = remove.begin(); it != remove.end(); ++it)
 	{
@@ -82,6 +81,8 @@ void irc::User::callCommands()
 		post_registration(*commands.begin());
 		callCommands();
 	}
+	else
+		push();
 }
 
 irc::User::User(int fd, struct sockaddr_in address)

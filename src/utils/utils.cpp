@@ -7,7 +7,9 @@ std::string irc::currentTime()
 {
 	time_t t = std::time(0);
 	struct tm *now = std::localtime(&t);
-	return (asctime(now));
+	std::string time(asctime(now));
+	time.erase(--time.end());
+	return time;
 }
 
 void irc::error(std::string message, bool stop)

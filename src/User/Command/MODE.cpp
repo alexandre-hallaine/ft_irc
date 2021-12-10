@@ -5,10 +5,7 @@
 
 void check_mode(std::string *mode, char option, bool is_minus, std::string options)
 {
-	size_t i = 0;
-
-	while (i != options.size())
-	{
+	for (size_t i = 0; i != options.size(); ++i)
 		if (option == options[i])
 		{
 			if (mode->find(options[i]) != std::string::npos && is_minus)
@@ -16,8 +13,6 @@ void check_mode(std::string *mode, char option, bool is_minus, std::string optio
 			else if (mode->find(options[i]) == std::string::npos && !is_minus)
 				mode->insert(mode->end(), options[i]);
 		}
-		i++;
-	}
 }
 
 void MODE(class irc::Command *command)
@@ -25,9 +20,8 @@ void MODE(class irc::Command *command)
 	if (command->getParameters().size() == 0)
 		return command->reply(461, "MODE");
 
-	std::string mode = command->getUser().getMode(); 
+	std::string mode = command->getUser().getMode();
 	bool is_minus = false;
-	size_t i = 0;
 
 	if (mode.size() == 0)
 		mode = "+";
@@ -35,22 +29,19 @@ void MODE(class irc::Command *command)
 	if (command->getParameters()[0] != command->getUser().getNickname())
 		return command->reply(502);
 
-	while (command->getParameters().back() != command->getParameters()[0] && i != command->getParameters()[1].size())
-	{
+	for (size_t i = 0; command->getParameters().back() != command->getParameters()[0] && i != command->getParameters()[1].size(); ++i)
 		if (command->getParameters()[1][i] == '-')
 			is_minus = true;
 		else if (command->getParameters()[1][i] == '+')
 			is_minus = false;
 		else if (command->getParameters()[1][i] == 'i')
-			check_mode(&mode, 'i', is_minus, command->getServer().getConfig().get("user_mode")); 
+			check_mode(&mode, 'i', is_minus, command->getServer().getConfig().get("user_mode"));
 		else if (command->getParameters()[1][i] == 's')
-			check_mode(&mode, 's', is_minus, command->getServer().getConfig().get("user_mode")); 
+			check_mode(&mode, 's', is_minus, command->getServer().getConfig().get("user_mode"));
 		else if (command->getParameters()[1][i] == 'w')
-			check_mode(&mode, 'w', is_minus, command->getServer().getConfig().get("user_mode")); 
+			check_mode(&mode, 'w', is_minus, command->getServer().getConfig().get("user_mode"));
 		else
 			command->reply(472, std::string(1, command->getParameters()[1][i]));
-		i++;
-	}
 
 	command->getUser().setMode(mode);
 	command->reply(221, mode);
