@@ -21,6 +21,8 @@ void QUIT(irc::Command *command);
 void MODE(irc::Command *command);
 void PING(irc::Command *command);
 void WHOIS(irc::Command *command);
+void WHOWAS(irc::Command *command);
+void WHO(irc::Command *command);
 
 void irc::User::push()
 {
@@ -33,8 +35,9 @@ void irc::User::push()
 	}
 	pending.clear();
 
-	if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
-		error("send", false);
+	if (buffer.length())
+		if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
+			error("send", false);
 }
 void post_registration(irc::Command *command)
 {
@@ -100,6 +103,8 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["MODE"] = MODE;
 	command_function["PING"] = PING;
 	command_function["WHOIS"] = WHOIS;
+	command_function["WHOWAS"] = WHOWAS;
+	command_function["WHO"] = WHO;
 }
 irc::User::~User() { close(fd); }
 
@@ -143,6 +148,7 @@ void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 void irc::User::setMode(std::string mode) { this->mode = mode; }
+void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 
 int irc::User::getFd() { return fd; }
 std::string irc::User::getHostaddr() { return hostname; }
@@ -164,3 +170,4 @@ std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getMode() { return mode; }
+std::string irc::User::getPastnick() { return pastnick; }

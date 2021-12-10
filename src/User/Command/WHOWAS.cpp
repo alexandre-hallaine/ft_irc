@@ -1,24 +1,29 @@
-#include "../PacketManager.hpp"
+#include "Command.hpp"
+#include "../User.hpp"
+#include "../../utils/utils.hpp"
+#include "../../Server/Server.hpp"
 
-void irc::WHOWAS(struct irc::packetParams params)
+void WHOWAS(class irc::Command *command)
 {
 	size_t pos = 0, tmp = 0;
 	bool has_print = false;
 
-	if (params.args.size() == 1)
-		return params.user->write(431);
+	if (command->getParameters().size() == 0)
+		return command->reply(431);
 
-	for (std::vector<User *>::iterator it = params.server->getUsers().begin(); it != params.server->getUsers().end(); it++)
+	std::vector<irc::User *> users = command->getServer().getUsers();
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
 	{
-		while ((tmp = (*it)->getPastnick().find(params.args[1], pos)) != std::string::npos)
+		while ((tmp = (*it)->getPastnick().find(command->getParameters()[0], pos)) != std::string::npos)
 		{
-			params.user->write(314, params.args[1], (*it)->getUsername(), (*it)->getHote(), (*it)->getRealname());
+			command->reply(314, command->getParameters()[0], (*it)->getUsername(), (*it)->getHostname(), (*it)->getRealname());
 			pos = tmp + 1;
 			has_print = true;
 		}
 		pos = 0, tmp = 0;
 	}
+
 	if (!has_print)
-		return params.user->write(406, params.args[1]);
-	return params.user->write(369);
+		return command->reply(406, command->getParameters()[0]);
+	return command->reply(369);
 }

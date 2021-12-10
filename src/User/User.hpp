@@ -26,6 +26,7 @@ namespace irc
 		std::string username;
 		std::string realname;
 		std::string mode;
+		std::string pastnick;
 
 		void push();
 		void callCommands();
@@ -43,6 +44,7 @@ namespace irc
 		void setUsername(std::string username);
 		void setRealname(std::string realname);
 		void setMode(std::string mode);
+		void setPastnick(std::string pastnick);
 
 		int getFd();
 		std::string getHostaddr();
@@ -52,6 +54,7 @@ namespace irc
 		std::string getUsername();
 		std::string getRealname();
 		std::string getMode();
+		std::string getPastnick();
 	};
 }
 #endif
