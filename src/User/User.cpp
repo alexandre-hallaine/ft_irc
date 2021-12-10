@@ -13,15 +13,57 @@
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
 
+void PASS(irc::Command *command);
 void NICK(irc::Command *command);
 void USER(irc::Command *command);
-void MOTD(irc::Command *command);
-void QUIT(irc::Command *command);
+void OPER(irc::Command *command);
 void MODE(irc::Command *command);
-void PING(irc::Command *command);
+void SERVICE(irc::Command *command);
+void QUIT(irc::Command *command);
+void SQUIT(irc::Command *command);
+
+void JOIN(irc::Command *command);
+void PART(irc::Command *command);
+void TOPIC(irc::Command *command);
+void NAMES(irc::Command *command);
+void LIST(irc::Command *command);
+void INVITE(irc::Command *command);
+void KICK(irc::Command *command);
+
+void NOTICE(irc::Command *command);
+void PRIVMSG(irc::Command *command);
+
+void MOTD(irc::Command *command);
+void LUSERS(irc::Command *command);
+void VERSION(irc::Command *command);
+void STATS(irc::Command *command);
+void LINKS(irc::Command *command);
+void TIME(irc::Command *command);
+void CONNECT(irc::Command *command);
+void TRACE(irc::Command *command);
+void ADMIN(irc::Command *command);
+void INFO(irc::Command *command);
+void SERVLIST(irc::Command *command);
+void SQUERY(irc::Command *command);
+
+void WHO(irc::Command *command);
 void WHOIS(irc::Command *command);
 void WHOWAS(irc::Command *command);
-void WHO(irc::Command *command);
+
+void KILL(irc::Command *command);
+void PING(irc::Command *command);
+void PONG(irc::Command *command);
+void ERROR(irc::Command *command);
+
+void AWAY(irc::Command *command);
+void REHASH(irc::Command *command);
+void DIE(irc::Command *command);
+void RESTART(irc::Command *command);
+void SUMMON(irc::Command *command);
+void USERS(irc::Command *command);
+void WALLOPS(irc::Command *command);
+void USERHOST(irc::Command *command);
+void ISON(irc::Command *command);
 
 void irc::User::push()
 {
@@ -96,15 +138,58 @@ irc::User::User(int fd, struct sockaddr_in address)
 	else
 		this->hostname = hostname;
 
+	command_function["PASS"] = PASS;
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
-	command_function["MOTD"] = MOTD;
-	command_function["QUIT"] = QUIT;
+	command_function["OPER"] = OPER;
 	command_function["MODE"] = MODE;
-	command_function["PING"] = PING;
+	command_function["SERVICE"] = SERVICE;
+	command_function["QUIT"] = QUIT;
+	command_function["SQUIT"] = SQUIT;
+
+	command_function["JOIN"] = JOIN;
+	command_function["PART"] = PART;
+	command_function["TOPIC"] = TOPIC;
+	command_function["NAMES"] = NAMES;
+	command_function["LIST"] = LIST;
+	command_function["INVITE"] = INVITE;
+	command_function["KICK"] = KICK;
+	
+	command_function["NOTICE"] = NOTICE;
+	command_function["NOTICE"] = PRIVMSG;
+	
+	command_function["MOTD"] = MOTD;
+	command_function["LUSERS"] = LUSERS;
+	command_function["VERSION"] = VERSION;
+	command_function["STATS"] = STATS;
+	command_function["LINKS"] = LINKS;
+	command_function["TIME"] = TIME;
+	command_function["CONNECT"] = CONNECT;
+	command_function["TRACE"] = TRACE;
+	command_function["ADMIN"] = ADMIN;
+	command_function["INFO"] = INFO;
+
+	command_function["SERVLIST"] = SERVLIST;
+	command_function["SQUERY"] = SQUERY;
+
+	command_function["WHO"] = WHO;
 	command_function["WHOIS"] = WHOIS;
 	command_function["WHOWAS"] = WHOWAS;
-	command_function["WHO"] = WHO;
+	
+	command_function["KILL"] = KILL;
+	command_function["PING"] = PING;
+	command_function["PONG"] = PONG;
+	command_function["ERROR"] = ERROR;
+	
+	command_function["AWAY"] = AWAY;
+	command_function["REHASH"] = REHASH;
+	command_function["DIE"] = DIE;
+	command_function["RESTART"] = RESTART;
+	command_function["SUMMON"] = SUMMON;
+	command_function["USERS"] = USERS;
+	command_function["WALLOPS"] = WALLOPS;
+	command_function["USERHOST"] = USERHOST;
+	command_function["ISON"] = ISON;
 }
 irc::User::~User() { close(fd); }
 
