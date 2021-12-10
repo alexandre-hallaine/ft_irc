@@ -2,6 +2,7 @@
 #include <ctime>
 #include <iostream>
 #include <cstdlib>
+#include <sstream>
 
 std::string irc::currentTime()
 {
@@ -18,6 +19,7 @@ void irc::error(std::string message, bool stop)
 	if (stop)
 		exit(EXIT_FAILURE);
 }
+
 std::vector<std::string> irc::split(std::string str, std::string delimiter)
 {
 	std::vector<std::string> values = std::vector<std::string>();
@@ -32,6 +34,14 @@ std::vector<std::string> irc::split(std::string str, std::string delimiter)
 
 	return values;
 }
+
 bool irc::isLetter(char c) { return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'); }
 bool irc::isSpecial(char c) { return (c >= '[' && c <= '`') || (c >= '{' && c <= '}'); }
 bool irc::isDigit(char c) { return (c >= '0' && c <= '9'); }
+
+std::string irc::toString(size_t var)
+{
+	std::stringstream stream;
+	stream << var;
+	return stream.str();
+}
