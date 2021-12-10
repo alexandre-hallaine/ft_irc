@@ -467,35 +467,25 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 	/*IRCv3
 	case 670:
 		return target + RPL_STARTTLS();
-		
 	case 691:
 		return target + ERR_STARTTLS();
-		
 
 	case 900:
 		return target + RPL_LOGGEDIN(arg1, arg2, arg3);
-		
 	case 901:
 		return target + RPL_LOGGEDOUT(arg1, arg2, arg3);
-		
 	case 902:
 		return target + ERR_NICKLOCKED();
-		
 	case 903:
 		return target + RPL_SASLSUCCESS();
-		
 	case 904:
 		return target + ERR_SASLFAIL();
-		
 	case 905:
 		return target + ERR_SASLTOOLONG();
-		
 	case 906:
 		return target + ERR_SASLABORTED();
-		
 	case 907:
-		return target + ERR_SASLALREADY();
-		
+		return target + ERR_SASLALREADY();	
 	case 908:
 		return target + RPL_SASLMECHS(arg1);
 		*/

@@ -3,7 +3,6 @@
 #include "../utils/utils.hpp"
 #include "../Server/Server.hpp"
 #include <fcntl.h>
-#include <poll.h>
 #include <iostream>
 #include <sys/socket.h>
 #include <algorithm>
@@ -111,20 +110,13 @@ irc::User::~User() { close(fd); }
 
 void irc::User::pendingMessages(Server *server)
 {
-	struct pollfd pfd;
-	pfd.fd = fd;
-	pfd.events = POLLIN;
-	if (poll(&pfd, 1, 50) == -1)
-		return;
-
 	char buffer[BUFFER_SIZE + 1];
 	ssize_t size;
-	if ((size = recv(pfd.fd, &buffer, BUFFER_SIZE, 0)) == -1)
+	if ((size = recv(fd, &buffer, BUFFER_SIZE, 0)) == -1)
 		return;
 	buffer[size] = 0;
 
-	std::string receive(buffer);
-	packet += receive;
+	packet += buffer;
 	std::string delimiter(MESSAGE_END);
 
 	size_t position;

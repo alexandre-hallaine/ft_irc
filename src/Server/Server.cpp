@@ -12,6 +12,8 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+#include <poll.h>
+#include <unistd.h>
 
 void irc::Server::init()
 {
@@ -35,7 +37,7 @@ void irc::Server::init()
 
 	displayUsers();
 
-	config.set("user_mode", "iws");
+	config.set("user_mode", "aiwroOs");
 	config.set("channel_mode", "");
 }
 void irc::Server::displayUsers()
@@ -46,6 +48,8 @@ void irc::Server::displayUsers()
 }
 void irc::Server::pendingConnection()
 {
+	size_t max_user = atoi(config.get("max").c_str());
+
 	while (true)
 	{
 		struct sockaddr_in address;
@@ -53,10 +57,15 @@ void irc::Server::pendingConnection()
 		int fd = accept(this->fd, (struct sockaddr *)&address, &csin_len);
 		if (fd == -1)
 			break;
-		users[fd] = new User(fd, address);
-		displayUsers();
-		if (DEBUG)
-			std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
+		if (users.size() == max_user)
+			close(fd);
+		else
+		{
+			users[fd] = new User(fd, address);
+			displayUsers();
+			if (DEBUG)
+				std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
+		}
 	}
 }
 
@@ -66,12 +75,30 @@ irc::Server::Server()
 void irc::Server::loop()
 {
 	init();
+
 	while (!stop)
 	{
-		pendingConnection();
+		std::vector<irc::User *> users = getUsers();
+		struct pollfd pfds[4242];
 
-		for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
-			(*it).second->pendingMessages(this);
+		pfds[0].fd = fd;
+		pfds[0].events = POLLIN;
+
+		for (size_t index = 0; index < users.size(); ++index)
+		{
+			pfds[index + 1].fd = users[index]->getFd();
+			pfds[index + 1].events = POLLIN;
+		}
+
+		if (poll(pfds, users.size() + 1, -1) == -1)
+			error("poll", false);
+
+		if (pfds[0].revents == POLLIN)
+			pendingConnection();
+		else
+			for (size_t index = 0; index < users.size(); ++index)
+				if (pfds[index + 1].revents == POLLIN)
+					this->users[pfds[index + 1].fd]->pendingMessages(this);
 	}
 }
 
