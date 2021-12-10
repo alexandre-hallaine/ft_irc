@@ -8,6 +8,9 @@ void WHO(class irc::Command *command)
 	bool is_star = false;
 	size_t pos = 0;
 
+	if (command->getParameters().size() == 0)
+		return ;
+
 	if ((pos = command->getParameters()[0].find("*")) != std::string::npos)
 		is_star = true;
 
