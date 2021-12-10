@@ -50,19 +50,20 @@ void Bot::run()
 		if (msg.find("376 " + nick) != std::string::npos)
 			break;
 	}
-	std::cout << "Joined " << addr << std::endl;
-	//send_msg("MODE " + nick + " +B"); // https://fr.wikibooks.org/wiki/Guide_d%27utilisation_de_l%27IRC/Index_des_modes_et_commandes
+	std::cout << "Joined server " << addr << std::endl;
+	//send_msg("MODE " + nick + " +B");
 	send_msg("JOIN #" + nick);
+	std::cout << "Joined #" << nick << std::endl;
 	while (true)
 	{
 		if (messages.empty())
 			recv_msg();
 		std::string msg = messages[0];
 		messages.erase(messages.begin());
-		if (DEBUG)
-			std::cout << msg << std::endl;
 		if (msg.empty())
 			continue;
+		if (DEBUG)
+			std::cout << msg << std::endl;
 		if (msg.find("PING") != std::string::npos)
 			send_msg("PONG " + msg.substr(5));
 	}
@@ -83,11 +84,13 @@ void Bot::recv_msg()
 	pfd.fd = sock;
 	pfd.events = POLLIN;
 	if (poll(&pfd, 1, 0) == -1)
-		return;
+		throw std::runtime_error("poll() failed");
 
 	ssize_t len = recv(sock, &buf, 4096, 0);
 	if (len < 0)
 		throw std::runtime_error("recv() failed");
+	if (len == 0)
+		throw std::runtime_error("Connection closed");
 	buf[len] = '\0';
 	receive += buf;
 	while (receive.find("\r\n") != std::string::npos)
