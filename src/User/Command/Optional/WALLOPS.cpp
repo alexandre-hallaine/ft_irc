@@ -5,7 +5,7 @@
 
 void WALLOPS(irc::Command *command) 
 {
-	if (command->getParameters().size() == 0)
+	if (command->getTrailer() == "")
 		return command->reply(461, "WALLOPS");
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
