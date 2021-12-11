@@ -1,6 +1,6 @@
 #include "User.hpp"
 #include "Command/Command.hpp"
-#include "../utils/utils.hpp"
+#include "../Utils/Utils.hpp"
 #include "../Server/Server.hpp"
 #include <fcntl.h>
 #include <iostream>

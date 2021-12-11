@@ -4,14 +4,15 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	utils/utils.hpp \
+FILES_CHECK			=	Utils/Utils.hpp \
 						Server/Config/Config.hpp \
 						Server/Display/Display.hpp \
 						Server/Server.hpp \
 						Server/Runtime.hpp \
 						User/Command/Command.hpp \
+						User/Command/Channel/Channel.hpp \
 						User/User.hpp
-FILES_SOURCE		=	utils/utils.cpp \
+FILES_SOURCE		=	Utils/Utils.cpp \
 						Server/Config/Config.cpp \
 						Server/Display/Display.cpp \
 						Server/Server.cpp \
@@ -24,6 +25,7 @@ FILES_SOURCE		=	utils/utils.cpp \
 						User/Command/Connection/SERVICE.cpp \
 						User/Command/Connection/QUIT.cpp \
 						User/Command/Connection/SQUIT.cpp \
+						User/Command/Channel/Channel.cpp \
 						User/Command/Channel/JOIN.cpp \
 						User/Command/Channel/PART.cpp \
 						User/Command/Channel/TOPIC.cpp \

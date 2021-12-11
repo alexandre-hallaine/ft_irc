@@ -1,6 +1,6 @@
 #include "Command.hpp"
 #include "../User.hpp"
-#include "../../utils/utils.hpp"
+#include "../../Utils/Utils.hpp"
 #include <sstream>
 
 irc::Command::Command(User *user, Server *server, std::string message)

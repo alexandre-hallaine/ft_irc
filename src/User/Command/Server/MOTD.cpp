@@ -1,6 +1,6 @@
 #include "../Command.hpp"
 #include "../../../Server/Server.hpp"
-#include "../../../utils/utils.hpp"
+#include "../../../Utils/Utils.hpp"
 
 void MOTD(irc::Command *command)
 {

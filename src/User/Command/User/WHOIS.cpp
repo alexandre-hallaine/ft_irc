@@ -1,6 +1,6 @@
 #include "../Command.hpp"
 #include "../../User.hpp"
-#include "../../../utils/utils.hpp"
+#include "../../../Utils/Utils.hpp"
 #include "../../../Server/Server.hpp"
 
 void WHOIS(class irc::Command *command)

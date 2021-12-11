@@ -1,5 +1,5 @@
 #include "Display.hpp"
-#include "../../utils/utils.hpp"
+#include "../../Utils/Utils.hpp"
 #include <iostream>
 #include <sstream>
 

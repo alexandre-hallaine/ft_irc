@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "../User/User.hpp"
-#include "../utils/utils.hpp"
+#include "../Utils/Utils.hpp"
+#include "../User/Command/Channel/Channel.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -112,6 +113,9 @@ std::vector<irc::User *> irc::Server::getUsers()
 		users.push_back(it->second);
 	return users;
 }
+irc::Channel *irc::Server::getChannel(std::string channelName) { return channels.find(channelName)->second; }
+void irc::Server::addChannel(std::string channelName) { channels.insert(std::pair<std::string, irc::Channel *>(channelName, new irc::Channel(channelName))); }
+void irc::Server::removeChannel(std::string channelName) { channels.erase(channelName); }
 
 void irc::Server::quitUser(User &user)
 {
