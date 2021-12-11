@@ -29,7 +29,6 @@ namespace irc
 		std::string mode;
 		std::string pastnick;
 
-		void push();
 		void callCommands();
 
 	public:
@@ -38,6 +37,7 @@ namespace irc
 
 		void pendingMessages(Server *server);
 		void write(std::string message);
+		void push();
 
 		bool isRegistered();
 

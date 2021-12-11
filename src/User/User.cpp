@@ -30,8 +30,8 @@ void LIST(irc::Command *command);
 void INVITE(irc::Command *command);
 void KICK(irc::Command *command);
 
-void NOTICE(irc::Command *command);
 void PRIVMSG(irc::Command *command);
+void NOTICE(irc::Command *command);
 
 void MOTD(irc::Command *command);
 void LUSERS(irc::Command *command);
@@ -65,21 +65,6 @@ void WALLOPS(irc::Command *command);
 void USERHOST(irc::Command *command);
 void ISON(irc::Command *command);
 
-void irc::User::push()
-{
-	std::string buffer;
-	for (std::vector<std::string>::iterator it = pending.begin(); it != pending.end(); ++it)
-	{
-		if (DEBUG)
-			std::cout << fd << " > " << *it << std::endl;
-		buffer += *it + MESSAGE_END;
-	}
-	pending.clear();
-
-	if (buffer.length())
-		if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
-			error("send", false);
-}
 void post_registration(irc::Command *command)
 {
 	command->reply(1, command->getUser().getPrefix());
@@ -155,8 +140,8 @@ irc::User::User(int fd, struct sockaddr_in address)
 	command_function["INVITE"] = INVITE;
 	command_function["KICK"] = KICK;
 
+	command_function["PRIVMSG"] = PRIVMSG;
 	command_function["NOTICE"] = NOTICE;
-	command_function["NOTICE"] = PRIVMSG;
 
 	command_function["MOTD"] = MOTD;
 	command_function["LUSERS"] = LUSERS;
@@ -219,6 +204,21 @@ void irc::User::pendingMessages(Server *server)
 	callCommands();
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
+void irc::User::push()
+{
+	std::string buffer;
+	for (std::vector<std::string>::iterator it = pending.begin(); it != pending.end(); ++it)
+	{
+		if (DEBUG)
+			std::cout << fd << " > " << *it << std::endl;
+		buffer += *it + MESSAGE_END;
+	}
+	pending.clear();
+
+	if (buffer.length())
+		if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
+			error("send", false);
+}
 
 bool irc::User::isRegistered() { return password && nickname.length() && realname.length(); }
 

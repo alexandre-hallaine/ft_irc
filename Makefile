@@ -33,8 +33,8 @@ FILES_SOURCE		=	Utils/Utils.cpp \
 						User/Command/Channel/LIST.cpp \
 						User/Command/Channel/INVITE.cpp \
 						User/Command/Channel/KICK.cpp \
-						User/Command/Sending/NOTICE.cpp \
 						User/Command/Sending/PRIVMSG.cpp \
+						User/Command/Sending/NOTICE.cpp \
 						User/Command/Server/MOTD.cpp \
 						User/Command/Server/LUSERS.cpp \
 						User/Command/Server/VERSION.cpp \
