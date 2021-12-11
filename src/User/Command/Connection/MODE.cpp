@@ -16,11 +16,28 @@ void MODE(class irc::Command *command)
 	if (command->getParameters().size() == 0)
 		return command->reply(461, "MODE");
 
-	std::string mode = command->getUser().getMode();
-	bool is_minus = false;
+	irc::User *user = 0;
 
 	if (command->getParameters()[0] != command->getUser().getNickname())
-		return command->reply(502);
+	{
+		if (command->getUser().getMode().find("o") == std::string::npos)
+			return command->reply(502);
+				
+		std::vector<irc::User *> users = command->getServer().getUsers();
+		for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
+			if ((*it)->getNickname() == command->getParameters()[0])
+			{
+				user = (*it);
+				break ;
+			}
+		if (!user)
+			return ;
+	}
+	else
+		user = &command->getUser();
+
+	std::string mode = user->getMode();
+	bool is_minus = false;
 
 	if (command->getParameters().size() > 1)
 	{
@@ -36,6 +53,6 @@ void MODE(class irc::Command *command)
 				check_mode(&mode, request[i], is_minus);
 	}
 
-	command->getUser().setMode(mode);
+	user->setMode(mode);
 	return command->reply(221, "+" + mode);
 }
