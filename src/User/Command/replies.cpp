@@ -77,7 +77,7 @@ std::string RPL_EXCEPTLIST(std::string channel, std::string mask) { return chann
 std::string RPL_ENDOFEXCEPTLIST(std::string channel) { return channel + " :End of channel exception list"; }
 std::string RPL_VERSION(std::string version, std::string server, std::string comments) { return version + " " + server + " :" + comments; }
 std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string hopcout, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " H :" + hopcout + " " + real; }
-std::string RPL_NAMREPLY(std::string channel, std::string nick_list) { return channel + " :" + nick_list; }
+std::string RPL_NAMREPLY(std::string chan_mod, std::string channel, std::string nick_list) { return chan_mod + " " + channel + " :" + nick_list; }
 std::string RPL_LINKS(std::string mask, std::string server, std::string hopcount, std::string info) { return mask + " " + server + " :" + hopcount + " " + info; }
 std::string RPL_ENDOFLINKS(std::string mask) { return mask + " :End of /LINKS list"; }
 std::string RPL_ENDOFNAMES(std::string channel) { return channel + " :End of /NAMES list"; }
@@ -319,7 +319,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 	case 352:
 		return target + RPL_WHOREPLY(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	case 353:
-		return target + RPL_NAMREPLY(arg1, arg2);
+		return target + RPL_NAMREPLY(arg1, arg2, arg3);
 	case 364:
 		return target + RPL_LINKS(arg1, arg2, arg3, arg4);
 	case 365:

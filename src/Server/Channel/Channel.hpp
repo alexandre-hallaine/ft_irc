@@ -33,6 +33,7 @@ namespace irc
 		void addUser(User &user);
 		void removeUser(User &user);
 		std::vector<User *> getUsers();
+		std::string getUsersString();
 
 		void setMode(User &user, std::string mode);
 		std::string getMode(User &user);

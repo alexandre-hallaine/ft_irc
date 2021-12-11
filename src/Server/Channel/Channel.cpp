@@ -19,6 +19,20 @@ std::vector<irc::User *> irc::Channel::getUsers()
 		users.push_back(it->second);
 	return users;
 }
+std::string irc::Channel::getUsersString()
+{
+	std::string users = "";
+
+	for (std::map<int, User *>::iterator it = this->users.begin(); it != this->users.end(); ++it)
+	{
+		if (it != this->users.begin())
+			users += " ";
+		if (modes[it->second->getFd()] == "+o")
+			users += "@";
+		users += it->second->getNickname();
+	}
+	return users;
+}
 
 void irc::Channel::setMode(User &user, std::string mode) { modes[user.getFd()] = mode; }
 std::string irc::Channel::getMode(User &user) { return modes[user.getFd()]; }
