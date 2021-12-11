@@ -54,5 +54,5 @@ void MODE(class irc::Command *command)
 	}
 
 	user->setMode(mode);
-	return command->reply(221, "+" + mode);
+	return command->reply(*user, 221, "+" + mode);
 }
