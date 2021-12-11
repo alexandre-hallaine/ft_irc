@@ -110,7 +110,7 @@ leaks: all
 debugflags:
 	$(eval COMPILATION_FLAG=-D DEBUG)
 
-debug: debugflags rrun
+debug: debugflags run
 
 .PHONY: all run clean fclean re rrun leaks debugflags debug
 .SILENT:
