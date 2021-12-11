@@ -1,6 +1,6 @@
 #include "bot.hpp"
 
-Bot::Bot(std::string addr, int port, std::string nick): addr(addr), nick(nick)
+Bot::Bot(std::string addr, int port, std::string pass, std::string nick): addr(addr), pass(pass), nick(nick)
 {
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		throw std::runtime_error("socket() failed");
@@ -24,6 +24,7 @@ void Bot::run()
 		std::cout << "Retrying in 5 seconds..." << std::endl;
 		sleep(5);
 	}
+	send_pass();
 	while (!connected)
 	{
 		try
@@ -99,6 +100,13 @@ void Bot::recv_msg()
 		receive.erase(0, receive.find("\r\n") + 2);
 		messages.push_back(msg);
 	}
+}
+
+void Bot::send_pass()
+{
+	if (pass.empty())
+		return;
+	send_msg("PASS " + pass);
 }
 
 void Bot::send_nick()

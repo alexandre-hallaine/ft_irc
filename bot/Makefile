@@ -11,7 +11,7 @@ FILES_SOURCE		=	bot.cpp \
 COMPILE				=	clang++
 COMPILATION_FLAG	=	-Wall -Wextra -Werror -std=c++98 -pedantic-errors -g 
 
-ARGUMENTS			=	localhost 6667
+ARGUMENTS			=	localhost 6667 password
 
 all: $(NAME)
 

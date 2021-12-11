@@ -22,6 +22,7 @@ class Bot
 		int sock;
 		struct sockaddr_in serv_addr;
 
+		std::string pass;
 		std::string nick;
 		bool connected;
 
@@ -30,9 +31,10 @@ class Bot
 
 		void send_msg(std::string msg);
 		void recv_msg();
+		void send_pass();
 		void send_nick();
 	public:
-		Bot(std::string addr, int port = 6667, std::string nick = "bot");
+		Bot(std::string addr, int port = 6667, std::string pass = std::string(), std::string nick = "bot");
 		~Bot();
 		
 		void run();

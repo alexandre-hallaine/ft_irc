@@ -14,7 +14,7 @@ void JOIN(irc::Command *command)
 		if (command->getServer().getChannel(*it).getUsers().size() == 0)
 		{
 			command->getServer().getChannel(*it).addUser(command->getUser());
-			command->getServer().getChannel(*it).setMode(command->getUser(), "+o");
+			command->getServer().getChannel(*it).setMode(command->getUser(), "o");
 		}
 		else
 			command->getServer().getChannel(*it).addUser(command->getUser());

@@ -18,9 +18,14 @@ int main(int argc, char **argv)
 			Bot bot(argv[1], atoi(argv[2]), argv[3]);
 			bot.run();
 		}
+		else if (argc == 5)
+		{
+			Bot bot(argv[1], atoi(argv[2]), argv[3], argv[4]);
+			bot.run();
+		}
 		else
 		{
-			std::cout << "Usage: " << argv[0] << " <server> [port] [nickname]" << std::endl;
+			std::cout << "Usage: " << argv[0] << " <bot_name> [<bot_port>] [<bot_ip>] [<bot_password>]" << std::endl;
 			return EXIT_FAILURE;
 		}
 		return EXIT_SUCCESS;

@@ -27,7 +27,7 @@ std::string irc::Channel::getUsersString()
 	{
 		if (it != this->users.begin())
 			users += " ";
-		if (modes[it->second->getFd()] == "+o")
+		if (modes[it->second->getFd()].find('o') != std::string::npos)
 			users += "@";
 		users += it->second->getNickname();
 	}
