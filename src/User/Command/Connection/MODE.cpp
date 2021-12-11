@@ -49,7 +49,7 @@ void MODE(class irc::Command *command)
 				is_minus = false;
 			else if (command->getServer().getConfig().get("user_mode").find(request[i]) == std::string::npos)
 				return command->reply(501);
-			else if (request[i] != 'a' && !(!is_minus && (request[i] == 'o' || request[i] == 'O')))
+			else if (request[i] != 'a' && !(is_minus && request[i] == 'r' && command->getUser().getMode().find("o") == std::string::npos) && !(!is_minus && (request[i] == 'o' || request[i] == 'O')))
 				check_mode(&mode, request[i], is_minus);
 	}
 
