@@ -3,6 +3,7 @@
 
 #include "Config/Config.hpp"
 #include "Display/Display.hpp"
+#include "Channel/Channel.hpp"
 #include <string>
 #include <map>
 #include <vector>
@@ -10,7 +11,6 @@
 namespace irc
 {
 	class User;
-	class Channel;
 
 	class Server
 	{
@@ -18,7 +18,7 @@ namespace irc
 		Config config;
 		Display display;
 		std::map<int, User *> users;
-		std::map<std::string, Channel *> channels;
+		std::map<std::string, Channel> channels;
 		std::string upTime;
 		bool stop;
 		int fd;
@@ -34,12 +34,12 @@ namespace irc
 
 		Config &getConfig();
 		std::string getUpTime();
-		std::vector<User *> getUsers();
-		Channel *getChannel(std::string channelName);
-		void addChannel(std::string channelName);
-		void removeChannel(std::string channelName);
 
-		void quitUser(User &user);
+		std::vector<User *> getUsers();
+		void delUser(User &user);
+
+		Channel &getChannel(std::string name);
+		void delChannel(Channel channel);
 	};
 }
 #endif

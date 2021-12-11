@@ -4,6 +4,6 @@
 
 void QUIT(irc::Command *command)
 {
-	command->getServer().quitUser(command->getUser());
+	command->getServer().delUser(command->getUser());
 	//command->getParameters()[0]); need to get msg for channel
 }

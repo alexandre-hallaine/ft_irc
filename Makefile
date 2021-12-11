@@ -7,14 +7,15 @@ DIRECTORY_OBJECT	=	objects
 FILES_CHECK			=	Utils/Utils.hpp \
 						Server/Config/Config.hpp \
 						Server/Display/Display.hpp \
+						Server/Channel/Channel.hpp \
 						Server/Server.hpp \
 						Server/Runtime.hpp \
 						User/Command/Command.hpp \
-						User/Command/Channel/Channel.hpp \
 						User/User.hpp
 FILES_SOURCE		=	Utils/Utils.cpp \
 						Server/Config/Config.cpp \
 						Server/Display/Display.cpp \
+						Server/Channel/Channel.cpp \
 						Server/Server.cpp \
 						Server/Runtime.cpp \
 						User/Command/Connection/PASS.cpp \
@@ -25,7 +26,6 @@ FILES_SOURCE		=	Utils/Utils.cpp \
 						User/Command/Connection/SERVICE.cpp \
 						User/Command/Connection/QUIT.cpp \
 						User/Command/Connection/SQUIT.cpp \
-						User/Command/Channel/Channel.cpp \
 						User/Command/Channel/JOIN.cpp \
 						User/Command/Channel/PART.cpp \
 						User/Command/Channel/TOPIC.cpp \

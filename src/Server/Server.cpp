@@ -1,7 +1,6 @@
 #include "Server.hpp"
 #include "../User/User.hpp"
 #include "../Utils/Utils.hpp"
-#include "../User/Command/Channel/Channel.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -105,6 +104,7 @@ void irc::Server::loop()
 
 irc::Config &irc::Server::getConfig() { return config; }
 std::string irc::Server::getUpTime() { return upTime; }
+
 std::vector<irc::User *> irc::Server::getUsers()
 {
 	std::vector<User *> users = std::vector<User *>();
@@ -113,14 +113,18 @@ std::vector<irc::User *> irc::Server::getUsers()
 		users.push_back(it->second);
 	return users;
 }
-irc::Channel *irc::Server::getChannel(std::string channelName) { return channels.find(channelName)->second; }
-void irc::Server::addChannel(std::string channelName) { channels.insert(std::pair<std::string, irc::Channel *>(channelName, new irc::Channel(channelName))); }
-void irc::Server::removeChannel(std::string channelName) { channels.erase(channelName); }
-
-void irc::Server::quitUser(User &user)
+void irc::Server::delUser(User &user)
 {
 	users.erase(users.find(user.getFd()));
 	delete &user;
 
 	displayUsers();
 }
+
+irc::Channel &irc::Server::getChannel(std::string name)
+{
+	Channel &channel = channels[name];
+	channel.setName(name);
+	return channel;
+}
+void irc::Server::delChannel(Channel channel) { channels.erase(channels.find(channel.getName())); }
