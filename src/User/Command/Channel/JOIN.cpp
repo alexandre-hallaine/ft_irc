@@ -1,7 +1,23 @@
 #include "../Command.hpp"
 #include "../../../Utils/Utils.hpp"
 #include "../../../Server/Server.hpp"
-#include "../../../Server/Channel/Channel.hpp"
+#include "../../User.hpp"
+
+std::string getUsersString(irc::Channel channel)
+{
+	std::vector<irc::User *> users = channel.getUsers();
+	std::string users_string = "";
+
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+	{
+		if (users_string.length())
+			users_string += " ";
+		if (channel.getMode(*(*it)).find('o') != std::string::npos)
+			users_string += "@";
+		users_string += (*it)->getNickname();
+	}
+	return users_string;
+}
 
 void JOIN(irc::Command *command)
 {
@@ -11,16 +27,16 @@ void JOIN(irc::Command *command)
 	std::vector<std::string> channelsNames = irc::split(command->getParameters()[0], ",");
 	for (std::vector<std::string>::iterator it = channelsNames.begin(); it != channelsNames.end(); ++it)
 	{
-		if (command->getServer().getChannel(*it).getUsers().size() == 0)
+		irc::Channel &channel = command->getServer().getChannel(*it);
+		if (channel.getUsers().size() == 0)
 		{
-			command->getServer().getChannel(*it).addUser(command->getUser());
-			command->getServer().getChannel(*it).setMode(command->getUser(), "o");
+			channel.addUser(command->getUser());
+			channel.setMode(command->getUser(), "o");
 		}
 		else
-			command->getServer().getChannel(*it).addUser(command->getUser());
-		command->reply(332, *it, command->getServer().getChannel(*it).getTopic());
-		command->reply(353, "=", *it, command->getServer().getChannel(*it).getUsersString());
+			channel.addUser(command->getUser());
+		command->reply(332, *it, channel.getTopic());
+		command->reply(353, "=", *it, getUsersString(channel));
 		command->reply(366, *it);
 	}
-	
 }
