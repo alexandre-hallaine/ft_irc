@@ -246,7 +246,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 	case 254:
 		return target + RPL_LUSERCHANNELS(arg1);
 	case 255:
-		return target + RPL_LUSERME(arg1, arg1);
+		return target + RPL_LUSERME(arg1, arg2);
 	case 256:
 		return target + RPL_ADMINME(arg1);
 	case 257:
