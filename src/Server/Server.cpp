@@ -182,6 +182,13 @@ irc::Channel &irc::Server::getChannel(std::string name)
 	updateChannels();
 	return channel;
 }
+std::vector<irc::Channel *> irc::Server::getChannels()
+{
+	std::vector<irc::Channel *> channels = std::vector<irc::Channel *>();
+	for (std::map<std::string, irc::Channel>::iterator it = this->channels.begin(); it != this->channels.end(); ++it)
+		channels.push_back(&(*it).second);
+	return channels;
+}
 void irc::Server::delChannel(Channel channel)
 {
 	channels.erase(channels.find(channel.getName()));
