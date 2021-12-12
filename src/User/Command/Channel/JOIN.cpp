@@ -12,7 +12,7 @@ std::string getUsersString(irc::Channel channel)
 	{
 		if (users_string.length())
 			users_string += " ";
-		if (channel.getMode(*(*it)).find('o') != std::string::npos)
+		if (channel.getUserMode(*(*it)).find('O') != std::string::npos)
 			users_string += "@";
 		users_string += (*it)->getNickname();
 	}
@@ -31,7 +31,7 @@ void JOIN(irc::Command *command)
 		if (channel.getUsers().size() == 0)
 		{
 			channel.addUser(command->getUser());
-			channel.setMode(command->getUser(), "o");
+			channel.setUserMode(command->getUser(), "O");
 		}
 		else
 			channel.addUser(command->getUser());
