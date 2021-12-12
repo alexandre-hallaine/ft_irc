@@ -17,10 +17,10 @@ namespace irc
 		std::map<int, User *> users;
 		std::string mode;
 		std::map<int, std::string> user_mode;
-		/*std::vector<std::string> bans;
-		bool inviteOnly;
+		/*
 		std::string key;
-		size_t max;*/
+		size_t max;
+		*/
 
 	public:
 		Channel();
@@ -34,6 +34,7 @@ namespace irc
 		void addUser(User &user);
 		void removeUser(User &user);
 		std::vector<User *> getUsers();
+		bool isMember(User &user);
 
 		void setMode(std::string);
 		void setMode(User &user, std::string mode);

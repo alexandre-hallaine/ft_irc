@@ -38,5 +38,7 @@ void JOIN(irc::Command *command)
 		command->reply(332, *it, channel.getTopic());
 		command->reply(353, "=", *it, getUsersString(channel));
 		command->reply(366, *it);
+		// TODO: send user join message:
+		// :<user> JOIN <channel>
 	}
 }
