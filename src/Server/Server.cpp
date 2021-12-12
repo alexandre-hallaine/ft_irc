@@ -39,6 +39,8 @@ void irc::Server::init()
 
 	config.set("user_mode", "aiwroOs");
 	config.set("channel_mode", "");
+	if ((size_t)atoi(config.get("max").c_str()) > 4242)
+		config.set("max", "4242");
 }
 void irc::Server::displayUsers()
 {
@@ -76,6 +78,10 @@ void irc::Server::loop()
 {
 	init();
 
+	int ping = atoi(config.get("ping").c_str());
+	int timeout = atoi(config.get("timeout").c_str());
+	time_t last_ping = std::time(0);
+
 	while (!stop)
 	{
 		std::vector<irc::User *> users = getUsers();
@@ -90,8 +96,23 @@ void irc::Server::loop()
 			pfds[index + 1].events = POLLIN;
 		}
 
-		if (poll(pfds, users.size() + 1, -1) == -1)
+		if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
 			error("poll", false);
+
+		time_t current = std::time(0);
+		if (current - last_ping >= ping)
+		{
+			for (std::vector<User *>::iterator it = users.begin(); it != users.end(); ++it)
+				if (current - (*it)->getLastPing() >= timeout)
+					delUser(*(*it));
+				else if ((*it)->isRegistered())
+				{
+					(*it)->write("PING " + (*it)->getNickname());
+					(*it)->push();
+				}
+			last_ping = current;
+			continue;
+		}
 
 		if (pfds[0].revents == POLLIN)
 			pendingConnection();

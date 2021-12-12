@@ -9,6 +9,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <ctime>
 
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
@@ -112,7 +113,7 @@ void irc::User::callCommands()
 }
 
 irc::User::User(int fd, struct sockaddr_in address)
-	: fd(fd)
+	: fd(fd), last_ping(std::time(0))
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 
@@ -202,6 +203,8 @@ void irc::User::pendingMessages(Server *server)
 		commands.push_back(new Command(this, server, message));
 	}
 	callCommands();
+	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
+		delete *it;
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
 void irc::User::push()
@@ -222,6 +225,7 @@ void irc::User::push()
 
 bool irc::User::isRegistered() { return password && nickname.length() && realname.length(); }
 
+void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
 void irc::User::setPassword() { password = true; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
@@ -230,6 +234,7 @@ void irc::User::setMode(std::string mode) { this->mode = mode; }
 void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 
 int irc::User::getFd() { return fd; }
+time_t irc::User::getLastPing() { return last_ping; };
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()

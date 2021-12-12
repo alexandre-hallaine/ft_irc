@@ -19,6 +19,7 @@ namespace irc
 		std::vector<Command *> commands;
 		std::string packet;
 		std::vector<std::string> pending;
+		time_t last_ping;
 
 		std::string hostaddr;
 		std::string hostname;
@@ -41,6 +42,7 @@ namespace irc
 
 		bool isRegistered();
 
+		void setLastPing(time_t last_ping);
 		void setPassword();
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
@@ -49,6 +51,7 @@ namespace irc
 		void setPastnick(std::string pastnick);
 
 		int getFd();
+		time_t getLastPing();
 		std::string getHostaddr();
 		std::string getHostname();
 		std::string getHost();
