@@ -38,6 +38,7 @@ namespace irc
 		std::vector<User *> getUsers();
 		void delUser(User &user);
 
+		bool isChannel(std::string name);
 		Channel &getChannel(std::string name);
 		void delChannel(Channel channel);
 	};

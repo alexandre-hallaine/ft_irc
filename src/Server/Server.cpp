@@ -121,6 +121,7 @@ void irc::Server::delUser(User &user)
 	displayUsers();
 }
 
+bool irc::Server::isChannel(std::string name) { return channels.count(name); }
 irc::Channel &irc::Server::getChannel(std::string name)
 {
 	Channel &channel = channels[name];
