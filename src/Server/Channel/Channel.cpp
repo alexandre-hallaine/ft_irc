@@ -20,5 +20,7 @@ std::vector<irc::User *> irc::Channel::getUsers()
 	return users;
 }
 
-void irc::Channel::setMode(User &user, std::string mode) { modes[user.getFd()] = mode; }
-std::string irc::Channel::getMode(User &user) { return modes[user.getFd()]; }
+void irc::Channel::setMode(std::string mode) { this->mode = mode; }
+void irc::Channel::setMode(User &user, std::string mode) { user_mode[user.getFd()] = mode; }
+std::string irc::Channel::getMode() { return mode; }
+std::string irc::Channel::getMode(User &user) { return user_mode[user.getFd()]; }
