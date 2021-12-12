@@ -112,8 +112,20 @@ void irc::User::callCommands()
 		push();
 }
 
-irc::User::User(int fd, struct sockaddr_in address)
-	: fd(fd), last_ping(std::time(0))
+irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
+													  command_function(),
+													  commands(),
+													  packet(),
+													  pending(),
+													  last_ping(std::time(0)),
+													  hostaddr(),
+													  hostname(),
+													  password(false),
+													  nickname(),
+													  username(),
+													  realname(),
+													  mode(),
+													  pastnick()
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 

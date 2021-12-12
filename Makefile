@@ -103,14 +103,14 @@ re: fclean all
 
 rrun: re run
 
-leaks: all
-	@printf "\e[0m"
-	valgrind --leak-check=full ./$(NAME) $(ARGUMENTS)
-
 debugflags:
 	$(eval COMPILATION_FLAG=-D DEBUG)
 
 debug: debugflags run
 
-.PHONY: all run clean fclean re rrun leaks debugflags debug
+leaks: debugflags all
+	@printf "\e[0m"
+	valgrind --leak-check=full ./$(NAME) $(ARGUMENTS)
+
+.PHONY: all run clean fclean re rrun debugflags debug leaks
 .SILENT:
