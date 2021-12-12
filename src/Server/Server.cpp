@@ -15,31 +15,6 @@
 #include <unistd.h>
 #include <algorithm>
 
-void irc::Server::init()
-{
-	int enable = 1;
-	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		error("socket", true);
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &enable, sizeof(enable)))
-		error("setsockopt", true);
-	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
-		error("fcntl", true);
-
-	struct sockaddr_in address;
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(atoi(config.get("port").c_str()));
-
-	if (bind(fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-		error("bind", true);
-	if (listen(fd, address.sin_port) < 0)
-		error("listen", true);
-
-	config.set("user_mode", "aiwroOs");
-	config.set("channel_mode", "");
-	if ((size_t)atoi(config.get("max").c_str()) > 4242)
-		config.set("max", "4242");
-}
 void irc::Server::pendingConnection()
 {
 	size_t max_user = atoi(config.get("max").c_str());
@@ -95,48 +70,74 @@ void irc::Server::updateChannels()
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), stop(false) { display.set(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), last_ping(std::time(0)) { display.set(0, "Welcome to our \033[1;37mIRC\n"); }
 
-void irc::Server::loop()
+irc::Server::~Server()
 {
-	init();
+	std::vector<User *> users = getUsers();
+	for (std::vector<User *>::iterator it = users.begin(); it != users.end(); ++it)
+		delUser(*(*it));
+}
+
+void irc::Server::init()
+{
+	int enable = 1;
+	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+		error("socket", true);
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &enable, sizeof(enable)))
+		error("setsockopt", true);
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
+		error("fcntl", true);
+
+	struct sockaddr_in address;
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_port = htons(atoi(config.get("port").c_str()));
+
+	if (bind(fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+		error("bind", true);
+	if (listen(fd, address.sin_port) < 0)
+		error("listen", true);
+
+	config.set("user_mode", "aiwroOs");
+	config.set("channel_mode", "");
+	if ((size_t)atoi(config.get("max").c_str()) > 4242)
+		config.set("max", "4242");
+}
+void irc::Server::execute()
+{
+	std::vector<irc::User *> users = getUsers();
+	struct pollfd pfds[4242];
+
+	pfds[0].fd = fd;
+	pfds[0].events = POLLIN;
+
+	for (size_t index = 0; index < users.size(); ++index)
+	{
+		pfds[index + 1].fd = users[index]->getFd();
+		pfds[index + 1].events = POLLIN;
+	}
 
 	int ping = atoi(config.get("ping").c_str());
-	time_t last_ping = std::time(0);
 
-	while (!stop)
+	if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
+		error("poll", false);
+
+	if (std::time(0) - last_ping >= ping)
 	{
-		std::vector<irc::User *> users = getUsers();
-		struct pollfd pfds[4242];
+		sendPing();
+		last_ping = std::time(0);
+		return;
+	}
 
-		pfds[0].fd = fd;
-		pfds[0].events = POLLIN;
-
+	if (pfds[0].revents == POLLIN)
+		pendingConnection();
+	else
+	{
 		for (size_t index = 0; index < users.size(); ++index)
-		{
-			pfds[index + 1].fd = users[index]->getFd();
-			pfds[index + 1].events = POLLIN;
-		}
-
-		if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
-			error("poll", false);
-
-		if (std::time(0) - last_ping >= ping)
-		{
-			sendPing();
-			last_ping = std::time(0);
-			continue;
-		}
-
-		if (pfds[0].revents == POLLIN)
-			pendingConnection();
-		else
-		{
-			for (size_t index = 0; index < users.size(); ++index)
-				if (pfds[index + 1].revents == POLLIN)
-					this->users[pfds[index + 1].fd]->pendingMessages(this);
-			updateUsers();
-		}
+			if (pfds[index + 1].revents == POLLIN)
+				this->users[pfds[index + 1].fd]->pendingMessages(this);
+		updateUsers();
 	}
 }
 

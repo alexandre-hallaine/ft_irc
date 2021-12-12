@@ -8,6 +8,9 @@ namespace irc
 	class Runtime
 		: private Server
 	{
+	private:
+		bool isInit;
+
 	public:
 		Runtime();
 

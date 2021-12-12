@@ -21,10 +21,9 @@ namespace irc
 		std::map<int, User *> users;
 		std::map<std::string, Channel> channels;
 		std::string upTime;
-		bool stop;
 		int fd;
+		time_t last_ping;
 
-		void init();
 		void pendingConnection();
 		void sendPing();
 
@@ -33,8 +32,10 @@ namespace irc
 
 	public:
 		Server();
+		~Server();
 
-		void loop();
+		void init();
+		void execute();
 
 		Config &getConfig();
 		std::string getUpTime();

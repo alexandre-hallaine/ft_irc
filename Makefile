@@ -105,7 +105,7 @@ rrun: re run
 
 leaks: all
 	@printf "\e[0m"
-	valgrind make run
+	valgrind --leak-check=full ./$(NAME) $(ARGUMENTS)
 
 debugflags:
 	$(eval COMPILATION_FLAG=-D DEBUG)
