@@ -100,7 +100,7 @@ void irc::Server::init()
 		error("listen", true);
 
 	config.set("user_mode", "aiwroOs");
-	config.set("channel_mode", "");
+	config.set("channel_mode", "imnpsrt");
 	if ((size_t)atoi(config.get("max").c_str()) > 4242)
 		config.set("max", "4242");
 }
