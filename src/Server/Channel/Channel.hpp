@@ -40,6 +40,8 @@ namespace irc
 		void setMode(User &user, std::string mode);
 		std::string getMode();
 		std::string getMode(User &user);
+
+		void write(User *user, std::string message);
 	};
 
 }
