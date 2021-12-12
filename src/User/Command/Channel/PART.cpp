@@ -26,7 +26,7 @@ void PART(irc::Command *command)
 				command->reply(442, channel);
 				continue;
 			}
-			chan.write(&command->getUser(), ":" + command->getUser().getPrefix() + " PART " + channel + (command->getParameters().size() > 1 ?  " :" + command->getParameters()[1] : ""));
+			chan.broadcast(command->getUser(), "PART " + channel + (command->getParameters().size() > 1 ? " :" + command->getParameters()[1] : ""));
 			chan.removeUser(command->getUser());
 			if (chan.getUsers().size() == 0)
 				command->getServer().delChannel(chan);

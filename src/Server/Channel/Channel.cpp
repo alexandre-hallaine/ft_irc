@@ -26,11 +26,13 @@ void irc::Channel::setMode(User &user, std::string mode) { user_mode[user.getFd(
 std::string irc::Channel::getMode() { return mode; }
 std::string irc::Channel::getMode(User &user) { return user_mode[user.getFd()]; }
 
-void irc::Channel::write(User *user, std::string message) {
+void irc::Channel::broadcast(User &user, std::string message)
+{
+	message = ":" + user.getPrefix() + " " + message;
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
 		it->second->write(message);
-		if (it->second != user)
+		if (it->first != user.getFd())
 			it->second->push();
 	}
 }

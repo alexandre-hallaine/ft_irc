@@ -38,6 +38,6 @@ void JOIN(irc::Command *command)
 		command->reply(332, *it, channel.getTopic());
 		command->reply(353, "=", *it, getUsersString(channel));
 		command->reply(366, *it);
-		channel.write(&command->getUser(), ":" + command->getUser().getPrefix() + " JOIN :" + channel.getName());
+		channel.broadcast(command->getUser(), "JOIN :" + channel.getName());
 	}
 }
