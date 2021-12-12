@@ -29,7 +29,7 @@ void MODE_channel(class irc::Command *command)
 				is_minus = false;
 			else if (command->getServer().getConfig().get("channel_mode").find(request[i]) == std::string::npos)
 				command->reply(472, std::string(1, request[i]));
-			else
+			else if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
 				check_mode(&mode, request[i], is_minus);
 		}
 	}
