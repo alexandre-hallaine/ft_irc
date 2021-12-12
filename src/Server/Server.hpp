@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <poll.h>
 
 namespace irc
 {
@@ -25,6 +26,10 @@ namespace irc
 
 		void init();
 		void pendingConnection();
+		void sendPing();
+
+		void updateUsers();
+		void updateChannels();
 
 	public:
 		Server();

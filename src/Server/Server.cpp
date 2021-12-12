@@ -12,7 +12,6 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-#include <poll.h>
 #include <unistd.h>
 #include <algorithm>
 
@@ -36,8 +35,6 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
-	display.set(fd, "FD\tHost");
-
 	config.set("user_mode", "aiwroOs");
 	config.set("channel_mode", "");
 	if ((size_t)atoi(config.get("max").c_str()) > 4242)
@@ -58,16 +55,43 @@ void irc::Server::pendingConnection()
 			close(fd);
 		else
 		{
-			User *user = new User(fd, address);
-			users[fd] = user;
-
-			std::stringstream ss;
-			ss << user->getFd() << "\t" << user->getHost();
-			display.set(user->getFd(), ss.str());
+			users[fd] = new User(fd, address);
+			updateUsers();
 			if (DEBUG)
 				std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 		}
 	}
+}
+void irc::Server::sendPing()
+{
+	time_t current = std::time(0);
+	int timeout = atoi(config.get("timeout").c_str());
+
+	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
+		if (current - (*it).second->getLastPing() >= timeout)
+			delUser(*(*it).second);
+		else if ((*it).second->isRegistered())
+		{
+			(*it).second->write("PING " + (*it).second->getNickname());
+			(*it).second->push();
+		}
+}
+
+void irc::Server::updateUsers()
+{
+	display.set(fd, "FD\tHost\tNickname");
+	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
+	{
+		std::stringstream ss;
+		ss << (*it).second->getFd() << "\t" << (*it).second->getHost() << "\t" << (*it).second->getNickname();
+		display.set((*it).second->getFd(), ss.str());
+	}
+}
+void irc::Server::updateChannels()
+{
+	std::stringstream ss;
+	ss << "Channels: " << channels.size();
+	display.set(2, ss.str());
 }
 
 irc::Server::Server()
@@ -78,7 +102,6 @@ void irc::Server::loop()
 	init();
 
 	int ping = atoi(config.get("ping").c_str());
-	int timeout = atoi(config.get("timeout").c_str());
 	time_t last_ping = std::time(0);
 
 	while (!stop)
@@ -98,27 +121,22 @@ void irc::Server::loop()
 		if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
 			error("poll", false);
 
-		time_t current = std::time(0);
-		if (current - last_ping >= ping)
+		if (std::time(0) - last_ping >= ping)
 		{
-			for (std::vector<User *>::iterator it = users.begin(); it != users.end(); ++it)
-				if (current - (*it)->getLastPing() >= timeout)
-					delUser(*(*it));
-				else if ((*it)->isRegistered())
-				{
-					(*it)->write("PING " + (*it)->getNickname());
-					(*it)->push();
-				}
-			last_ping = current;
+			sendPing();
+			last_ping = std::time(0);
 			continue;
 		}
 
 		if (pfds[0].revents == POLLIN)
 			pendingConnection();
 		else
+		{
 			for (size_t index = 0; index < users.size(); ++index)
 				if (pfds[index + 1].revents == POLLIN)
 					this->users[pfds[index + 1].fd]->pendingMessages(this);
+			updateUsers();
+		}
 	}
 }
 
@@ -135,17 +153,17 @@ std::vector<irc::User *> irc::Server::getUsers()
 }
 void irc::Server::delUser(User &user)
 {
-	std::vector<std::string> remove;
+	std::vector<Channel> remove;
 	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		std::vector<irc::User *> users = (*it).second.getUsers();
 		if (std::find(users.begin(), users.end(), &user) != users.end())
-		{
 			(*it).second.removeUser(user);
-			if (!(*it).second.getUsers().size())
-				delChannel((*it).second);
-		}
+		if (!(*it).second.getUsers().size())
+			remove.push_back((*it).second);
 	}
+	for (std::vector<Channel>::iterator it = remove.begin(); it != remove.end(); ++it)
+		delChannel(*it);
 
 	display.remove(user.getFd());
 
@@ -156,8 +174,15 @@ void irc::Server::delUser(User &user)
 bool irc::Server::isChannel(std::string name) { return channels.count(name); }
 irc::Channel &irc::Server::getChannel(std::string name)
 {
+	bool exist = isChannel(name);
 	Channel &channel = channels[name];
-	channel.setName(name);
+	if (!exist)
+		channel.setName(name);
+	updateChannels();
 	return channel;
 }
-void irc::Server::delChannel(Channel channel) { channels.erase(channels.find(channel.getName())); }
+void irc::Server::delChannel(Channel channel)
+{
+	channels.erase(channels.find(channel.getName()));
+	updateChannels();
+}
