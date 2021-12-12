@@ -13,14 +13,12 @@ namespace irc
 
 		void clearScreen();
 		void update();
-		void write(unsigned char pos, std::string prefix, std::string line);
 
 	public:
 		Display();
 
-		void write(unsigned char pos, std::string line);
-		void warning(unsigned char pos, std::string line);
-		void error(unsigned char pos, std::string line);
+		void set(unsigned char pos, std::string line);
+		void remove(unsigned char pos);
 	};
 }
 #endif

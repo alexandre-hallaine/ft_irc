@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <poll.h>
 #include <unistd.h>
+#include <algorithm>
 
 void irc::Server::init()
 {
@@ -35,18 +36,12 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
-	displayUsers();
+	display.set(fd, "FD\tHost");
 
 	config.set("user_mode", "aiwroOs");
 	config.set("channel_mode", "");
 	if ((size_t)atoi(config.get("max").c_str()) > 4242)
 		config.set("max", "4242");
-}
-void irc::Server::displayUsers()
-{
-	std::stringstream ss;
-	ss << "Users: " << users.size();
-	display.write(1, ss.str());
 }
 void irc::Server::pendingConnection()
 {
@@ -63,8 +58,12 @@ void irc::Server::pendingConnection()
 			close(fd);
 		else
 		{
-			users[fd] = new User(fd, address);
-			displayUsers();
+			User *user = new User(fd, address);
+			users[fd] = user;
+
+			std::stringstream ss;
+			ss << user->getFd() << "\t" << user->getHost();
+			display.set(user->getFd(), ss.str());
 			if (DEBUG)
 				std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 		}
@@ -72,7 +71,7 @@ void irc::Server::pendingConnection()
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), stop(false) { display.write(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), stop(false) { display.set(0, "Welcome to our \033[1;37mIRC\n"); }
 
 void irc::Server::loop()
 {
@@ -136,10 +135,22 @@ std::vector<irc::User *> irc::Server::getUsers()
 }
 void irc::Server::delUser(User &user)
 {
-	users.erase(users.find(user.getFd()));
-	delete &user;
+	std::vector<std::string> remove;
+	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		std::vector<irc::User *> users = (*it).second.getUsers();
+		if (std::find(users.begin(), users.end(), &user) != users.end())
+		{
+			(*it).second.removeUser(user);
+			if (!(*it).second.getUsers().size())
+				delChannel((*it).second);
+		}
+	}
 
-	displayUsers();
+	display.remove(user.getFd());
+
+	users.erase(user.getFd());
+	delete &user;
 }
 
 bool irc::Server::isChannel(std::string name) { return channels.count(name); }

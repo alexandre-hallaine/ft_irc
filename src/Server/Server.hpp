@@ -24,7 +24,6 @@ namespace irc
 		int fd;
 
 		void init();
-		void displayUsers();
 		void pendingConnection();
 
 	public:

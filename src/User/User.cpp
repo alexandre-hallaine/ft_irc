@@ -203,8 +203,6 @@ void irc::User::pendingMessages(Server *server)
 		commands.push_back(new Command(this, server, message));
 	}
 	callCommands();
-	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
-		delete *it;
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
 void irc::User::push()
@@ -234,7 +232,7 @@ void irc::User::setMode(std::string mode) { this->mode = mode; }
 void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 
 int irc::User::getFd() { return fd; }
-time_t irc::User::getLastPing() { return last_ping; };
+time_t irc::User::getLastPing() { return last_ping; }
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()
