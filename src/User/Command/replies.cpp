@@ -144,7 +144,6 @@ std::string ERR_BADCHANMASK(std::string channel) { return channel + " :Bad Chann
 std::string ERR_NOCHANMODES(std::string channel) { return channel + " :Channel doesn't support modes"; }
 std::string ERR_BANLISTFULL(std::string channel) { return channel + " :Channel list is full"; }
 std::string ERR_NOPRIVILEGES() { return ":Permission Denied- You're not an IRC operator"; }
-std::string ERR_CHANOPRIVSNEEDED(std::string channel) { return channel + " :You're not channel operator"; }
 std::string ERR_CANTKILLSERVER() { return ":You cant kill a server!"; }
 std::string ERR_RESTRICTED() { return ":Your connection is restricted!"; }
 std::string ERR_CHANOPRIVSNEEDED(std::string user) { return user + " :You're not channel operator"; }
