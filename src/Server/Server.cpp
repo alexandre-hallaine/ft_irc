@@ -44,7 +44,7 @@ void irc::Server::sendPing()
 
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if (current - (*it).second->getLastPing() >= timeout)
-			delUser(*(*it).second);
+			(*it).second->deleteLater();
 		else if ((*it).second->isRegistered())
 		{
 			(*it).second->write("PING " + (*it).second->getNickname());
@@ -133,22 +133,15 @@ void irc::Server::execute()
 	}
 
 	if (pfds[0].revents == POLLIN)
-		pendingConnection();
-	else
-	{
-		std::vector<irc::User *> remove = std::vector<irc::User *>();
-		for (size_t index = 0; index < users.size(); ++index)
-			if (pfds[index + 1].revents == POLLIN)
-			{
-				this->users[pfds[index + 1].fd]->pendingMessages(this);
-				if (this->users[pfds[index + 1].fd]->toDelete())
-					remove.push_back(this->users[pfds[index + 1].fd]);
-				updateUsers();
-			}
+		return pendingConnection();
+	for (size_t index = 0; index < users.size(); ++index)
+		if (pfds[index + 1].revents == POLLIN)
+			this->users[pfds[index + 1].fd]->pendingMessages(this);
 
-		for (std::vector<irc::User *>::iterator it = remove.begin(); it != remove.end(); ++it)
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+		if ((*it)->toDelete())
 			delUser(*(*it));
-	}
+	updateUsers();
 }
 
 irc::Config &irc::Server::getConfig() { return config; }
