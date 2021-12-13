@@ -58,7 +58,7 @@ void irc::Server::updateUsers()
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
 		std::stringstream ss;
-		ss << (*it).second->getFd() << "\t" << (*it).second->getNickname() << "\t" << (*it).second->getHost();
+		ss << "\033[34m" << (*it).second->getFd() << "\t\033[33m" << (*it).second->getNickname() << "\t\033[35m" << (*it).second->getHost();
 		display.set((*it).second->getFd(), ss.str());
 	}
 }
@@ -143,8 +143,8 @@ void irc::Server::execute()
 				this->users[pfds[index + 1].fd]->pendingMessages(this);
 				if (this->users[pfds[index + 1].fd]->toDelete())
 					remove.push_back(this->users[pfds[index + 1].fd]);
+				updateUsers();
 			}
-		updateUsers();
 
 		for (std::vector<irc::User *>::iterator it = remove.begin(); it != remove.end(); ++it)
 			delUser(*(*it));

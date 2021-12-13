@@ -19,7 +19,7 @@ std::vector<irc::User *> irc::Channel::getUsers()
 		users.push_back(it->second);
 	return users;
 }
-bool irc::Channel::isMember(User &user) { return users.find(user.getFd()) != users.end(); }
+bool irc::Channel::isUser(User &user) { return users.find(user.getFd()) != users.end(); }
 
 void irc::Channel::setMode(std::string mode) { this->mode = mode; }
 std::string irc::Channel::getMode() { return mode; }

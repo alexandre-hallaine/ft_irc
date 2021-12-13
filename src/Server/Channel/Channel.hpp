@@ -32,7 +32,7 @@ namespace irc
 		void addUser(User &user);
 		void removeUser(User &user);
 		std::vector<User *> getUsers();
-		bool isMember(User &user);
+		bool isUser(User &user);
 
 		void setMode(std::string);
 		std::string getMode();

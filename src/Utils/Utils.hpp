@@ -21,5 +21,7 @@ namespace irc
 	bool isDigit(char c);
 
 	std::string toString(size_t var);
+
+	bool strmatch(std::string str, std::string pattern);
 }
 #endif

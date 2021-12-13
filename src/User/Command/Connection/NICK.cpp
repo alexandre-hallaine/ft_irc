@@ -10,7 +10,6 @@ void NICK(irc::Command *command)
 
 	std::string nickname = command->getParameters()[0];
 
-	//check valid nick
 	if (nickname.length() > 9)
 		return command->reply(432, nickname);
 	size_t index = 0;
@@ -20,8 +19,6 @@ void NICK(irc::Command *command)
 	for (; index < nickname.length(); ++index)
 		if (!irc::isLetter(nickname[index]) && !irc::isSpecial(nickname[index]) && !irc::isDigit(nickname[index]) && nickname[index] != '-')
 			return command->reply(432, nickname);
-
-	//boo
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
