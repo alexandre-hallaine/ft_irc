@@ -106,11 +106,10 @@ void MODE_channel(class irc::Command *command)
 			}
 			else if (command->getParameters().size() == count && command->getServer().getConfig().get("channel_givemode").find(request[i]) != std::string::npos)
 				command->reply(461, "MODE");
-			else if (request[i] == 'O')
-				(void)count;
 			else if (command->getParameters().size() > 2 && command->getServer().getConfig().get("channel_givemode").find(request[i]) != std::string::npos)
 			{
-				check_givemode(request[i], is_minus, command, count);
+				if (request[i] != 'O')
+					check_givemode(request[i], is_minus, command, count);
 				count++;
 				if ((i + 1) == request.size())
 					return ;
