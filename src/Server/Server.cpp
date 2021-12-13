@@ -54,23 +54,23 @@ void irc::Server::sendPing()
 
 void irc::Server::updateUsers()
 {
-	display.set(fd, "FD\tHost\tNickname");
+	display.set(fd, "\nFD\tNickname\tHost");
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
 		std::stringstream ss;
-		ss << (*it).second->getFd() << "\t" << (*it).second->getHost() << "\t" << (*it).second->getNickname();
+		ss << (*it).second->getFd() << "\t" << (*it).second->getNickname() << "\t" << (*it).second->getHost();
 		display.set((*it).second->getFd(), ss.str());
 	}
 }
 void irc::Server::updateChannels()
 {
 	std::stringstream ss;
-	ss << "Channels: " << channels.size();
+	ss << "\nChannels: " << channels.size();
 	display.set(2, ss.str());
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), last_ping(std::time(0)) { display.set(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), last_ping(std::time(0)) { display.set(0, "Welcome to our \033[1;37mIRC"); }
 
 irc::Server::~Server()
 {
