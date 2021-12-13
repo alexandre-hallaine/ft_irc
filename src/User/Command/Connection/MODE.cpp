@@ -33,6 +33,8 @@ void check_setmode(std::string *mode, char option, bool is_minus, class irc::Com
 	}
 	else if (!is_minus && option == 'k' && mode->find(option) != std::string::npos)
 		command->reply(467, command->getParameters()[0]);
+	else if (!is_minus && option == 'l' && mode->find(option) != std::string::npos)
+		command->getServer().getChannel(command->getParameters()[0]).setMaxUsers(command->getParameters()[count]);
 }
 
 void MODE_channel(class irc::Command *command)
