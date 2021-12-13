@@ -1,24 +1,21 @@
 #include "../Command.hpp"
-#include "../../User.hpp"
 #include "../../../Server/Server.hpp"
+#include "../../User.hpp"
 
 void OPER(irc::Command *command)
 {
-	if (command->getParameters().size() == 0)
+	if (command->getParameters().size() < 2)
 		return command->reply(461, "OPER");
 
-	std::vector<irc::User *> users = command->getServer().getUsers();
-	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
+	if (command->getParameters()[0] != command->getServer().getConfig().get("oper_user"))
+		return command->reply(464);
+	if (command->getParameters()[1] != command->getServer().getConfig().get("oper_password"))
+		return command->reply(464);
+
+	command->reply(381);
+	if (command->getUser().getMode().find('o') == std::string::npos)
 	{
-		if ((*it)->getNickname() == command->getParameters()[0] && command->getParameters().size() > 1 && command->getServer().getConfig().get("oper_password") == command->getParameters()[1])
-		{
-			if ((*it)->getMode().find("o") == std::string::npos)
-			{
-				(*it)->setMode((*it)->getMode() + "o");
-				command->reply(381);
-			}
-			return command->reply(221, "+" + (*it)->getMode());
-		}
+		command->getUser().setMode(command->getUser().getMode() + "o");
+		command->reply(221, "+" + command->getUser().getMode());
 	}
-	return command->reply(464);
 }
