@@ -40,7 +40,7 @@ void JOIN(irc::Command *command)
 		{
 			if (channel.getMode().find('k') != std::string::npos && channel.getKey() != command->getParameters()[1])
 				return command->reply(475, *it);
-			if (channel.getMode().find('l') != std::string::npos && channel.getUsers().size() >= atoi(channel.getMaxUsers().c_str()))
+			if (channel.getMode().find('l') != std::string::npos && channel.getUsers().size() >= (size_t)atoi(channel.getMaxUsers().c_str()))
 				return command->reply(471, *it);
 			channel.addUser(command->getUser());
 		}
