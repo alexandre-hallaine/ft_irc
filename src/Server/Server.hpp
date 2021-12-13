@@ -40,7 +40,6 @@ namespace irc
 		Config &getConfig();
 		std::string getUpTime();
 
-		bool isUser(std::string const &nick);
 		std::vector<User *> getUsers();
 		User *getUser(std::string const &nick);
 		void delUser(User &user);

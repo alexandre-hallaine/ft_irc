@@ -147,13 +147,6 @@ void irc::Server::execute()
 irc::Config &irc::Server::getConfig() { return config; }
 std::string irc::Server::getUpTime() { return upTime; }
 
-bool irc::Server::isUser(std::string const &nick)
-{
-	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
-		if ((*it).second->getNickname() == nick)
-			return true;
-	return false;
-}
 std::vector<irc::User *> irc::Server::getUsers()
 {
 	std::vector<User *> users = std::vector<User *>();
