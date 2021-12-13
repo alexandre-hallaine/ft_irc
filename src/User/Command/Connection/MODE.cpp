@@ -11,6 +11,30 @@ void check_mode(std::string *mode, char option, bool is_minus)
 		mode->insert(mode->end(), option);
 }
 
+void check_setmode(std::string *mode, char option, bool is_minus, class irc::Command *command, size_t count)
+{
+	if (is_minus && mode->find(option) != std::string::npos)
+	{
+		if (option == 'l')
+			command->getServer().getChannel(command->getParameters()[0]).setMaxUsers("");
+		else if (option == 'k' && command->getParameters()[count] != command->getServer().getChannel(command->getParameters()[0]).getKey())
+			return ;
+		else if (option == 'k' && command->getParameters()[count] == command->getServer().getChannel(command->getParameters()[0]).getKey())
+			command->getServer().getChannel(command->getParameters()[0]).setKey("");
+		mode->erase(mode->begin() + mode->find(option));
+	}
+	else if (!is_minus && mode->find(option) == std::string::npos)
+	{
+		if (option == 'k')
+			command->getServer().getChannel(command->getParameters()[0]).setKey(command->getParameters()[count]);
+		else
+			command->getServer().getChannel(command->getParameters()[0]).setMaxUsers(command->getParameters()[count]);
+		mode->insert(mode->end(), option);
+	}
+	else if (!is_minus && option == 'k' && mode->find(option) != std::string::npos)
+		command->reply(467, command->getParameters()[0]);
+}
+
 void MODE_channel(class irc::Command *command)
 {
 	if (!command->getServer().isChannel(command->getParameters()[0]))
@@ -18,6 +42,7 @@ void MODE_channel(class irc::Command *command)
 
 	std::string mode = command->getServer().getChannel(command->getParameters()[0]).getMode();
 	bool is_minus = false;
+	size_t count = 2;
 	if (command->getParameters().size() > 1)
 	{
 		std::string request = command->getParameters()[1];
@@ -27,14 +52,24 @@ void MODE_channel(class irc::Command *command)
 				is_minus = true;
 			else if (request[i] == '+')
 				is_minus = false;
-			else if (command->getServer().getConfig().get("channel_mode").find(request[i]) == std::string::npos)
+			else if (command->getServer().getConfig().get("channel_togglemode").find(request[i]) == std::string::npos && command->getServer().getConfig().get("channel_setmode").find(request[i]) == std::string::npos && command->getServer().getConfig().get("channel_givemode").find(request[i]) == std::string::npos) 
 				command->reply(472, std::string(1, request[i]));
-			else if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
+			else if (command->getServer().getConfig().get("channel_togglemode").find(request[i]) != std::string::npos && (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos))
 				check_mode(&mode, request[i], is_minus);
+			else if (command->getParameters().size() == count && (request[i] != 'l' || !is_minus) && command->getServer().getConfig().get("channel_setmode").find(request[i]) != std::string::npos)
+				command->reply(461, "MODE");
+			else if ((command->getParameters().size() > 2 || (request[i] == 'l' && is_minus)) && command->getServer().getConfig().get("channel_setmode").find(request[i]) != std::string::npos)
+			{
+				check_setmode(&mode, request[i], is_minus, command, count);
+				if (request[i] != 'l')
+					count++;
+				else if (request[i] == 'l' && !is_minus)
+					count++;
+			}
 		}
 	}
 	command->getServer().getChannel(command->getParameters()[0]).setMode(mode);
-	return command->reply(324, command->getParameters()[0], mode, "");
+	return command->reply(324, command->getParameters()[0], "+" + mode, (command->getServer().getChannel(command->getParameters()[0]).getKey() + " " +  command->getServer().getChannel(command->getParameters()[0]).getMaxUsers()));
 }
 
 void MODE(class irc::Command *command)
