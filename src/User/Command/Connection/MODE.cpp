@@ -96,6 +96,8 @@ void MODE_channel(class irc::Command *command)
 			{
 				if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
 					check_mode(&mode, request[i], is_minus);
+				else
+					command->reply(482);
 			}
 			else if (command->getParameters().size() == count && (request[i] != 'l' || !is_minus) && command->getServer().getConfig().get("channel_setmode").find(request[i]) != std::string::npos)
 				command->reply(461, "MODE");
@@ -103,6 +105,8 @@ void MODE_channel(class irc::Command *command)
 			{
 				if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
 					check_setmode(&mode, request[i], is_minus, command, count);
+				else
+					command->reply(482);
 				if (request[i] != 'l')
 					count++;
 				else if (request[i] == 'l' && !is_minus)
@@ -114,6 +118,8 @@ void MODE_channel(class irc::Command *command)
 			{
 				if (request[i] != 'O' && (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos))
 					check_givemode(request[i], is_minus, command, count);
+				else
+					command->reply(482);
 				count++;
 			}
 		}
