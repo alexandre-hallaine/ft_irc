@@ -218,6 +218,12 @@ void irc::User::pendingMessages(Server *server)
 	callCommands();
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
+void irc::User::sendTo(irc::User &toUser, std::string message)
+{
+	message = ":" + this->getPrefix() + " " + message;
+	toUser.write(message);
+	toUser.push();
+}
 void irc::User::push()
 {
 	std::string buffer;

@@ -45,8 +45,6 @@ namespace irc
 		User *getUser(std::string const &nick);
 		void delUser(User &user);
 
-		void sendOne(User &user, std::string message);
-
 		bool isChannel(std::string const &name);
 		Channel &getChannel(std::string name);
 		std::vector<Channel *> getChannels();

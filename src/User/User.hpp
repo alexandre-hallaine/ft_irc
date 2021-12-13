@@ -39,6 +39,7 @@ namespace irc
 
 		void pendingMessages(Server *server);
 		void write(std::string message);
+		void sendTo(User &toUser, std::string message);
 		void push();
 
 		bool isRegistered();

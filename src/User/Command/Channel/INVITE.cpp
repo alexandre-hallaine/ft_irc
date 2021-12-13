@@ -5,20 +5,14 @@
 void INVITE(irc::Command *command)
 {
 	if (command->getParameters().size() < 2)
-	{
-		command->reply(461, "INVITE");
-		return;
-	}
+		return command->reply(461, "INVITE");
+
 	if (command->getServer().isUser(command->getParameters()[1]))
-	{
-		command->reply(401, command->getParameters()[1]);
-		return;
-	}
+		return command->reply(401, command->getParameters()[1]);
+
 	if (command->getServer().getChannel(command->getParameters()[0]).isOnChannel(command->getParameters()[1]))
-	{
 		command->reply(443, command->getParameters()[0], command->getParameters()[1]);
-		return;
-	}
+
 	if (command->getServer().isChannel(command->getParameters()[1]))
 	{
 		irc::Channel &channel = command->getServer().getChannel(command->getParameters()[1]);
@@ -33,6 +27,6 @@ void INVITE(irc::Command *command)
 			return;
 		}
 	}
-	command->getServer().sendOne(command->getUser(), "INVITE " + command->getParameters()[0] + command->getParameters()[1]);
+	command->getUser().sendTo(*command->getServer().getUser(command->getParameters()[0]), "INVITE " + command->getParameters()[0] + " " + command->getParameters()[1]);
 	command->reply(341, command->getParameters()[0], command->getParameters()[1]);
 }

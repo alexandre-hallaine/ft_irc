@@ -189,13 +189,6 @@ void irc::Server::delUser(User &user)
 	delete &user;
 }
 
-void irc::Server::sendOne(User &user, std::string message)
-{
-	message = ":" + user.getPrefix() + " " + message;
-	user.write(message);
-	user.push();
-}
-
 bool irc::Server::isChannel(std::string const &name) { return channels.count(name); }
 irc::Channel &irc::Server::getChannel(std::string name)
 {
