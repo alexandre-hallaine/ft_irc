@@ -115,8 +115,6 @@ void MODE_channel(class irc::Command *command)
 				if (request[i] != 'O' && (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos))
 					check_givemode(request[i], is_minus, command, count);
 				count++;
-				if ((i + 1) == request.size())
-					return ;
 			}
 		}
 	}
@@ -125,7 +123,9 @@ void MODE_channel(class irc::Command *command)
 	if (options.size() > 0)
 		options += " ";
 	options += command->getServer().getChannel(command->getParameters()[0]).getMaxUsers();
-	return command->reply(324, command->getParameters()[0], "+" + mode, options);
+	if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
+		return command->reply(324, command->getParameters()[0], "+" + mode, options);
+	return command->reply(324, command->getParameters()[0], "+" + mode, "");
 }
 
 void MODE(class irc::Command *command)
