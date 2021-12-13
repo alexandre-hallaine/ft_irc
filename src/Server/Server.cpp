@@ -121,7 +121,7 @@ void irc::Server::execute()
 	int ping = atoi(config.get("ping").c_str());
 
 	if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
-		error("poll", false);
+		return;
 
 	if (std::time(0) - last_ping >= ping)
 	{
@@ -134,10 +134,18 @@ void irc::Server::execute()
 		pendingConnection();
 	else
 	{
+		std::vector<irc::User *> remove = std::vector<irc::User *>();
 		for (size_t index = 0; index < users.size(); ++index)
 			if (pfds[index + 1].revents == POLLIN)
+			{
 				this->users[pfds[index + 1].fd]->pendingMessages(this);
+				if (this->users[pfds[index + 1].fd]->toDelete())
+					remove.push_back(this->users[pfds[index + 1].fd]);
+			}
 		updateUsers();
+
+		for (std::vector<irc::User *>::iterator it = remove.begin(); it != remove.end(); ++it)
+			delUser(*(*it));
 	}
 }
 

@@ -20,6 +20,7 @@ namespace irc
 		std::string packet;
 		std::vector<std::string> pending;
 		time_t last_ping;
+		bool needDelete;
 
 		std::string hostaddr;
 		std::string hostname;
@@ -41,6 +42,8 @@ namespace irc
 		void push();
 
 		bool isRegistered();
+		void deleteLater();
+		bool toDelete();
 
 		void setLastPing(time_t last_ping);
 		void setPassword();
