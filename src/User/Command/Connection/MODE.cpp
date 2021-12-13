@@ -71,7 +71,11 @@ void MODE_channel(class irc::Command *command)
 		}
 	}
 	command->getServer().getChannel(command->getParameters()[0]).setMode(mode);
-	return command->reply(324, command->getParameters()[0], "+" + mode, (command->getServer().getChannel(command->getParameters()[0]).getKey() + " " +  command->getServer().getChannel(command->getParameters()[0]).getMaxUsers()));
+	std::string options = command->getServer().getChannel(command->getParameters()[0]).getKey();
+	if (options.size() > 0)
+		options += " ";
+	options += command->getServer().getChannel(command->getParameters()[0]).getMaxUsers();
+	return command->reply(324, command->getParameters()[0], "+" + mode, options);
 }
 
 void MODE(class irc::Command *command)
