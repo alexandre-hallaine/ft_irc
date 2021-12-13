@@ -45,3 +45,32 @@ std::string irc::toString(size_t var)
 	stream << var;
 	return stream.str();
 }
+
+bool irc::strmatch(std::string str, std::string pattern)
+{
+	size_t str_size = str.size();
+	size_t pattern_size = pattern.size();
+
+	if (str_size == 0 || pattern_size == 0)
+		return false;
+	bool lookup[str_size + 1][pattern_size + 1];
+ 
+	lookup[0][0] = true;
+ 
+	for (int j = 1; j <= pattern_size; j++)
+		if (pattern[j - 1] == '*')
+			lookup[0][j] = lookup[0][j - 1];
+ 
+	for (int i = 1; i <= str_size; i++) {
+		for (int j = 1; j <= pattern_size; j++) {
+			if (pattern[j - 1] == '*')
+				lookup[i][j] = lookup[i][j - 1] || lookup[i - 1][j];
+			else if (pattern[j - 1] == '?' || str[i - 1] == pattern[j - 1])
+				lookup[i][j] = lookup[i - 1][j - 1];
+			else
+				lookup[i][j] = false;
+		}
+	}
+ 
+	return lookup[str_size][pattern_size];
+}
