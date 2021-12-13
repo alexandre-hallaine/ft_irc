@@ -21,7 +21,7 @@ void PART(irc::Command *command)
 		if (command->getServer().isChannel(channel))
 		{
 			irc::Channel &chan = command->getServer().getChannel(channel);
-			if (!chan.isMember(command->getUser()))
+			if (!chan.isUser(command->getUser()))
 			{
 				command->reply(442, channel);
 				continue;
