@@ -18,6 +18,7 @@ namespace irc
 		std::string prefix;
 		std::vector<std::string> parameters;
 		std::string trailer;
+		std::string query;
 
 		bool stop;
 
@@ -32,6 +33,7 @@ namespace irc
 		std::string getPrefix();
 		std::vector<std::string> getParameters();
 		std::string getTrailer();
+		std::string getQuery();
 
 		void setStop(bool stop);
 		bool getStop();
