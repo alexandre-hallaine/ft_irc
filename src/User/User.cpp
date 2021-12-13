@@ -126,7 +126,8 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 													  username(),
 													  realname(),
 													  mode(),
-													  pastnick()
+													  pastnick(),
+													  lastChannel("*")
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 

@@ -48,5 +48,6 @@ void JOIN(irc::Command *command)
 		command->reply(353, "=", *it, getUsersString(channel));
 		command->reply(366, *it);
 		channel.broadcast(command->getUser(), "JOIN :" + channel.getName());
+		command->getUser().setLastChannel(channel.getName());
 	}
 }

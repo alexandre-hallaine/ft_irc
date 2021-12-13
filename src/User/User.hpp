@@ -31,6 +31,8 @@ namespace irc
 		std::string mode;
 		std::string pastnick;
 
+		std::string lastChannel;
+
 		void callCommands();
 
 	public:
@@ -53,6 +55,7 @@ namespace irc
 		void setRealname(std::string realname);
 		void setMode(std::string mode);
 		void setPastnick(std::string pastnick);
+		void setLastChannel(std::string lastChannel);
 
 		int getFd();
 		time_t getLastPing();
@@ -65,6 +68,7 @@ namespace irc
 		std::string getRealname();
 		std::string getMode();
 		std::string getPastnick();
+		std::string getLastChannel();
 	};
 }
 #endif
