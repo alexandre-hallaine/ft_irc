@@ -11,10 +11,6 @@ void PRIVMSG(irc::Command *command)
 		return command->reply(412);
 
 	std::string recipient = command->getParameters()[0];
-
-	if (recipient.find(".") != std::string::npos)
-		return command->reply(411);
-
 	std::vector<irc::User *> users;
 
 	if (*recipient.begin() == '#')

@@ -19,6 +19,8 @@ namespace irc
 		std::vector<std::string> parameters;
 		std::string trailer;
 
+		bool stop;
+
 		std::string getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7);
 
 	public:
@@ -30,6 +32,9 @@ namespace irc
 		std::string getPrefix();
 		std::vector<std::string> getParameters();
 		std::string getTrailer();
+
+		void setStop(bool stop);
+		bool getStop();
 
 		void reply(User &user, unsigned short code, std::string arg1 = "", std::string arg2 = "", std::string arg3 = "", std::string arg4 = "", std::string arg5 = "", std::string arg6 = "", std::string arg7 = "");
 		void reply(unsigned short code, std::string arg1 = "", std::string arg2 = "", std::string arg3 = "", std::string arg4 = "", std::string arg5 = "", std::string arg6 = "", std::string arg7 = "");

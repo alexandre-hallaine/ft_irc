@@ -45,6 +45,7 @@ namespace irc
 
 		bool isChannel(std::string name);
 		Channel &getChannel(std::string name);
+		std::vector<Channel *> getChannels();
 		void delChannel(Channel channel);
 	};
 }

@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "../Command.hpp"
 #include "../../../Utils/Utils.hpp"
 #include "../../../Server/Server.hpp"
@@ -27,6 +28,8 @@ void JOIN(irc::Command *command)
 	std::vector<std::string> channelsNames = irc::split(command->getParameters()[0], ",");
 	for (std::vector<std::string>::iterator it = channelsNames.begin(); it != channelsNames.end(); ++it)
 	{
+		if (it->c_str()[0] != '#')
+			*it = "#" + *it;
 		irc::Channel &channel = command->getServer().getChannel(*it);
 		if (channel.getUsers().size() == 0)
 		{
@@ -34,7 +37,13 @@ void JOIN(irc::Command *command)
 			channel.setUserMode(command->getUser(), "O");
 		}
 		else
+		{
+			if (channel.getMode().find('k') != std::string::npos && channel.getKey() != command->getParameters()[1])
+				return command->reply(475, *it);
+			if (channel.getMode().find('l') != std::string::npos && channel.getUsers().size() >= (size_t)atoi(channel.getMaxUsers().c_str()))
+				return command->reply(471, *it);
 			channel.addUser(command->getUser());
+		}
 		command->reply(332, *it, channel.getTopic());
 		command->reply(353, "=", *it, getUsersString(channel));
 		command->reply(366, *it);

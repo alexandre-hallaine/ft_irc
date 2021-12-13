@@ -54,23 +54,23 @@ void irc::Server::sendPing()
 
 void irc::Server::updateUsers()
 {
-	display.set(fd, "FD\tHost\tNickname");
+	display.set(fd, "\nFD\tNickname\tHost");
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
 		std::stringstream ss;
-		ss << (*it).second->getFd() << "\t" << (*it).second->getHost() << "\t" << (*it).second->getNickname();
+		ss << (*it).second->getFd() << "\t" << (*it).second->getNickname() << "\t" << (*it).second->getHost();
 		display.set((*it).second->getFd(), ss.str());
 	}
 }
 void irc::Server::updateChannels()
 {
 	std::stringstream ss;
-	ss << "Channels: " << channels.size();
+	ss << "\nChannels: " << channels.size();
 	display.set(2, ss.str());
 }
 
 irc::Server::Server()
-	: upTime(currentTime()), last_ping(std::time(0)) { display.set(0, "Welcome to our \033[1;37mIRC\n"); }
+	: upTime(currentTime()), last_ping(std::time(0)) { display.set(0, "Welcome to our \033[1;37mIRC"); }
 
 irc::Server::~Server()
 {
@@ -123,7 +123,7 @@ void irc::Server::execute()
 	int ping = atoi(config.get("ping").c_str());
 
 	if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
-		error("poll", false);
+		return;
 
 	if (std::time(0) - last_ping >= ping)
 	{
@@ -136,10 +136,18 @@ void irc::Server::execute()
 		pendingConnection();
 	else
 	{
+		std::vector<irc::User *> remove = std::vector<irc::User *>();
 		for (size_t index = 0; index < users.size(); ++index)
 			if (pfds[index + 1].revents == POLLIN)
+			{
 				this->users[pfds[index + 1].fd]->pendingMessages(this);
+				if (this->users[pfds[index + 1].fd]->toDelete())
+					remove.push_back(this->users[pfds[index + 1].fd]);
+			}
 		updateUsers();
+
+		for (std::vector<irc::User *>::iterator it = remove.begin(); it != remove.end(); ++it)
+			delUser(*(*it));
 	}
 }
 
@@ -183,6 +191,13 @@ irc::Channel &irc::Server::getChannel(std::string name)
 		channel.setName(name);
 	updateChannels();
 	return channel;
+}
+std::vector<irc::Channel *> irc::Server::getChannels()
+{
+	std::vector<irc::Channel *> channels = std::vector<irc::Channel *>();
+	for (std::map<std::string, irc::Channel>::iterator it = this->channels.begin(); it != this->channels.end(); ++it)
+		channels.push_back(&(*it).second);
+	return channels;
 }
 void irc::Server::delChannel(Channel channel)
 {

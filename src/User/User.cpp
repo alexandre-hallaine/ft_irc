@@ -118,6 +118,7 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 													  packet(),
 													  pending(),
 													  last_ping(std::time(0)),
+													  needDelete(false),
 													  hostaddr(),
 													  hostname(),
 													  password(false),
@@ -234,6 +235,8 @@ void irc::User::push()
 }
 
 bool irc::User::isRegistered() { return password && nickname.length() && realname.length(); }
+void irc::User::deleteLater() { needDelete = true; }
+bool irc::User::toDelete() { return needDelete; }
 
 void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
 void irc::User::setPassword() { password = true; }
@@ -245,6 +248,7 @@ void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 
 int irc::User::getFd() { return fd; }
 time_t irc::User::getLastPing() { return last_ping; }
+
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()
