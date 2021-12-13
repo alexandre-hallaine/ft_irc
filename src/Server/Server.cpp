@@ -169,6 +169,13 @@ std::vector<irc::User *> irc::Server::getUsers()
 		users.push_back(it->second);
 	return users;
 }
+irc::User *irc::Server::getUser(std::string const &nick)
+{
+	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
+		if ((*it).second->getNickname() == nick)
+			return (*it).second;
+	return NULL;
+}
 void irc::Server::delUser(User &user)
 {
 	std::vector<Channel> remove;
@@ -187,6 +194,13 @@ void irc::Server::delUser(User &user)
 
 	users.erase(user.getFd());
 	delete &user;
+}
+
+void irc::Server::sendOne(User &user, std::string message)
+{
+	message = ":" + user.getPrefix() + " " + message;
+	user.write(message);
+	user.push();
 }
 
 bool irc::Server::isChannel(std::string const &name) { return channels.count(name); }

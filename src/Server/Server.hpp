@@ -42,7 +42,10 @@ namespace irc
 
 		bool isUser(std::string const &nick);
 		std::vector<User *> getUsers();
+		User *getUser(std::string const &nick);
 		void delUser(User &user);
+
+		void sendOne(User &user, std::string message);
 
 		bool isChannel(std::string const &name);
 		Channel &getChannel(std::string name);

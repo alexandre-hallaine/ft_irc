@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 #include "../../User/User.hpp"
+#include <algorithm>
 
 irc::Channel::Channel() {}
 
@@ -50,6 +51,10 @@ std::string irc::Channel::getKey() { return key; }
 
 void irc::Channel::setMaxUsers(std::string max_users) { this->max_users = max_users; }
 std::string irc::Channel::getMaxUsers() { return max_users; }
+
+void irc::Channel::addInvited(User &user) { invited.push_back(&user); }
+bool irc::Channel::isInvited(User &user) { return std::find(invited.begin(), invited.end(), &user) != invited.end(); }
+void irc::Channel::removeInvited(User &user) { invited.erase(std::find(invited.begin(), invited.end(), &user)); }
 
 void irc::Channel::broadcast(User &user, std::string message)
 {

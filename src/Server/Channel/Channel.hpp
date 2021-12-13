@@ -19,6 +19,7 @@ namespace irc
 		std::map<int, std::string> user_mode;
 		std::string key;
 		std::string max_users;
+		std::vector<User *> invited;
 
 	public:
 		Channel();
@@ -47,6 +48,10 @@ namespace irc
 
 		void setMaxUsers(std::string max);
 		std::string getMaxUsers();
+
+		void addInvited(User &user);
+		bool isInvited(User &user);
+		void removeInvited(User &user);
 
 		void broadcast(User &user, std::string message);
 	};
