@@ -57,12 +57,12 @@ bool irc::strmatch(std::string str, std::string pattern)
  
 	lookup[0][0] = true;
  
-	for (int j = 1; j <= pattern_size; j++)
+	for (size_t j = 1; j <= pattern_size; j++)
 		if (pattern[j - 1] == '*')
 			lookup[0][j] = lookup[0][j - 1];
  
-	for (int i = 1; i <= str_size; i++) {
-		for (int j = 1; j <= pattern_size; j++) {
+	for (size_t i = 1; i <= str_size; i++) {
+		for (size_t j = 1; j <= pattern_size; j++) {
 			if (pattern[j - 1] == '*')
 				lookup[i][j] = lookup[i][j - 1] || lookup[i - 1][j];
 			else if (pattern[j - 1] == '?' || str[i - 1] == pattern[j - 1])
