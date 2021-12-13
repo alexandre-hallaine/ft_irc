@@ -100,7 +100,7 @@ void irc::Server::init()
 		error("listen", true);
 
 	config.set("user_mode", "aiwroOs");
-	config.set("channel_mode", "");
+	config.set("channel_mode", "imnpst");
 	if ((size_t)atoi(config.get("max").c_str()) > 4242)
 		config.set("max", "4242");
 }
@@ -189,6 +189,13 @@ irc::Channel &irc::Server::getChannel(std::string name)
 		channel.setName(name);
 	updateChannels();
 	return channel;
+}
+std::vector<irc::Channel *> irc::Server::getChannels()
+{
+	std::vector<irc::Channel *> channels = std::vector<irc::Channel *>();
+	for (std::map<std::string, irc::Channel>::iterator it = this->channels.begin(); it != this->channels.end(); ++it)
+		channels.push_back(&(*it).second);
+	return channels;
 }
 void irc::Server::delChannel(Channel channel)
 {

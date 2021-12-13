@@ -17,10 +17,8 @@ namespace irc
 		std::map<int, User *> users;
 		std::string mode;
 		std::map<int, std::string> user_mode;
-		/*
 		std::string key;
-		size_t max;
-		*/
+		std::string max_users;
 
 	public:
 		Channel();
@@ -37,9 +35,16 @@ namespace irc
 		bool isMember(User &user);
 
 		void setMode(std::string);
-		void setMode(User &user, std::string mode);
 		std::string getMode();
-		std::string getMode(User &user);
+
+		void setUserMode(User &user, std::string mode);
+		std::string getUserMode(User &user);
+
+		void setKey(std::string key);
+		std::string getKey();
+
+		void setMaxUsers(std::string max);
+		std::string getMaxUsers();
 
 		void broadcast(User &user, std::string message);
 	};

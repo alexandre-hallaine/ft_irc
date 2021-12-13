@@ -22,9 +22,16 @@ std::vector<irc::User *> irc::Channel::getUsers()
 bool irc::Channel::isMember(User &user) { return users.find(user.getFd()) != users.end(); }
 
 void irc::Channel::setMode(std::string mode) { this->mode = mode; }
-void irc::Channel::setMode(User &user, std::string mode) { user_mode[user.getFd()] = mode; }
 std::string irc::Channel::getMode() { return mode; }
-std::string irc::Channel::getMode(User &user) { return user_mode[user.getFd()]; }
+
+void irc::Channel::setUserMode(User &user, std::string mode) { user_mode[user.getFd()] = mode; }
+std::string irc::Channel::getUserMode(User &user) { return user_mode[user.getFd()]; }
+
+void irc::Channel::setKey(std::string key) { this->key = key; }
+std::string irc::Channel::getKey() { return key; }
+
+void irc::Channel::setMaxUsers(std::string max_users) { this->max_users = max_users; }
+std::string irc::Channel::getMaxUsers() { return max_users; }
 
 void irc::Channel::broadcast(User &user, std::string message)
 {
