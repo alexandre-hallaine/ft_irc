@@ -5,7 +5,7 @@
 
 void LUSERS(irc::Command *command)
 {
-	size_t vis_users = 0, invis_users = 0, op_users = 0, unk_users = 0, channels = 0;
+	size_t vis_users = 0, invis_users = 0, op_users = 0, unk_users = 0, channels;
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
@@ -21,8 +21,9 @@ void LUSERS(irc::Command *command)
 			vis_users++;
 		if ((*it)->getMode().find("o") != std::string::npos)
 			op_users++;
-		//channels
 	}
+	channels = command->getServer().getChannels().size();
+
 	command->reply(251, irc::toString(vis_users), irc::toString(invis_users), "1");
 	command->reply(252, irc::toString(op_users));
 	command->reply(253, irc::toString(unk_users));
