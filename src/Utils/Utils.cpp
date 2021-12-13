@@ -53,7 +53,7 @@ bool irc::strmatch(std::string str, std::string pattern)
 
 	if (str_size == 0 || pattern_size == 0)
 		return false;
-	bool lookup[str_size + 1][pattern_size + 1];
+	std::vector<std::vector<bool> > lookup(str_size + 1, std::vector<bool>(pattern_size + 1, false));
  
 	lookup[0][0] = true;
  
