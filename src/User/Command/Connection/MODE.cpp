@@ -28,13 +28,49 @@ void check_setmode(std::string *mode, char option, bool is_minus, class irc::Com
 		if (option == 'k')
 			command->getServer().getChannel(command->getParameters()[0]).setKey(command->getParameters()[count]);
 		else
+		{
+			for (size_t index = 0; index != command->getParameters()[count].length(); index++)
+				if (!irc::isDigit(command->getParameters()[count][index]))
+					return ;
 			command->getServer().getChannel(command->getParameters()[0]).setMaxUsers(command->getParameters()[count]);
+		}
 		mode->insert(mode->end(), option);
 	}
 	else if (!is_minus && option == 'k' && mode->find(option) != std::string::npos)
 		command->reply(467, command->getParameters()[0]);
 	else if (!is_minus && option == 'l' && mode->find(option) != std::string::npos)
+	{
+		for (size_t index = 0; index != command->getParameters()[count].length(); index++)
+			if (!irc::isDigit(command->getParameters()[count][index]))
+				return ;
 		command->getServer().getChannel(command->getParameters()[0]).setMaxUsers(command->getParameters()[count]);
+	}
+}
+
+void check_givemode(char option, bool is_minus, class irc::Command *command, size_t count)
+{
+		irc::User *user = 0;
+		std::vector<irc::User *> users = command->getServer().getChannel(command->getParameters()[0]).getUsers();
+		for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
+			if ((*it)->getNickname() == command->getParameters()[count])
+			{
+				user = (*it);
+				break ;
+			}
+		if (!user)
+			return command->reply(441, command->getParameters()[count], command->getParameters()[0]);
+
+		std::string mode = command->getServer().getChannel(command->getParameters()[0]).getUserMode(*user);
+		if (is_minus && mode.find(option) != std::string::npos)
+			mode.erase(mode.begin() + mode.find(option));
+		else if (!is_minus && mode.find(option) == std::string::npos)
+			mode.insert(mode.end(), option);
+
+		command->getServer().getChannel(command->getParameters()[0]).setUserMode(*user, mode);
+		if (!is_minus)
+			return command->reply(324, command->getParameters()[0], "+" + std::string(1, option), command->getParameters()[count]);
+		else
+			return command->reply(324, command->getParameters()[0], "-" + std::string(1, option), command->getParameters()[count]);
 }
 
 void MODE_channel(class irc::Command *command)
@@ -67,6 +103,17 @@ void MODE_channel(class irc::Command *command)
 					count++;
 				else if (request[i] == 'l' && !is_minus)
 					count++;
+			}
+			else if (command->getParameters().size() == count && command->getServer().getConfig().get("channel_givemode").find(request[i]) != std::string::npos)
+				command->reply(461, "MODE");
+			else if (request[i] == 'O')
+				(void)count;
+			else if (command->getParameters().size() > 2 && command->getServer().getConfig().get("channel_givemode").find(request[i]) != std::string::npos)
+			{
+				check_givemode(request[i], is_minus, command, count);
+				count++;
+				if ((i + 1) == request.size())
+					return ;
 			}
 		}
 	}
