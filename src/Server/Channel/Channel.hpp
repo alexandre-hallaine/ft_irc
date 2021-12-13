@@ -31,8 +31,10 @@ namespace irc
 
 		void addUser(User &user);
 		void removeUser(User &user);
+		void removeUser(std::string const &nick);
 		std::vector<User *> getUsers();
 		bool isUser(User &user);
+		bool isOnChannel(std::string const &nick);
 
 		void setMode(std::string);
 		std::string getMode();

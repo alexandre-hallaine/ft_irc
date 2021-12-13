@@ -147,6 +147,7 @@ std::string ERR_NOPRIVILEGES() { return ":Permission Denied- You're not an IRC o
 std::string ERR_UNIQOPRIVSNEEDED(std::string channel) { return channel + " :You're not channel operator"; }
 std::string ERR_CANTKILLSERVER() { return ":You cant kill a server!"; }
 std::string ERR_RESTRICTED() { return ":Your connection is restricted!"; }
+std::string ERR_CHANOPRIVSNEEDED(std::string user) { return user + " :You're not channel operator"; }
 std::string ERR_UNIQOPPRIVSNEEDED() { return ":You're not the original channel operator"; }
 std::string ERR_NOOPERHOST() { return ":No O-lines for your host"; }
 std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
@@ -449,7 +450,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 	case 481:
 		return target + ERR_NOPRIVILEGES();
 	case 482:
-		return target + ERR_UNIQOPRIVSNEEDED(arg1);
+		return target + ERR_CHANOPRIVSNEEDED(arg1);
 	case 483:
 		return target + ERR_CANTKILLSERVER();
 	case 484:

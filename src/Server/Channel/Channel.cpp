@@ -11,6 +11,17 @@ std::string irc::Channel::getTopic() { return topic; }
 
 void irc::Channel::addUser(User &user) { users[user.getFd()] = &user; }
 void irc::Channel::removeUser(User &user) { users.erase(users.find(user.getFd())); }
+void irc::Channel::removeUser(std::string const &nick)
+{
+	for (std::map<int, irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+	{
+		if (it->second->getNickname() == nick)
+		{
+			users.erase(it);
+			return;
+		}
+	}
+}
 std::vector<irc::User *> irc::Channel::getUsers()
 {
 	std::vector<User *> users = std::vector<User *>();
@@ -20,6 +31,13 @@ std::vector<irc::User *> irc::Channel::getUsers()
 	return users;
 }
 bool irc::Channel::isUser(User &user) { return users.find(user.getFd()) != users.end(); }
+bool irc::Channel::isOnChannel(std::string const &nick)
+{
+	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
+		if (it->second->getNickname() == nick)
+			return true;
+	return false;
+}
 
 void irc::Channel::setMode(std::string mode) { this->mode = mode; }
 std::string irc::Channel::getMode() { return mode; }

@@ -154,6 +154,13 @@ void irc::Server::execute()
 irc::Config &irc::Server::getConfig() { return config; }
 std::string irc::Server::getUpTime() { return upTime; }
 
+bool irc::Server::isUser(std::string const &nick)
+{
+	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
+		if ((*it).second->getNickname() == nick)
+			return true;
+	return false;
+}
 std::vector<irc::User *> irc::Server::getUsers()
 {
 	std::vector<User *> users = std::vector<User *>();
@@ -182,7 +189,7 @@ void irc::Server::delUser(User &user)
 	delete &user;
 }
 
-bool irc::Server::isChannel(std::string name) { return channels.count(name); }
+bool irc::Server::isChannel(std::string const &name) { return channels.count(name); }
 irc::Channel &irc::Server::getChannel(std::string name)
 {
 	bool exist = isChannel(name);

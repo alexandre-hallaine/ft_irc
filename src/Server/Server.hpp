@@ -40,10 +40,11 @@ namespace irc
 		Config &getConfig();
 		std::string getUpTime();
 
+		bool isUser(std::string const &nick);
 		std::vector<User *> getUsers();
 		void delUser(User &user);
 
-		bool isChannel(std::string name);
+		bool isChannel(std::string const &name);
 		Channel &getChannel(std::string name);
 		std::vector<Channel *> getChannels();
 		void delChannel(Channel channel);
