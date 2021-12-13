@@ -25,8 +25,6 @@ void KICK(irc::Command *command)
 		}
 		for (std::vector<std::string>::iterator it2 = users.begin(); it2 != users.end(); ++it2)
 		{
-			if (!command->getServer().isUser(*it2))
-				continue;
 			if (!channel.isOnChannel(*it2))
 			{
 				command->reply(441, *it2, *it);
