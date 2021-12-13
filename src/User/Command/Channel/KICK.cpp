@@ -20,7 +20,7 @@ void KICK(irc::Command *command)
 		irc::Channel &channel = command->getServer().getChannel(*it);
 		if (channel.getUserMode(command->getUser()).find('O') == std::string::npos)
 		{
-			command->reply(482, command->getUser().getNickname());
+			command->reply(482, *it);
 			continue;
 		}
 		for (std::vector<std::string>::iterator it2 = users.begin(); it2 != users.end(); ++it2)
