@@ -7,7 +7,7 @@ void AWAY(irc::Command *command)
 	{
 		if (command->getUser().getMode().find('a') == std::string::npos)
 			return;
-		command->getUser().setMode(command->getUser().getMode().erase(command->getUser().getMode().find('a')));
+		command->getUser().setMode(command->getUser().getMode().erase(command->getUser().getMode().find('a'), 1));
 		return command->reply(305);
 	}
 	if (command->getUser().getMode().find('a') == std::string::npos)
