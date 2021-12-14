@@ -137,11 +137,12 @@ void irc::Server::execute()
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
-	{
-		(*it)->push();
 		if ((*it)->getStatus() == DELETE)
 			delUser(*(*it));
-	}
+
+	users = getUsers();
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+		(*it)->push();
 	displayUsers();
 }
 
