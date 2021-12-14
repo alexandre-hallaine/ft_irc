@@ -8,6 +8,7 @@ void PASS(irc::Command *command)
 		return command->reply(461);
 	if (command->getUser().getStatus() != irc::PASSWORD)
 		return command->reply(462);
+
 	if (command->getServer().getConfig().get("password") == command->getParameters()[0])
 		command->getUser().setStatus(irc::REGISTER);
 }

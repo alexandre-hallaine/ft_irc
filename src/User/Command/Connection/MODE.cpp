@@ -168,7 +168,9 @@ void MODE_user(class irc::Command *command)
 				return command->reply(501);
 			else if (request[i] == 'a')
 				continue;
-			else if ((request[i] == 'r' || request[i] == 'o') && command->getUser().getMode().find("o") == std::string::npos)
+			else if (request[i] == 'o' && command->getUser().getMode().find("o") == std::string::npos)
+				continue;
+			else if (is_minus && request[i] == 'r')
 				continue;
 			else
 				check_togglemode(&mode, request[i], is_minus);

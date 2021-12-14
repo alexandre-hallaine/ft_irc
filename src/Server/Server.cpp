@@ -95,7 +95,7 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
-	config.set("user_mode", "aiwros");
+	config.set("user_mode", "aiwro");
 	config.set("channel_givemode", "Oov");
 	config.set("channel_togglemode", "imnpst");
 	config.set("channel_setmode", "kl");
