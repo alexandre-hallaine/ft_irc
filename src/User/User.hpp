@@ -8,22 +8,33 @@
 
 namespace irc
 {
+	enum UserStatus
+	{
+		PASSWORD,
+		REGISTER,
+		ONLINE,
+		DELETE
+	};
+
 	class Command;
 	class Server;
 
 	class User
 	{
-	private:
-		int fd;
-		std::map<std::string, void (*)(Command *)> command_function;
-		std::vector<Command *> commands;
-		std::string packet;
-		std::vector<std::string> pending;
+		friend class Server;
 
+	private:
+		std::map<std::string, void (*)(Command *)> command_function;
+
+		int fd;
+		std::string buffer;
+		std::vector<Command *> commands;
+		std::vector<std::string> waitingToSend;
+
+		UserStatus status;
 		time_t last_ping;
 		std::string hostaddr;
 		std::string hostname;
-		bool passwordCheck;
 		std::string nickname;
 		std::string username;
 		std::string realname;
@@ -34,30 +45,30 @@ namespace irc
 		std::string deleteMessage;
 		std::string awayMessage;
 
-		void callCommands();
+		void dispatch();
+		void receive(Server *server);
+		void write(std::string message);
+		void push();
 
 	public:
 		User(int fd, struct sockaddr_in address);
 		~User();
 
-		void pendingMessages(Server *server);
-		void write(std::string message);
 		void sendTo(User &toUser, std::string message);
-		void push();
 
+		void setStatus(UserStatus status);
 		void setLastPing(time_t last_ping);
-		void setPasswordCheck();
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
 		void setRealname(std::string realname);
-	
-		bool isRegistered();
+
 		int getFd();
+		UserStatus getStatus();
 		time_t getLastPing();
+		std::string getPrefix();
 		std::string getHostaddr();
 		std::string getHostname();
 		std::string getHost();
-		std::string getPrefix();
 		std::string getNickname();
 		std::string getUsername();
 		std::string getRealname();

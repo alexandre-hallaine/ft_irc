@@ -74,52 +74,115 @@ void post_registration(irc::Command *command)
 	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"),
 				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
 
-	//not needed
 	LUSERS(command);
 	MOTD(command);
 }
-void irc::User::callCommands()
+void irc::User::dispatch()
 {
-	bool registered = isRegistered();
+	UserStatus last_status = status;
+
+	if (last_status == DELETE)
+		return;
 
 	std::vector<Command *> remove = std::vector<Command *>();
 	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
 	{
-		Command *command = *it;
-		if (registered || command->getPrefix() == "PASS" || command->getPrefix() == "NICK" || command->getPrefix() == "USER")
+		if (last_status == PASSWORD)
 		{
-			if (command_function.count(command->getPrefix()))
-				command_function[command->getPrefix()](command);
-			else if (DEBUG)
-				std::cout << "Unknown command: " << command->getPrefix() << std::endl;
-			remove.push_back(command);
+			if ((*it)->getPrefix() != "PASS")
+				continue;
 		}
+		else if (last_status == REGISTER)
+		{
+			if ((*it)->getPrefix() != "NICK" && (*it)->getPrefix() != "USER")
+				continue;
+		}
+		if (command_function.count((*it)->getPrefix()))
+			command_function[(*it)->getPrefix()]((*it));
+		else if (DEBUG)
+			std::cout << "Unknown command: " << (*it)->getPrefix() << std::endl;
+		remove.push_back((*it));
 	}
 
 	for (std::vector<Command *>::iterator it = remove.begin(); it != remove.end(); ++it)
-	{
-		std::vector<Command *>::iterator item = std::find(commands.begin(), commands.end(), *it);
-		if (item != commands.end())
-			commands.erase(item);
-	}
+		if (std::find(commands.begin(), commands.end(), *it) != commands.end())
+			commands.erase(std::find(commands.begin(), commands.end(), *it));
 
-	if (!registered && isRegistered())
+	if (last_status == REGISTER)
+		if (nickname.length() && realname.length())
+			status = ONLINE;
+
+	if (last_status != status)
 	{
-		post_registration(*commands.begin());
-		callCommands();
+		if (status == ONLINE)
+			post_registration(*commands.begin());
+		dispatch();
 	}
 }
+void irc::User::receive(Server *server)
+{
+	{
+		char buffer[BUFFER_SIZE + 1];
+		ssize_t size;
+		if ((size = recv(fd, &buffer, BUFFER_SIZE, 0)) == -1)
+			return;
 
-irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
-													  command_function(),
+		if (size == 0)
+		{
+			status = DELETE;
+			return;
+		}
+		buffer[size] = 0;
+
+		this->buffer += buffer;
+	}
+
+	std::string delimiter(MESSAGE_END);
+	size_t position;
+	while ((position = buffer.find(delimiter)) != std::string::npos)
+	{
+		std::string message = buffer.substr(0, position);
+		buffer.erase(0, position + delimiter.length());
+		if (!message.length())
+			continue;
+
+		if (DEBUG)
+			std::cout << fd << " < " << message << std::endl;
+		commands.push_back(new Command(this, server, message));
+	}
+	dispatch();
+}
+void irc::User::write(std::string message) { waitingToSend.push_back(message); }
+void irc::User::push()
+{
+	if (!waitingToSend.size())
+		return;
+
+	std::string buffer;
+	for (std::vector<std::string>::iterator it = waitingToSend.begin(); it != waitingToSend.end(); ++it)
+	{
+		if (DEBUG)
+			std::cout << fd << " > " << *it << std::endl;
+		buffer += *it + MESSAGE_END;
+	}
+	waitingToSend.clear();
+
+	if (buffer.length())
+		if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
+			error("send", false);
+}
+
+irc::User::User(int fd, struct sockaddr_in address) : command_function(),
+
+													  fd(fd),
+													  buffer(),
 													  commands(),
-													  packet(),
-													  pending(),
+													  waitingToSend(),
 
+													  status(PASSWORD),
 													  last_ping(std::time(0)),
 													  hostaddr(),
 													  hostname(),
-													  passwordCheck(false),
 													  nickname(),
 													  username(),
 													  realname(),
@@ -127,7 +190,8 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 													  mode("w"),
 													  pastnick(),
 													  lastChannel("*"),
-													  deleteMessage()
+													  deleteMessage(),
+													  awayMessage()
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 
@@ -193,64 +257,31 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 }
 irc::User::~User() { close(fd); }
 
-void irc::User::pendingMessages(Server *server)
-{
-	char buffer[BUFFER_SIZE + 1];
-	ssize_t size;
-	if ((size = recv(fd, &buffer, BUFFER_SIZE, 0)) == -1)
-		return;
-
-	if (size == 0)
-		return setDeleteMessage("I WAS KILLED AHHHHH!");
-	buffer[size] = 0;
-
-	packet += buffer;
-	std::string delimiter(MESSAGE_END);
-
-	size_t position;
-	while ((position = packet.find(delimiter)) != std::string::npos)
-	{
-		std::string message = packet.substr(0, position);
-		packet.erase(0, position + delimiter.length());
-		if (!message.length())
-			continue;
-
-		if (DEBUG)
-			std::cout << fd << " < " << message << std::endl;
-		commands.push_back(new Command(this, server, message));
-	}
-	callCommands();
-}
-void irc::User::write(std::string message) { pending.push_back(message); }
 void irc::User::sendTo(irc::User &toUser, std::string message) { toUser.write(":" + this->getPrefix() + " " + message); }
-void irc::User::push()
-{
-	if (!pending.size())
-		return;
 
-	std::string buffer;
-	for (std::vector<std::string>::iterator it = pending.begin(); it != pending.end(); ++it)
-	{
-		if (DEBUG)
-			std::cout << fd << " > " << *it << std::endl;
-		buffer += *it + MESSAGE_END;
-	}
-	pending.clear();
-
-	if (buffer.length())
-		if (send(fd, buffer.c_str(), buffer.length(), 0) == -1)
-			error("send", false);
-}
-
+void irc::User::setStatus(UserStatus status) { this->status = status; }
 void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
-void irc::User::setPasswordCheck() { passwordCheck = true; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 
-bool irc::User::isRegistered() { return passwordCheck && nickname.length() && realname.length(); }
 int irc::User::getFd() { return fd; }
+irc::UserStatus irc::User::getStatus() { return status; };
 time_t irc::User::getLastPing() { return last_ping; }
+std::string irc::User::getPrefix()
+{
+	if (status == PASSWORD || status == REGISTER)
+		return std::string("*");
+
+	std::string prefix = nickname;
+	if (getHost().length())
+	{
+		if (username.length())
+			prefix += "!" + username;
+		prefix += "@" + getHost();
+	}
+	return prefix;
+}
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()
@@ -258,19 +289,6 @@ std::string irc::User::getHost()
 	if (hostname.length())
 		return hostname;
 	return hostaddr;
-}
-std::string irc::User::getPrefix()
-{
-	if (!isRegistered())
-		return std::string();
-	std::string prefix = nickname;
-	if (hostname.length())
-	{
-		if (username.length())
-			prefix += "!" + username;
-		prefix += "@" + hostname;
-	}
-	return prefix;
 }
 std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getUsername() { return username; }

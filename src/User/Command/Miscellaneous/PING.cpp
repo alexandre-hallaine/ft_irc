@@ -7,5 +7,5 @@ void PING(class irc::Command *command)
 {
 	if (command->getParameters().size() == 0)
 		return command->reply(409);
-	command->getUser().write("PONG :" + command->getParameters()[0]);
+	command->getUser().sendTo(command->getUser(), "PONG :" + command->getParameters()[0]);
 }

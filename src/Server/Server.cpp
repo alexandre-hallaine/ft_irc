@@ -45,7 +45,7 @@ void irc::Server::sendPing()
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if (current - (*it).second->getLastPing() >= timeout)
 			(*it).second->setDeleteMessage("Ping timeout");
-		else if ((*it).second->isRegistered())
+		else if ((*it).second->getStatus() == ONLINE)
 			(*it).second->write("PING " + (*it).second->getNickname());
 }
 
@@ -133,7 +133,7 @@ void irc::Server::execute()
 			return pendingConnection();
 		for (size_t index = 0; index < users.size(); ++index)
 			if (pfds[index + 1].revents == POLLIN)
-				this->users[pfds[index + 1].fd]->pendingMessages(this);
+				this->users[pfds[index + 1].fd]->receive(this);
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
