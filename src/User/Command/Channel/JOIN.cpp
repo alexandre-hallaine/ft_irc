@@ -20,11 +20,24 @@ std::string getUsersString(irc::Channel channel)
 	return users_string;
 }
 
+void leaveAllChannels(irc::Command *command)
+{
+	std::vector<irc::Channel *> channels = command->getServer().getChannels();
+	for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		(*it)->broadcast(command->getUser(), "PART " + (*it)->getName() + (command->getParameters().size() > 1 ? " :" + command->getParameters()[1] : ""));
+		(*it)->removeUser(command->getUser());
+		if ((*it)->getUsers().size() == 0)
+			command->getServer().delChannel(*(*it));
+	}
+}
+
 void JOIN(irc::Command *command)
 {
 	if (command->getParameters().size() == 0)
 		return command->reply(461, "JOIN");
-
+	if (command->getParameters()[0] == "0")
+		return leaveAllChannels(command);
 	std::vector<std::string> channelsNames = irc::split(command->getParameters()[0], ",");
 	for (std::vector<std::string>::iterator it = channelsNames.begin(); it != channelsNames.end(); ++it)
 	{

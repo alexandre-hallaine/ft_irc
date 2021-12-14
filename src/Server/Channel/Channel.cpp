@@ -54,7 +54,12 @@ std::string irc::Channel::getMaxUsers() { return max_users; }
 
 void irc::Channel::addInvited(User &user) { invited.push_back(&user); }
 bool irc::Channel::isInvited(User &user) { return std::find(invited.begin(), invited.end(), &user) != invited.end(); }
-void irc::Channel::removeInvited(User &user) { invited.erase(std::find(invited.begin(), invited.end(), &user)); }
+void irc::Channel::removeInvited(User &user)
+{
+	std::vector<User *>::iterator it = std::find(invited.begin(), invited.end(), &user);
+	if (it != invited.end())
+		invited.erase(it);
+}
 
 void irc::Channel::broadcast(User &user, std::string message)
 {
