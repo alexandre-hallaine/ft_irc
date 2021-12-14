@@ -138,9 +138,9 @@ void irc::Server::execute()
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
+		(*it)->push();
 		if ((*it)->getDeleteMessage().length())
 			delUser(*(*it));
-		(*it)->push();
 	}
 	updateUsers();
 }

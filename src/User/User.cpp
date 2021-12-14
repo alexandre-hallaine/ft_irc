@@ -199,6 +199,9 @@ void irc::User::pendingMessages(Server *server)
 	ssize_t size;
 	if ((size = recv(fd, &buffer, BUFFER_SIZE, 0)) == -1)
 		return;
+
+	if (size == 0)
+		return setDeleteMessage("I WAS KILLED AHHHHH!");
 	buffer[size] = 0;
 
 	packet += buffer;
