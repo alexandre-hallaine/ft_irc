@@ -62,7 +62,7 @@ void check_givemode(char option, bool is_minus, class irc::Command *command, siz
 
 	std::string mode = command->getServer().getChannel(command->getParameters()[0]).getUserMode(*user);
 	if (is_minus && mode.find(option) != std::string::npos)
-		mode.erase(mode->find(option), 1);
+		mode.erase(mode.find(option), 1);
 	else if (!is_minus && mode.find(option) == std::string::npos)
 		mode.push_back(option);
 
