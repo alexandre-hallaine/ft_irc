@@ -40,6 +40,6 @@ void irc::Command::reply(User &user, unsigned short code, std::string arg1, std:
 	while (scode.length() < 3)
 		scode = "0" + scode;
 
-	user.write(":" + user.getPrefix() + " " + scode + " " + getReplies(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+	user.sendTo(user, scode + " " + getReplies(code, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
 }
 void irc::Command::reply(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7) { reply(*user, code, arg1, arg2, arg3, arg4, arg5, arg6, arg7); }

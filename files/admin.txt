@@ -1,1 +1,2 @@
-BONSOIR ON A DES ADMINS
+premiere ligne de la commande ADMIN
+deuxieme ligne de la commande ADMIN
