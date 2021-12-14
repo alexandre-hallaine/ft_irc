@@ -30,6 +30,8 @@ void irc::Server::acceptUser()
 		if (fd == -1)
 			break;
 		users[fd] = new User(fd, address);
+		if (!config.get("password").length())
+			users[fd]->setStatus(REGISTER);
 		if (DEBUG)
 			std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 	}
