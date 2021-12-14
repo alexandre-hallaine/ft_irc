@@ -78,6 +78,9 @@ void MODE_channel(class irc::Command *command)
 	if (!command->getServer().isChannel(command->getParameters()[0]))
 		return command->reply(403, command->getParameters()[0]);
 
+	if (command->getParameters()[0] == "b")
+		return;
+
 	std::string mode = command->getServer().getChannel(command->getParameters()[0]).getMode();
 	bool is_minus = false;
 	size_t count = 2;
