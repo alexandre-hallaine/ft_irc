@@ -32,6 +32,7 @@ namespace irc
 		std::string pastnick;
 		std::string lastChannel;
 		std::string deleteMessage;
+		std::string awayMessage;
 
 		void callCommands();
 
@@ -65,11 +66,13 @@ namespace irc
 		void setPastnick(std::string pastnick);
 		void setLastChannel(std::string lastChannel);
 		void setDeleteMessage(std::string message);
+		void setAwayMessage(std::string message);
 
 		std::string getMode();
 		std::string getPastnick();
 		std::string getLastChannel();
 		std::string getDeleteMessage();
+		std::string getAwayMessage();
 	};
 }
 #endif

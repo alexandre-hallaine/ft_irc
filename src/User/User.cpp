@@ -277,8 +277,10 @@ void irc::User::setMode(std::string mode) { this->mode = mode; }
 void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
 void irc::User::setLastChannel(std::string lastChannel) { this->lastChannel = lastChannel; }
 void irc::User::setDeleteMessage(std::string message) { deleteMessage = message; }
+void irc::User::setAwayMessage(std::string message) { awayMessage = message; }
 
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getPastnick() { return pastnick; }
 std::string irc::User::getLastChannel() { return lastChannel; }
 std::string irc::User::getDeleteMessage() { return deleteMessage; }
+std::string irc::User::getAwayMessage() { return awayMessage; }
