@@ -252,6 +252,7 @@ void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 void irc::User::setMode(std::string mode) { this->mode = mode; }
 void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
+void irc::User::setLastChannel(std::string lastChannel) { this->lastChannel = lastChannel; }
 
 int irc::User::getFd() { return fd; }
 time_t irc::User::getLastPing() { return last_ping; }
@@ -282,3 +283,4 @@ std::string irc::User::getUsername() { return username; }
 std::string irc::User::getRealname() { return realname; }
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getPastnick() { return pastnick; }
+std::string irc::User::getLastChannel() { return lastChannel; }
