@@ -303,5 +303,10 @@ void irc::User::setAwayMessage(std::string message) { awayMessage = message; }
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getPastnick() { return pastnick; }
 std::string irc::User::getLastChannel() { return lastChannel; }
-std::string irc::User::getDeleteMessage() { return deleteMessage; }
+std::string irc::User::getDeleteMessage()
+{
+	if (!deleteMessage.length())
+		return "Client Quit";
+	return deleteMessage;
+}
 std::string irc::User::getAwayMessage() { return awayMessage; }

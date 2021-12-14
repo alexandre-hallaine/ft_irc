@@ -18,23 +18,19 @@
 void irc::Server::acceptUser()
 {
 	size_t max_user = atoi(config.get("max").c_str());
-
-	while (true)
-	{
-		if (users.size() == max_user)
-			if (shutdown(fd, SHUT_RD) == -1)
-				break;
-		struct sockaddr_in address;
-		socklen_t csin_len = sizeof(address);
-		int fd = accept(this->fd, (struct sockaddr *)&address, &csin_len);
-		if (fd == -1)
-			break;
-		users[fd] = new User(fd, address);
-		if (!config.get("password").length())
-			users[fd]->setStatus(REGISTER);
-		if (DEBUG)
-			std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
-	}
+	if (users.size() == max_user)
+		if (shutdown(fd, SHUT_RD) == -1)
+			return;
+	struct sockaddr_in address;
+	socklen_t csin_len = sizeof(address);
+	int fd = accept(this->fd, (struct sockaddr *)&address, &csin_len);
+	if (fd == -1)
+		return;
+	users[fd] = new User(fd, address);
+	if (!config.get("password").length())
+		users[fd]->setStatus(REGISTER);
+	if (DEBUG)
+		std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 }
 void irc::Server::sendPing()
 {
@@ -109,7 +105,7 @@ void irc::Server::init()
 void irc::Server::execute()
 {
 	std::vector<irc::User *> users = getUsers();
-	struct pollfd pfds[4242];
+	struct pollfd pfds[4243];
 
 	pfds[0].fd = fd;
 	pfds[0].events = POLLIN;
@@ -168,8 +164,10 @@ std::vector<irc::User *> irc::Server::getUsers()
 }
 void irc::Server::delUser(User &user)
 {
-	std::vector<Channel> remove;
 	std::vector<irc::User *> broadcast_users = std::vector<irc::User *>();
+	broadcast_users.push_back(&user);
+
+	std::vector<Channel> remove;
 	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
 		if ((*it).second.isUser(user))
 		{
@@ -189,6 +187,7 @@ void irc::Server::delUser(User &user)
 	std::string message = "QUIT :" + user.getDeleteMessage();
 	for (std::vector<irc::User *>::iterator it = broadcast_users.begin(); it != broadcast_users.end(); ++it)
 		user.sendTo(*(*it), message);
+	user.push();
 
 	display.remove(user.getFd());
 
