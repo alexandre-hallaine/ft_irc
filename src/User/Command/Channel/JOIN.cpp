@@ -67,7 +67,8 @@ void JOIN(irc::Command *command)
 			channel_mode = "@";
 		else
 			channel_mode = "=";
-		command->reply(332, *it, channel.getTopic());
+		if (channel.getTopic().length())
+			command->reply(332, *it, channel.getTopic());
 		command->reply(353, channel_mode, *it, getUsersString(channel));
 		command->reply(366, *it);
 		channel.broadcast(command->getUser(), "JOIN :" + channel.getName());
