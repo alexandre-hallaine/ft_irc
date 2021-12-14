@@ -19,16 +19,35 @@ void WHO(class irc::Command *command)
 		is_op = true;
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
-	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
-	{ // need to check channel first
-		if (is_op && (*it)->getMode().find("o") != std::string::npos &&((*it)->getHostname() == command->getParameters()[0] || (*it)->getRealname() == command->getParameters()[0] || (*it)->getNickname() == command->getParameters()[0]))
-			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHostname(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
+
+	if (command->getParameters()[0][0] == '#')
+	{
+		if (!command->getServer().isChannel(command->getParameters()[0]))
+			command->reply(315, command->getUser().getUsername());
+		irc::Channel channel = command->getServer().getChannel(command->getParameters()[0]);
+		for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+		{
+			if (channel.isOnChannel((*it)->getNickname()))
+			{
+				if (is_op && (*it)->getMode().find('o') != std::string::npos)
+					command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
+				else if (!is_op)
+					command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
+			}
+		}
+		return command->reply(315, command->getUser().getUsername());
+	}
+	
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+	{
+		if (is_op && (*it)->getMode().find("o") != std::string::npos && ((*it)->getHostname() == command->getParameters()[0] || (*it)->getRealname() == command->getParameters()[0] || (*it)->getNickname() == command->getParameters()[0]))
+			command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
 		else if (!is_op && ((*it)->getHostname() == command->getParameters()[0] || (*it)->getRealname() == command->getParameters()[0] || (*it)->getNickname() == command->getParameters()[0]))
-			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHostname(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
+			command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
 		else if (is_op && (*it)->getMode().find("o") != std::string::npos && is_star && (command->getParameters()[0].substr(0, pos) == (*it)->getHostname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getRealname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getNickname().substr(0, pos)))
-			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHostname(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
+			command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
 		else if (!is_op && is_star && (command->getParameters()[0].substr(0, pos) == (*it)->getHostname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getRealname().substr(0, pos) || command->getParameters()[0].substr(0, pos) == (*it)->getNickname().substr(0, pos)))
-			command->reply(352, "*", command->getUser().getUsername(), command->getUser().getHostname(), "", command->getUser().getNickname(), "0", command->getUser().getRealname());
+			command->reply(352, (*it)->getLastChannel(), (*it)->getUsername(), (*it)->getHostname(), "", (*it)->getNickname(), "0", (*it)->getRealname());
 	}
 	command->reply(315, command->getUser().getUsername());
 }
