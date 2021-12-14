@@ -136,6 +136,7 @@ void MODE_channel(class irc::Command *command)
 		return command->reply(324, command->getParameters()[0], "+" + mode, options);
 	return command->reply(324, command->getParameters()[0], "+" + mode, "");
 }
+
 void MODE_user(class irc::Command *command)
 {
 	irc::User *user = 0;
