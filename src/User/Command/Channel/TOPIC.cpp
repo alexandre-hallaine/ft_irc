@@ -18,6 +18,8 @@ void TOPIC(irc::Command *command)
 		bool canEdit = false;
 		if (channel.getMode().find('t') == std::string::npos)
 			canEdit = true;
+		else if (command->getUser().getMode().find('o') != std::string::npos)
+			canEdit = true;
 		else if (channel.getUserMode(command->getUser()).find('O') != std::string::npos || channel.getUserMode(command->getUser()).find('o') != std::string::npos)
 			canEdit = true;
 
