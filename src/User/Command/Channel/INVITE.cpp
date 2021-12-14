@@ -26,6 +26,7 @@ void INVITE(irc::Command *command)
 			command->reply(442, command->getParameters()[1]);
 			return;
 		}
+		channel.addInvited(*command->getServer().getUser(command->getParameters()[0]));
 	}
 	command->getUser().sendTo(*command->getServer().getUser(command->getParameters()[0]), "INVITE " + command->getParameters()[0] + " " + command->getParameters()[1]);
 	command->reply(341, command->getParameters()[0], command->getParameters()[1]);

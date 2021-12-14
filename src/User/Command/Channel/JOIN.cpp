@@ -42,6 +42,9 @@ void JOIN(irc::Command *command)
 				return command->reply(475, *it);
 			if (channel.getMode().find('l') != std::string::npos && channel.getUsers().size() >= (size_t)atoi(channel.getMaxUsers().c_str()))
 				return command->reply(471, *it);
+			if (channel.getMode().find('i') != std::string::npos && !channel.isInvited(command->getUser()))
+				return command->reply(473, *it);
+			channel.removeInvited(command->getUser());
 			channel.addUser(command->getUser());
 		}
 		command->reply(332, *it, channel.getTopic());
