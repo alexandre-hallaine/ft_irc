@@ -60,8 +60,15 @@ void JOIN(irc::Command *command)
 			channel.removeInvited(command->getUser());
 			channel.addUser(command->getUser());
 		}
+		std::string channel_mode;
+		if (channel.getMode().find('p') != std::string::npos)
+			channel_mode = "*";
+		else if (channel.getMode().find('s') != std::string::npos)
+			channel_mode = "@";
+		else
+			channel_mode = "=";
 		command->reply(332, *it, channel.getTopic());
-		command->reply(353, "=", *it, getUsersString(channel));
+		command->reply(353, channel_mode, *it, getUsersString(channel));
 		command->reply(366, *it);
 		channel.broadcast(command->getUser(), "JOIN :" + channel.getName());
 		command->getUser().setLastChannel(channel.getName());
