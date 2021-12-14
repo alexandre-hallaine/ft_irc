@@ -3,12 +3,12 @@
 #include "../../../Utils/Utils.hpp"
 #include "../../../Server/Server.hpp"
 
-void check_mode(std::string *mode, char option, bool is_minus)
+void check_togglemode(std::string *mode, char option, bool is_minus)
 {
 	if (is_minus && mode->find(option) != std::string::npos)
-		mode->erase(mode->begin() + mode->find(option));
+		mode->erase(mode->find(option), 1);
 	else if (!is_minus && mode->find(option) == std::string::npos)
-		mode->insert(mode->end(), option);
+		mode->push_back(option);
 }
 
 void check_setmode(std::string *mode, char option, bool is_minus, class irc::Command *command, size_t count)
@@ -98,7 +98,7 @@ void MODE_channel(class irc::Command *command)
 			else if (command->getServer().getConfig().get("channel_togglemode").find(request[i]) != std::string::npos && (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos))
 			{
 				if (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos)
-					check_mode(&mode, request[i], is_minus);
+					check_togglemode(&mode, request[i], is_minus);
 				else
 					command->reply(482, command->getParameters()[0]);
 			}
