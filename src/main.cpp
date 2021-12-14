@@ -1,4 +1,4 @@
-#include "Server/Runtime.hpp"
+#include "Server/Server.hpp"
 #include <iostream>
 #include <csignal>
 
@@ -14,13 +14,14 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	irc::Runtime runtime = irc::Runtime();
+	irc::Server server = irc::Server();
 	signal(SIGINT, handler);
 
-	runtime.getConfig().set("port", argv[1]);
-	runtime.getConfig().set("password", argv[2]);
+	server.getConfig().set("port", argv[1]);
+	server.getConfig().set("password", argv[2]);
 
+	server.init();
 	while (!stop)
-		runtime.run();
+		server.execute();
 	return 0;
 }

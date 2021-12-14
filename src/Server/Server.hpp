@@ -20,15 +20,15 @@ namespace irc
 		Display display;
 		std::map<int, User *> users;
 		std::map<std::string, Channel> channels;
-		std::string upTime;
 		int fd;
+		std::string upTime;
 		time_t last_ping;
 
-		void pendingConnection();
+		void acceptUser();
 		void sendPing();
 
-		void updateUsers();
-		void updateChannels();
+		void displayUsers();
+		void displayChannels();
 
 	public:
 		Server();
@@ -40,14 +40,14 @@ namespace irc
 		Config &getConfig();
 		std::string getUpTime();
 
-		std::vector<User *> getUsers();
 		User *getUser(std::string const &nick);
 		void delUser(User &user);
+		std::vector<User *> getUsers();
 
 		bool isChannel(std::string const &name);
 		Channel &getChannel(std::string name);
-		std::vector<Channel *> getChannels();
 		void delChannel(Channel channel);
+		std::vector<Channel *> getChannels();
 	};
 }
 #endif

@@ -3,9 +3,9 @@
 
 void QUIT(irc::Command *command)
 {
-	command->getUser().setStatus(irc::DELETE);
 	if (command->getParameters().size() > 1)
 		command->getUser().setDeleteMessage(command->getParameters()[1]);
 	else
 		command->getUser().setDeleteMessage("Client Quit");
+	command->getUser().setStatus(irc::DELETE);
 }

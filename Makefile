@@ -9,7 +9,6 @@ FILES_CHECK			=	Utils/Utils.hpp \
 						Server/Display/Display.hpp \
 						Server/Channel/Channel.hpp \
 						Server/Server.hpp \
-						Server/Runtime.hpp \
 						User/Command/Command.hpp \
 						User/User.hpp
 FILES_SOURCE		=	Utils/Utils.cpp \
@@ -17,7 +16,6 @@ FILES_SOURCE		=	Utils/Utils.cpp \
 						Server/Display/Display.cpp \
 						Server/Channel/Channel.cpp \
 						Server/Server.cpp \
-						Server/Runtime.cpp \
 						User/Command/Connection/PASS.cpp \
 						User/Command/Connection/NICK.cpp \
 						User/Command/Connection/USER.cpp \
