@@ -266,12 +266,12 @@ void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
 
 int irc::User::getFd() { return fd; }
-irc::UserStatus irc::User::getStatus() { return status; };
+irc::UserStatus irc::User::getStatus() { return status; }
 time_t irc::User::getLastPing() { return last_ping; }
 std::string irc::User::getPrefix()
 {
 	if (status == PASSWORD || status == REGISTER)
-		return std::string("*");
+		return std::string("");
 
 	std::string prefix = nickname;
 	if (getHost().length())

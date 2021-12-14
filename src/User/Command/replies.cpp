@@ -178,9 +178,9 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 {
 	std::string target;
 	if (user->getStatus() == PASSWORD || user->getStatus() == REGISTER)
-		target = user->getNickname();
-	else
 		target = "*";
+	else
+		target = user->getNickname();
 	target += " ";
 
 	switch (code)
