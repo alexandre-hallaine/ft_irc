@@ -44,12 +44,9 @@ void irc::Server::sendPing()
 
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if (current - (*it).second->getLastPing() >= timeout)
-			(*it).second->deleteLater();
+			(*it).second->setDeleteMessage("Ping timeout");
 		else if ((*it).second->isRegistered())
-		{
 			(*it).second->write("PING " + (*it).second->getNickname());
-			(*it).second->push();
-		}
 }
 
 void irc::Server::updateUsers()
@@ -129,18 +126,22 @@ void irc::Server::execute()
 	{
 		sendPing();
 		last_ping = std::time(0);
-		return;
+	}
+	else
+	{
+		if (pfds[0].revents == POLLIN)
+			return pendingConnection();
+		for (size_t index = 0; index < users.size(); ++index)
+			if (pfds[index + 1].revents == POLLIN)
+				this->users[pfds[index + 1].fd]->pendingMessages(this);
 	}
 
-	if (pfds[0].revents == POLLIN)
-		return pendingConnection();
-	for (size_t index = 0; index < users.size(); ++index)
-		if (pfds[index + 1].revents == POLLIN)
-			this->users[pfds[index + 1].fd]->pendingMessages(this);
-
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
-		if ((*it)->toDelete())
+	{
+		if ((*it)->getDeleteMessage().length())
 			delUser(*(*it));
+		(*it)->push();
+	}
 	updateUsers();
 }
 
@@ -165,16 +166,26 @@ irc::User *irc::Server::getUser(std::string const &nick)
 void irc::Server::delUser(User &user)
 {
 	std::vector<Channel> remove;
+	std::string message = "QUIT :" + user.getDeleteMessage();
+	std::vector<irc::User *> broadcast_users = std::vector<irc::User *>();
+
 	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
-	{
-		std::vector<irc::User *> users = (*it).second.getUsers();
-		if (std::find(users.begin(), users.end(), &user) != users.end())
+		if ((*it).second.isUser(user))
+		{
 			(*it).second.removeUser(user);
-		if (!(*it).second.getUsers().size())
-			remove.push_back((*it).second);
-	}
+			std::vector<irc::User *> users = it->second.getUsers();
+			if (!users.size())
+				remove.push_back((*it).second);
+			else
+				for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+					if (std::find(broadcast_users.begin(), broadcast_users.end(), *it) == broadcast_users.end())
+						broadcast_users.push_back(*it);
+		}
+
 	for (std::vector<Channel>::iterator it = remove.begin(); it != remove.end(); ++it)
 		delChannel(*it);
+	for (std::vector<irc::User *>::iterator it = broadcast_users.begin(); it != broadcast_users.end(); ++it)
+		user.sendTo(*(*it), message);
 
 	display.remove(user.getFd());
 

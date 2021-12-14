@@ -9,5 +9,5 @@ void PASS(irc::Command *command)
 	if (command->getUser().isRegistered())
 		return command->reply(462);
 	if (command->getServer().getConfig().get("password") == command->getParameters()[0])
-		command->getUser().setPassword();
+		command->getUser().setPasswordCheck();
 }

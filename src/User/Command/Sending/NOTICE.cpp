@@ -38,8 +38,5 @@ void NOTICE(irc::Command *command)
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if ((*it)->getMode().find('a') == std::string::npos)
-		{
 			(*it)->write(":" + command->getUser().getPrefix() + " NOTICE " + recipient + " :" + command->getTrailer());
-			(*it)->push();
-		}
 }

@@ -63,11 +63,6 @@ void irc::Channel::removeInvited(User &user)
 
 void irc::Channel::broadcast(User &user, std::string message)
 {
-	message = ":" + user.getPrefix() + " " + message;
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
-	{
-		it->second->write(message);
-		if (it->first != user.getFd())
-			it->second->push();
-	}
+		user.sendTo(*it->second, message);
 }

@@ -19,19 +19,19 @@ namespace irc
 		std::vector<Command *> commands;
 		std::string packet;
 		std::vector<std::string> pending;
-		time_t last_ping;
-		bool needDelete;
 
+		time_t last_ping;
 		std::string hostaddr;
 		std::string hostname;
-		bool password;
+		bool passwordCheck;
 		std::string nickname;
 		std::string username;
 		std::string realname;
+
 		std::string mode;
 		std::string pastnick;
-
 		std::string lastChannel;
+		std::string deleteMessage;
 
 		void callCommands();
 
@@ -44,19 +44,13 @@ namespace irc
 		void sendTo(User &toUser, std::string message);
 		void push();
 
-		bool isRegistered();
-		void deleteLater();
-		bool toDelete();
-
 		void setLastPing(time_t last_ping);
-		void setPassword();
+		void setPasswordCheck();
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
 		void setRealname(std::string realname);
-		void setMode(std::string mode);
-		void setPastnick(std::string pastnick);
-		void setLastChannel(std::string lastChannel);
-
+	
+		bool isRegistered();
 		int getFd();
 		time_t getLastPing();
 		std::string getHostaddr();
@@ -66,9 +60,16 @@ namespace irc
 		std::string getNickname();
 		std::string getUsername();
 		std::string getRealname();
+
+		void setMode(std::string mode);
+		void setPastnick(std::string pastnick);
+		void setLastChannel(std::string lastChannel);
+		void setDeleteMessage(std::string message);
+
 		std::string getMode();
 		std::string getPastnick();
 		std::string getLastChannel();
+		std::string getDeleteMessage();
 	};
 }
 #endif

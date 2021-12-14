@@ -108,8 +108,6 @@ void irc::User::callCommands()
 		post_registration(*commands.begin());
 		callCommands();
 	}
-	else
-		push();
 }
 
 irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
@@ -117,17 +115,19 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 													  commands(),
 													  packet(),
 													  pending(),
+
 													  last_ping(std::time(0)),
-													  needDelete(false),
 													  hostaddr(),
 													  hostname(),
-													  password(false),
+													  passwordCheck(false),
 													  nickname(),
 													  username(),
 													  realname(),
+
 													  mode(),
 													  pastnick(),
-													  lastChannel("*")
+													  lastChannel("*"),
+													  deleteMessage()
 {
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 
@@ -219,14 +219,12 @@ void irc::User::pendingMessages(Server *server)
 	callCommands();
 }
 void irc::User::write(std::string message) { pending.push_back(message); }
-void irc::User::sendTo(irc::User &toUser, std::string message)
-{
-	message = ":" + this->getPrefix() + " " + message;
-	toUser.write(message);
-	toUser.push();
-}
+void irc::User::sendTo(irc::User &toUser, std::string message) { toUser.write(":" + this->getPrefix() + " " + message); }
 void irc::User::push()
 {
+	if (!pending.size())
+		return;
+
 	std::string buffer;
 	for (std::vector<std::string>::iterator it = pending.begin(); it != pending.end(); ++it)
 	{
@@ -241,22 +239,15 @@ void irc::User::push()
 			error("send", false);
 }
 
-bool irc::User::isRegistered() { return password && nickname.length() && realname.length(); }
-void irc::User::deleteLater() { needDelete = true; }
-bool irc::User::toDelete() { return needDelete; }
-
 void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
-void irc::User::setPassword() { password = true; }
+void irc::User::setPasswordCheck() { passwordCheck = true; }
 void irc::User::setNickname(std::string nickname) { this->nickname = nickname; }
 void irc::User::setUsername(std::string username) { this->username = username; }
 void irc::User::setRealname(std::string realname) { this->realname = realname; }
-void irc::User::setMode(std::string mode) { this->mode = mode; }
-void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
-void irc::User::setLastChannel(std::string lastChannel) { this->lastChannel = lastChannel; }
 
+bool irc::User::isRegistered() { return passwordCheck && nickname.length() && realname.length(); }
 int irc::User::getFd() { return fd; }
 time_t irc::User::getLastPing() { return last_ping; }
-
 std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()
@@ -281,6 +272,13 @@ std::string irc::User::getPrefix()
 std::string irc::User::getNickname() { return nickname; }
 std::string irc::User::getUsername() { return username; }
 std::string irc::User::getRealname() { return realname; }
+
+void irc::User::setMode(std::string mode) { this->mode = mode; }
+void irc::User::setPastnick(std::string pastnick) { this->pastnick = pastnick; }
+void irc::User::setLastChannel(std::string lastChannel) { this->lastChannel = lastChannel; }
+void irc::User::setDeleteMessage(std::string message) { deleteMessage = message; }
+
 std::string irc::User::getMode() { return mode; }
 std::string irc::User::getPastnick() { return pastnick; }
 std::string irc::User::getLastChannel() { return lastChannel; }
+std::string irc::User::getDeleteMessage() { return deleteMessage; }
