@@ -7,7 +7,7 @@ void INVITE(irc::Command *command)
 	if (command->getParameters().size() < 2)
 		return command->reply(461, "INVITE");
 
-	if (command->getServer().isUser(command->getParameters()[1]))
+	if (command->getServer().getUser(command->getParameters()[0]) == NULL)
 		return command->reply(401, command->getParameters()[1]);
 
 	if (command->getServer().getChannel(command->getParameters()[0]).isOnChannel(command->getParameters()[1]))
