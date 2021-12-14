@@ -21,7 +21,7 @@ void check_setmode(std::string *mode, char option, bool is_minus, class irc::Com
 			return;
 		else if (option == 'k' && command->getParameters()[count] == command->getServer().getChannel(command->getParameters()[0]).getKey())
 			command->getServer().getChannel(command->getParameters()[0]).setKey("");
-		mode->erase(mode->begin() + mode->find(option));
+		mode->erase(mode->find(option), 1);
 	}
 	else if (!is_minus && mode->find(option) == std::string::npos)
 	{
@@ -34,7 +34,7 @@ void check_setmode(std::string *mode, char option, bool is_minus, class irc::Com
 					return;
 			command->getServer().getChannel(command->getParameters()[0]).setMaxUsers(command->getParameters()[count]);
 		}
-		mode->insert(mode->end(), option);
+		mode->push_back(option);
 	}
 	else if (!is_minus && option == 'k' && mode->find(option) != std::string::npos)
 		command->reply(467, command->getParameters()[0]);
@@ -62,9 +62,9 @@ void check_givemode(char option, bool is_minus, class irc::Command *command, siz
 
 	std::string mode = command->getServer().getChannel(command->getParameters()[0]).getUserMode(*user);
 	if (is_minus && mode.find(option) != std::string::npos)
-		mode.erase(mode.begin() + mode.find(option));
+		mode.erase(mode->find(option), 1);
 	else if (!is_minus && mode.find(option) == std::string::npos)
-		mode.insert(mode.end(), option);
+		mode.push_back(option);
 
 	command->getServer().getChannel(command->getParameters()[0]).setUserMode(*user, mode);
 	if (!is_minus)
