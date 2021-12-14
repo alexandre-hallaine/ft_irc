@@ -40,5 +40,5 @@ void PRIVMSG(irc::Command *command)
 		if ((*it)->getMode().find('a') != std::string::npos)
 			command->reply(301);
 		else
-			(*it)->write(":" + command->getUser().getPrefix() + " PRIVMSG " + recipient + " :" + command->getTrailer());
+			command->getUser().sendTo(*(*it), "PRIVMSG " + recipient + " :" + command->getTrailer());
 }

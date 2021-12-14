@@ -124,7 +124,7 @@ irc::User::User(int fd, struct sockaddr_in address) : fd(fd),
 													  username(),
 													  realname(),
 
-													  mode(),
+													  mode("w"),
 													  pastnick(),
 													  lastChannel("*"),
 													  deleteMessage()
