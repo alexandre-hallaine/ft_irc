@@ -76,7 +76,7 @@ std::string RPL_ENDOFINVITELIST(std::string channel) { return channel + " :End o
 std::string RPL_EXCEPTLIST(std::string channel, std::string mask) { return channel + " " + mask; }
 std::string RPL_ENDOFEXCEPTLIST(std::string channel) { return channel + " :End of channel exception list"; }
 std::string RPL_VERSION(std::string version, std::string server, std::string comments) { return version + " " + server + " :" + comments; }
-std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string hopcout, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " H :" + hopcout + " " + real; }
+std::string RPL_WHOREPLY(std::string channel, std::string user, std::string host, std::string server, std::string nick, std::string state, std::string real) { return channel + " " + user + " " + host + " " + server + " " + nick + " " + state + " :0 " + real; }
 std::string RPL_NAMREPLY(std::string chan_mod, std::string channel, std::string nick_list) { return chan_mod + " " + channel + " :" + nick_list; }
 std::string RPL_LINKS(std::string mask, std::string server, std::string hopcount, std::string info) { return mask + " " + server + " :" + hopcount + " " + info; }
 std::string RPL_ENDOFLINKS(std::string mask) { return mask + " :End of /LINKS list"; }
