@@ -13,7 +13,7 @@ std::string getUsersString(irc::Channel channel)
 	{
 		if (users_string.length())
 			users_string += " ";
-		if (channel.getUserMode(*(*it)).find('O') != std::string::npos)
+		if (channel.getUserMode(*(*it)).find('O') != std::string::npos || channel.getUserMode(*(*it)).find('o') != std::string::npos || (*it)->getMode().find('o') != std::string::npos)
 			users_string += "@";
 		users_string += (*it)->getNickname();
 	}

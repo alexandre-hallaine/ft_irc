@@ -18,7 +18,7 @@ void KICK(irc::Command *command)
 			continue;
 		}
 		irc::Channel &channel = command->getServer().getChannel(*it);
-		if (channel.getUserMode(command->getUser()).find('O') == std::string::npos && command->getUser().getMode().find('o') == std::string::npos)
+		if (channel.getUserMode(command->getUser()).find('O') == std::string::npos && channel.getUserMode(command->getUser()).find('o') == std::string::npos && command->getUser().getMode().find('o') == std::string::npos)
 		{
 			command->reply(482, *it);
 			continue;
