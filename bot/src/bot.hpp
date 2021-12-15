@@ -12,6 +12,9 @@
 # include <unistd.h>
 # include <poll.h>
 # include <vector>
+# include <fstream>
+# include <algorithm>
+# include "color.hpp"
 
 #define DEBUG true
 
@@ -28,11 +31,14 @@ class Bot
 
 		std::string receive;
 		std::vector<std::string> messages;
+		std::ofstream log;
 
-		void send_msg(std::string msg);
+		void send_msg(std::string msg, bool toLog = false);
 		void recv_msg();
 		void send_pass();
 		void send_nick();
+
+		std::vector<std::string> split(std::string str, std::string delim);
 	public:
 		Bot(std::string addr, int port = 6667, std::string pass = std::string(), std::string nick = "bot");
 		~Bot();
