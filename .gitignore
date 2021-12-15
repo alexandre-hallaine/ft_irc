@@ -2,4 +2,5 @@
 objects
 ircserv
 bot/bot
-bot/bot.log
+*.log
+nohup.out
