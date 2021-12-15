@@ -11,9 +11,11 @@ std::string getUsersToString(irc::Channel channel)
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
+		if ((*it)->getMode().find('i') != std::string::npos)
+			continue;
 		if (users_string.length())
 			users_string += " ";
-		if (channel.getUserMode(*(*it)).find('O') != std::string::npos)
+		if (channel.getUserMode(*(*it)).find('O') != std::string::npos || channel.getUserMode(*(*it)).find('o') != std::string::npos || (*it)->getMode().find('o') != std::string::npos)
 			users_string += "@";
 		users_string += (*it)->getNickname();
 	}
@@ -41,7 +43,9 @@ void NAMES(irc::Command *command)
 				channel_mode = "@";
 			else
 				channel_mode = "=";
-			command->reply(353, channel_mode, channel->getName(), getUsersToString(*channel));
+			std::string users_string = getUsersToString(*channel);
+			if (users_string.length())
+				command->reply(353, channel_mode, channel->getName(), getUsersToString(*channel));
 			command->reply(366, channel->getName());
 		}
 	}
@@ -57,7 +61,9 @@ void NAMES(irc::Command *command)
 				channel_mode = "@";
 			else
 				channel_mode = "=";
-			command->reply(353, channel_mode, channel->getName(), getUsersToString(*channel));
+			std::string users_string = getUsersToString(*channel);
+			if (users_string.length())
+				command->reply(353, channel_mode, channel->getName(), users_string);
 			command->reply(366, channel->getName());
 		}
 		std::vector<irc::User *> users = command->getServer().getUsers();

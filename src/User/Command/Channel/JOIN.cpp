@@ -87,6 +87,7 @@ void JOIN(irc::Command *command)
 		command->reply(353, channel_mode, *it, getUsersString(channel));
 		command->reply(366, *it);
 		channel.broadcast(command->getUser(), "JOIN :" + channel.getName());
-		command->getUser().setLastChannel(channel.getName());
+		if (channel.getMode().find('p') == std::string::npos)
+			command->getUser().setLastChannel(channel.getName());
 	}
 }

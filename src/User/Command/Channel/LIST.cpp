@@ -3,6 +3,7 @@
 #include "../../../Utils/Utils.hpp"
 #include "../../User.hpp"
 #include <iostream>
+#include <cstdlib>
 
 void LIST(irc::Command *command)
 {
@@ -11,10 +12,10 @@ void LIST(irc::Command *command)
 	{
 		for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
 			if (irc::strmatch((*it)->getName(), command->getParameters()[0]))
-				command->reply(322, (*it)->getName(), (*it)->getTopic());
+				command->reply(322, (*it)->getName(), irc::toString((*it)->getUsers().size()), (*it)->getTopic());
 	}
 	else
 		for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
-			command->reply(322, (*it)->getName(), (*it)->getTopic());
+			command->reply(322, (*it)->getName(), irc::toString((*it)->getUsers().size()), (*it)->getTopic());
 	command->reply(323);
 }

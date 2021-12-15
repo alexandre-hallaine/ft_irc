@@ -63,7 +63,7 @@ std::string RPL_WHOISIDLE(std::string nick, std::string integer) { return nick +
 std::string RPL_ENDOFWHOIS(std::string nick) { return nick + " :End of /WHOIS list"; }
 std::string RPL_WHOISCHANNELS(std::string nick, std::string channel) { return nick + " :" + channel; }
 std::string RPL_LISTSTART() { return "Channel :Users  Name"; }
-std::string RPL_LIST(std::string channel, std::string topic) { return channel + " :" + topic; }
+std::string RPL_LIST(std::string channel, std::string nbrUser, std::string topic) { return channel + " " + nbrUser + " :" + topic; }
 std::string RPL_LISTEND() { return ":End of /LIST"; }
 std::string RPL_CHANNELMODEIS(std::string channel, std::string mode, std::string params) { return channel + " " + mode + " " + params; }
 std::string RPL_UNIQOPIS(std::string channel, std::string nick) { return channel + " " + nick; }
@@ -293,7 +293,7 @@ std::string irc::Command::getReplies(unsigned short code, std::string arg1, std:
 	case 321:
 		return target + RPL_LISTSTART();
 	case 322:
-		return target + RPL_LIST(arg1, arg2);
+		return target + RPL_LIST(arg1, arg2, arg3);
 	case 323:
 		return target + RPL_LISTEND();
 	case 324:
