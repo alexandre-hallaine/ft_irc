@@ -27,13 +27,12 @@ void WHO(class irc::Command *command)
 
 		irc::Channel channel = command->getServer().getChannel(command->getParameters()[0]);
 
-		if (command->getUser().getMode().find('o') == std::string::npos && !(channel.isUser(command->getUser())))
-			return command->reply(315, command->getUser().getUsername());
-
 		for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 		{
 			if (channel.isOnChannel((*it)->getNickname()))
 			{
+				if (command->getUser().getMode().find('o') == std::string::npos && (*it)->getMode().find('i') != std::string::npos)
+					continue;
 				std::string state;
 				if ((*it)->getMode().find('a') != std::string::npos)
 					state = "G";
