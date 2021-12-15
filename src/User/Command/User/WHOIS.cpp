@@ -26,5 +26,6 @@ void WHOIS(class irc::Command *command)
 			return command->reply(318, command->getParameters()[0]);
 		}
 
-	return command->reply(401, command->getParameters()[0]);
+	command->reply(401, command->getParameters()[0]);
+	return command->reply(318, command->getParameters()[0]);
 }

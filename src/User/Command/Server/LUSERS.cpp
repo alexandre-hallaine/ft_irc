@@ -8,7 +8,7 @@ void LUSERS(irc::Command *command)
 	size_t vis_users = 0, invis_users = 0, op_users = 0, unk_users = 0, channels;
 
 	std::vector<irc::User *> users = command->getServer().getUsers();
-	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); it++)
+	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
 		if (command->getUser().getStatus() != irc::ONLINE)
 		{

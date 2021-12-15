@@ -286,7 +286,7 @@ std::string irc::User::getHostaddr() { return hostname; }
 std::string irc::User::getHostname() { return hostname; }
 std::string irc::User::getHost()
 {
-	if (hostname.length())
+	if (hostname.size())
 		return hostname;
 	return hostaddr;
 }

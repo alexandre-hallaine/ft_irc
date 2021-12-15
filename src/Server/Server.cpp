@@ -27,12 +27,13 @@ void irc::Server::acceptUser()
 	if (fd == -1)
 		return;
 	users[fd] = new User(fd, address);
-	pollfd pfd;
-	pfd.fd = fd;
-	pfd.events = POLLIN;
-	pfds.push_back(pfd);
 	if (!config.get("password").length())
 		users[fd]->setStatus(REGISTER);
+
+	pfds.push_back(pollfd());
+	pfds.back().fd = fd;
+	pfds.back().events = POLLIN;
+
 	if (DEBUG)
 		std::cout << "new User " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << " (" << fd << ")" << std::endl;
 }
@@ -58,8 +59,8 @@ void irc::Server::displayUsers()
 	display.set(fd, std::string("\n") + buffer);
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
-		sprintf(buffer, "\033[34m%-4i \033[33m%-9s \033[35m%s", (*it).second->getFd(), (*it).second->getNickname().c_str(), (*it).second->getHost().c_str());
-		display.set((*it).second->getFd(), buffer);
+		sprintf(buffer, "\033[34m%-4i \033[33m%-9s \033[35m", (*it).second->getFd(), (*it).second->getNickname().c_str());
+		display.set((*it).second->getFd(), buffer + (*it).second->getHost());
 	}
 }
 void irc::Server::displayChannels()
@@ -99,26 +100,22 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
-	pollfd pfd;
-	pfd.fd = fd;
-	pfd.events = POLLIN;
-	pfds.push_back(pfd);
+	pfds.push_back(pollfd());
+	pfds.back().fd = fd;
+	pfds.back().events = POLLIN;
 
 	config.set("user_mode", "aiwro");
 	config.set("channel_givemode", "Oov");
 	config.set("channel_togglemode", "imnpst");
 	config.set("channel_setmode", "kl");
-	config.get("max");
 }
 void irc::Server::execute()
 {
 	std::vector<irc::User *> users = getUsers();
-	pollfd * pfds_ptr;
-	pfds_ptr = &pfds[0];
 
 	int ping = atoi(config.get("ping").c_str());
 
-	if (poll(pfds_ptr, pfds.size(), (ping * 1000) / 10) == -1)
+	if (poll(&pfds[0], pfds.size(), (ping * 1000) / 10) == -1)
 		return;
 
 	if (std::time(0) - last_ping >= ping)

@@ -45,6 +45,6 @@ void WHOWAS(class irc::Command *command)
 	}
 
 	if (!has_print)
-		return command->reply(406, command->getParameters()[0]);
-	return command->reply(369);
+		command->reply(406, command->getParameters()[0]);
+	return command->reply(369, command->getParameters()[0]);
 }
