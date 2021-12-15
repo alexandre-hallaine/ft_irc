@@ -27,9 +27,10 @@ void irc::Server::acceptUser()
 	if (fd == -1)
 		return;
 	users[fd] = new User(fd, address);
-	pfds.push_back(pollfd());
-	pfds.back().fd = fd;
-	pfds.back().events = POLLIN;
+	pollfd pfd;
+	pfd.fd = fd;
+	pfd.events = POLLIN;
+	pfds.push_back(pfd);
 	if (!config.get("password").length())
 		users[fd]->setStatus(REGISTER);
 	if (DEBUG)
@@ -98,9 +99,10 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
-	pfds.push_back(pollfd());
-	pfds[0].fd = fd;
-	pfds[0].events = POLLIN;
+	pollfd pfd;
+	pfd.fd = fd;
+	pfd.events = POLLIN;
+	pfds.push_back(pfd);
 
 	config.set("user_mode", "aiwro");
 	config.set("channel_givemode", "Oov");
@@ -129,15 +131,14 @@ void irc::Server::execute()
 		if (pfds[0].revents == POLLIN)
 			acceptUser();
 		else
-			for (size_t index = 0; index < users.size(); ++index)
-				if (pfds[index + 1].revents == POLLIN)
-					this->users[pfds[index + 1].fd]->receive(this);
+			for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it)
+				if ((*it).revents == POLLIN)
+					this->users[(*it).fd]->receive(this);
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if ((*it)->getStatus() == DELETE)
 			delUser(*(*it));
-
 	users = getUsers();
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 		(*it)->push();
@@ -170,12 +171,6 @@ void irc::Server::delUser(User &user)
 	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
 		if ((*it).second.isUser(user))
 		{
-			for (std::vector<pollfd>::iterator it_pfd = pfds.begin(); it_pfd != pfds.end(); ++it_pfd)
-				if ((*it_pfd).fd == user.getFd())
-				{
-					pfds.erase(it_pfd);
-					break;
-				}
 			(*it).second.removeUser(user);
 			
 			std::vector<irc::User *> users = it->second.getUsers();
@@ -197,6 +192,12 @@ void irc::Server::delUser(User &user)
 
 	display.remove(user.getFd());
 
+	for (std::vector<pollfd>::iterator it_pfd = pfds.begin(); it_pfd != pfds.end(); ++it_pfd)
+		if ((*it_pfd).fd == user.getFd())
+		{
+			pfds.erase(it_pfd);
+			break;
+		}
 	users.erase(user.getFd());
 	delete &user;
 }
