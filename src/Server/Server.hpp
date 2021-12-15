@@ -23,6 +23,7 @@ namespace irc
 		int fd;
 		std::string upTime;
 		time_t last_ping;
+		std::vector<pollfd> pfds;
 
 		void acceptUser();
 		void sendPing();

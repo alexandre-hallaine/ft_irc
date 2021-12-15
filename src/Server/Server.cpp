@@ -27,6 +27,9 @@ void irc::Server::acceptUser()
 	if (fd == -1)
 		return;
 	users[fd] = new User(fd, address);
+	pfds.push_back(pollfd());
+	pfds.back().fd = fd;
+	pfds.back().events = POLLIN;
 	if (!config.get("password").length())
 		users[fd]->setStatus(REGISTER);
 	if (DEBUG)
@@ -95,30 +98,25 @@ void irc::Server::init()
 	if (listen(fd, address.sin_port) < 0)
 		error("listen", true);
 
+	pfds.push_back(pollfd());
+	pfds[0].fd = fd;
+	pfds[0].events = POLLIN;
+
 	config.set("user_mode", "aiwro");
 	config.set("channel_givemode", "Oov");
 	config.set("channel_togglemode", "imnpst");
 	config.set("channel_setmode", "kl");
-	if ((size_t)atoi(config.get("max").c_str()) > 4242)
-		config.set("max", "4242");
+	config.get("max");
 }
 void irc::Server::execute()
 {
 	std::vector<irc::User *> users = getUsers();
-	struct pollfd pfds[4243];
-
-	pfds[0].fd = fd;
-	pfds[0].events = POLLIN;
-
-	for (size_t index = 0; index < users.size(); ++index)
-	{
-		pfds[index + 1].fd = users[index]->getFd();
-		pfds[index + 1].events = POLLIN;
-	}
+	pollfd * pfds_ptr;
+	pfds_ptr = &pfds[0];
 
 	int ping = atoi(config.get("ping").c_str());
 
-	if (poll(pfds, users.size() + 1, (ping * 1000) / 10) == -1)
+	if (poll(pfds_ptr, pfds.size(), (ping * 1000) / 10) == -1)
 		return;
 
 	if (std::time(0) - last_ping >= ping)
@@ -172,7 +170,14 @@ void irc::Server::delUser(User &user)
 	for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
 		if ((*it).second.isUser(user))
 		{
+			for (std::vector<pollfd>::iterator it_pfd = pfds.begin(); it_pfd != pfds.end(); ++it_pfd)
+				if ((*it_pfd).fd == user.getFd())
+				{
+					pfds.erase(it_pfd);
+					break;
+				}
 			(*it).second.removeUser(user);
+			
 			std::vector<irc::User *> users = it->second.getUsers();
 			if (!users.size())
 				remove.push_back((*it).second);
