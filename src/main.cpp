@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, handler);
 
 	server.getConfig().set("port", argv[1]);
-	//server.getConfig().set("password", argv[2]);
+	server.getConfig().set("password", argv[2]);
 
 	server.init();
 	while (!stop)
