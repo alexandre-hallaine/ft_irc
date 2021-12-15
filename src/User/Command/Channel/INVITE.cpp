@@ -16,7 +16,7 @@ void INVITE(irc::Command *command)
 	if (command->getServer().isChannel(command->getParameters()[1]))
 	{
 		irc::Channel &channel = command->getServer().getChannel(command->getParameters()[1]);
-		if (channel.getMode().find('i') != std::string::npos && channel.getUserMode(command->getUser()).find('O') == std::string::npos)
+		if (channel.getMode().find('i') != std::string::npos && channel.getUserMode(command->getUser()).find('O') == std::string::npos && command->getUser().getMode().find('o') == std::string::npos)
 		{
 			command->reply(482, command->getParameters()[1]);
 			return;

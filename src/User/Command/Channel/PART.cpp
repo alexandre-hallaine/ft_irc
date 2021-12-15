@@ -16,8 +16,6 @@ void PART(irc::Command *command)
 		std::string &channel = *it;
 		if (channel.size() == 0)
 			continue;
-		if (channel[0] != '#')
-			channel = "#" + channel;
 		if (command->getServer().isChannel(channel))
 		{
 			irc::Channel &chan = command->getServer().getChannel(channel);
