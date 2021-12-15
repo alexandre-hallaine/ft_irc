@@ -121,7 +121,7 @@ void MODE_channel(class irc::Command *command)
 			{
 				if (request[i] != 'O' && (command->getUser().getMode().find("o") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("O") != std::string::npos || command->getServer().getChannel(command->getParameters()[0]).getUserMode(command->getUser()).find("o") != std::string::npos))
 					check_givemode(request[i], is_minus, command, count);
-				else
+				else if (request[i] != 'O')
 					command->reply(482, command->getParameters()[0]);
 				count++;
 			}
@@ -170,7 +170,7 @@ void MODE_user(class irc::Command *command)
 				continue;
 			else if (request[i] == 'o' && command->getUser().getMode().find("o") == std::string::npos)
 				continue;
-			else if (is_minus && request[i] == 'r')
+			else if (request[i] == 'r' && is_minus && command->getUser().getMode().find("o") == std::string::npos)
 				continue;
 			else
 				check_togglemode(&mode, request[i], is_minus);

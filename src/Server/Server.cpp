@@ -106,7 +106,7 @@ void irc::Server::init()
 
 	config.set("user_mode", "aiwro");
 	config.set("channel_givemode", "Oov");
-	config.set("channel_togglemode", "imnpst");
+	config.set("channel_togglemode", "imnpt");
 	config.set("channel_setmode", "kl");
 }
 void irc::Server::execute()

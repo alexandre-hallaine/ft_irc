@@ -8,6 +8,9 @@ void NICK(irc::Command *command)
 	if (!command->getParameters().size())
 		return command->reply(431);
 
+	if (command->getUser().getMode().find('r') != std::string::npos)
+		return command->reply(484);
+
 	std::string nickname = command->getParameters()[0];
 
 	if (nickname.length() > 9)
