@@ -30,4 +30,6 @@ void INVITE(irc::Command *command)
 	}
 	command->getUser().sendTo(*command->getServer().getUser(command->getParameters()[0]), "INVITE " + command->getParameters()[0] + " " + command->getParameters()[1]);
 	command->reply(341, command->getParameters()[0], command->getParameters()[1]);
+	if (command->getServer().getUser(command->getParameters()[0])->getMode().find('a') != std::string::npos)
+		command->reply(301, command->getParameters()[0], command->getServer().getUser(command->getParameters()[0])->getAwayMessage());
 }
