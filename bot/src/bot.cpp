@@ -1,5 +1,20 @@
 #include "bot.hpp"
 
+std::vector<std::string> Bot::split(std::string str, std::string delimiter)
+{
+	std::vector<std::string> values = std::vector<std::string>();
+
+	size_t position;
+	while ((position = str.find(delimiter)) != std::string::npos)
+	{
+		values.push_back(str.substr(0, position));
+		str.erase(0, position + delimiter.length());
+	}
+	values.push_back(str);
+
+	return values;
+}
+
 Bot::Bot(std::string addr, int port, std::string pass, std::string nick): addr(addr), pass(pass), nick(nick)
 {
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -8,12 +23,14 @@ Bot::Bot(std::string addr, int port, std::string pass, std::string nick): addr(a
 	serv_addr.sin_port = htons(port);
 	serv_addr.sin_addr.s_addr = inet_addr(addr == "localhost" ? "127.0.0.1" : addr.c_str());
 	std::cout << "Connecting to " << addr << ":" << port << std::endl;
+	log.open("bot.log");
 }
 
 Bot::~Bot()
 {
 	send_msg("QUIT");
 	close(sock);
+	log.close();
 }
 
 void Bot::run()
@@ -67,11 +84,44 @@ void Bot::run()
 			std::cout << msg << std::endl;
 		if (msg.find("PING") != std::string::npos)
 			send_msg("PONG " + msg.substr(5));
+		else
+		{
+			std::vector<std::string> values = split(msg, " ");
+			if (std::find(values.begin(), values.end(), "JOIN") != values.end())
+				log << C_B_YELLOW << &values[0].substr(0, values[0].find('!'))[1] << C_B_RESET << " joined" << std::endl;
+			else if (std::find(values.begin(), values.end(), "PRIVMSG") != values.end())
+			{
+				log << "<" << C_YELLOW << &values[0].substr(0, values[0].find('!'))[1] << C_RESET << "> ";
+				for (std::vector<std::string>::iterator it = values.begin() + 3; it != values.end(); ++it)
+				{
+					if (it != values.begin() + 3)
+						log << " ";
+					log << *it;
+				}
+				log << std::endl;
+				if (values[3] == ":flip")
+					send_msg("NOTICE " + values[2] + " :" + (rand() % 2 == 0 ? "heads" : "tails"), true);
+			}
+			else if (std::find(values.begin(), values.end(), "PART") != values.end())
+				log << C_B_YELLOW << &values[0].substr(0, values[0].find('!'))[1] << C_RESET << " leave" << std::endl;
+		}
 	}
 }
 
-void Bot::send_msg(std::string msg)
+void Bot::send_msg(std::string msg, bool toLog)
 {
+	if (toLog)
+	{
+		std::vector<std::string> values = split(msg, " ");
+		log << "<" << C_YELLOW << nick << C_RESET << "> ";
+		for (std::vector<std::string>::iterator it = values.begin() + 2; it != values.end(); ++it)
+		{
+			if (it != values.begin() + 2)
+				log << " ";
+			log << *it;
+		}
+		log << std::endl;
+	}
 	msg += "\r\n";
 	if (send(sock, msg.c_str(), msg.size(), 0) < 0)
 		throw std::runtime_error("send() failed");
