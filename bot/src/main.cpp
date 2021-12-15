@@ -1,26 +1,32 @@
 #include "bot.hpp"
+#include <csignal>
+
+bool sig = false;
+
+void handler(int) { sig = true; }
 
 int main(int argc, char **argv)
 {
 	try {
+		signal(SIGINT, handler);
 		if (argc == 2)
 		{
-			Bot bot(argv[1]);
+			Bot bot(&sig, argv[1]);
 			bot.run();
 		}
 		else if (argc == 3)
 		{
-			Bot bot(argv[1], atoi(argv[2]));
+			Bot bot(&sig, argv[1], atoi(argv[2]));
 			bot.run();
 		}
 		else if (argc == 4)
 		{
-			Bot bot(argv[1], atoi(argv[2]), argv[3]);
+			Bot bot(&sig, argv[1], atoi(argv[2]), argv[3]);
 			bot.run();
 		}
 		else if (argc == 5)
 		{
-			Bot bot(argv[1], atoi(argv[2]), argv[3], argv[4]);
+			Bot bot(&sig, argv[1], atoi(argv[2]), argv[3], argv[4]);
 			bot.run();
 		}
 		else
@@ -33,41 +39,8 @@ int main(int argc, char **argv)
 	catch (const std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
+		if (std::string(e.what()) == "Connection closed")
+			return EXIT_SUCCESS;
 		return EXIT_FAILURE;
 	}
-		// int sock = socket(AF_INET, SOCK_STREAM, 0);
-		// if (sock < 0)
-		// {
-		// 	perror("socket");
-		// 	return 1;
-		// }
-		// struct sockaddr_in serv_addr;
-		// serv_addr.sin_family = AF_INET;
-		// serv_addr.sin_port = htons(atoi(argv[2]));
-		// serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
-
-		// while (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-		// {
-		// 	perror("connect");
-		// 	std::cout << "Retrying in 5 seconds..." << std::endl;
-		// 	sleep(5);
-		// }
-		// std::string msg;
-
-		// msg = "NICK nsimon\r\n";
-		// send(sock , msg.c_str(), msg.size() , 0 );
-		// while (true)
-		// {
-		// 	char buf[1024];
-		// 	int n = recv(sock, buf, sizeof(buf), 0);
-		// 	if (n < 0)
-		// 	{
-		// 		perror("recv");
-		// 		return 1;
-		// 	}
-		// 	if (n == 0)
-		// 		break;
-		// 	buf[n] = 0;
-		// 	printf("%s", buf);
-		// }
 }

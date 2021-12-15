@@ -1,21 +1,6 @@
 #include "bot.hpp"
 
-std::vector<std::string> Bot::split(std::string str, std::string delimiter)
-{
-	std::vector<std::string> values = std::vector<std::string>();
-
-	size_t position;
-	while ((position = str.find(delimiter)) != std::string::npos)
-	{
-		values.push_back(str.substr(0, position));
-		str.erase(0, position + delimiter.length());
-	}
-	values.push_back(str);
-
-	return values;
-}
-
-Bot::Bot(std::string addr, int port, std::string pass, std::string nick): addr(addr), pass(pass), nick(nick)
+Bot::Bot(bool *sig, std::string addr, int port, std::string pass, std::string nick): sig(sig), addr(addr), pass(pass), nick(nick)
 {
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		throw std::runtime_error("socket() failed");
@@ -57,7 +42,7 @@ void Bot::run()
 	std::cout << "Connected as " << nick << std::endl;
 	send_msg("USER " + nick + " " + nick + " " + addr + " :" + nick);
 	//while (recv_msg().find("376 " + nick) == std::string::npos)
-	while (true)
+	while (!*sig)
 	{
 		if (messages.empty())
 			recv_msg();
@@ -72,7 +57,7 @@ void Bot::run()
 	//send_msg("MODE " + nick + " +B");
 	send_msg("JOIN #" + nick);
 	std::cout << "Joined #" << nick << std::endl;
-	while (true)
+	while (!*sig)
 	{
 		if (messages.empty())
 			recv_msg();
@@ -81,12 +66,12 @@ void Bot::run()
 		if (msg.empty())
 			continue;
 		if (DEBUG)
-			std::cout << msg << std::endl;
+			std::cout << "< " + msg << std::endl;
 		if (msg.find("PING") != std::string::npos)
-			send_msg("PONG " + msg.substr(5));
+			send_msg("PONG :" + msg.substr(5));
 		else
 		{
-			std::vector<std::string> values = split(msg, " ");
+			std::vector<std::string> values = Utils::split(msg, " ");
 			if (std::find(values.begin(), values.end(), "JOIN") != values.end())
 				log << C_B_YELLOW << &values[0].substr(0, values[0].find('!'))[1] << C_B_RESET << " joined" << std::endl;
 			else if (std::find(values.begin(), values.end(), "PRIVMSG") != values.end())
@@ -99,8 +84,16 @@ void Bot::run()
 					log << *it;
 				}
 				log << std::endl;
-				if (values[3] == ":flip")
+				if (values[3] == ":!flip")
 					send_msg("NOTICE " + values[2] + " :" + (rand() % 2 == 0 ? "heads" : "tails"), true);
+				else if (values[3] == ":!roll")
+					send_msg("NOTICE " + values[2] + " :" + Utils::toString(rand() % 6 + 1), true);
+				else if (values[3] == ":!help")
+					send_msg("NOTICE " + values[2] + " :!flip - flip a coin, !roll - roll a dice", true);
+				else if (values[3] == ":!quit")
+					send_msg("QUIT :" + values[2] + " has quit", true);
+				else if (values[3] == ":!nick")
+					send_msg("NICK " + values[2].substr(1), true);
 			}
 			else if (std::find(values.begin(), values.end(), "PART") != values.end())
 				log << C_B_YELLOW << &values[0].substr(0, values[0].find('!'))[1] << C_RESET << " leave" << std::endl;
@@ -112,7 +105,7 @@ void Bot::send_msg(std::string msg, bool toLog)
 {
 	if (toLog)
 	{
-		std::vector<std::string> values = split(msg, " ");
+		std::vector<std::string> values = Utils::split(msg, " ");
 		log << "<" << C_YELLOW << nick << C_RESET << "> ";
 		for (std::vector<std::string>::iterator it = values.begin() + 2; it != values.end(); ++it)
 		{
@@ -123,6 +116,8 @@ void Bot::send_msg(std::string msg, bool toLog)
 		log << std::endl;
 	}
 	msg += "\r\n";
+	if (DEBUG)
+		std::cout << "> " + msg << std::endl;
 	if (send(sock, msg.c_str(), msg.size(), 0) < 0)
 		throw std::runtime_error("send() failed");
 }

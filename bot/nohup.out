@@ -1,0 +1,145 @@
+[0mConnecting to localhost:6667
+Connected as bot
+:bot!bot@localhost 001 bot :Welcome to the Internet Relay Network bot!bot@localhost
+:bot!bot@localhost 002 bot :Your host is localhost, running version 1.69
+:bot!bot@localhost 003 bot :This server was created Wed Dec 15 23:46:41 2021
+:bot!bot@localhost 004 bot ShibRC 1.69 aiwro 
+:bot!bot@localhost 251 bot :There are 1 users and 0 invisible on 1 servers
+:bot!bot@localhost 252 bot 0 :operator(s) online
+:bot!bot@localhost 253 bot 0 :unknown connection(s)
+:bot!bot@localhost 254 bot 0 :channels formed
+:bot!bot@localhost 255 bot :I have 1 clients and 0 servers
+:bot!bot@localhost 375 bot :- ShibRC Message of the day - 
+:bot!bot@localhost 372 bot :-  ad88888ba   88           88  88              88888888ba     ,ad8888ba,   
+:bot!bot@localhost 372 bot :- d8"     "8b  88           ""  88              88      "8b   d8"'    `"8b  
+:bot!bot@localhost 372 bot :- Y8,          88               88              88      ,8P  d8'            
+:bot!bot@localhost 372 bot :- `Y8aaaaa,    88,dPPYba,   88  88,dPPYba,      88aaaaaa8P'  88             
+:bot!bot@localhost 372 bot :-   `"""""8b,  88P'    "8a  88  88P'    "8a     88""""88'    88             
+:bot!bot@localhost 372 bot :-         `8b  88       88  88  88       d8     88    `8b    Y8,            
+:bot!bot@localhost 372 bot :- Y8a     a8P  88       88  88  88b,   ,a8"     88     `8b    Y8a.    .a8P  
+:bot!bot@localhost 372 bot :-  "Y88888P"   88       88  88  8Y"Ybbd8"'      88      `8b    `"Y8888Y"'   
+:bot!bot@localhost 372 bot :- 
+:bot!bot@localhost 372 bot :- ```...........-:::--..........---.`````..---------.......-://+o+:..............-
+:bot!bot@localhost 372 bot :- ...........---//+sso+:........---..````.....---------..-/osyyyo/:.......--------
+:bot!bot@localhost 372 bot :- .............:/ohddddho:......----..........--:-::---:/shddddhh+/.......---:----
+:bot!bot@localhost 372 bot :- ......-......:+hdddhdddy+-....-::-.........----..---/osddhhhhhdy/........-------
+:bot!bot@localhost 372 bot :- `````........-sddhhhyhdds+/-..-::-...------::--..-:+osddhyyyyhmh+.........------
+:bot!bot@localhost 372 bot :- ````````..```:sddssssyhdhso+//+ossoooosyyyyyyssoo+++shdhyoooydmd+............---
+:bot!bot@localhost 372 bot :- ````````````.:sddyo++ohddhs/+osssyyhhyyyyyhhhhyyyso+ydhyo/+shddy:...............
+:bot!bot@localhost 372 bot :- ````````````.:ydmho+//shdyosyyyyhhyyyyssosssyhhhhhhhyhhyoosydmdo.``.............
+:bot!bot@localhost 372 bot :- ```````````.:/ohmdys+/ohhyhhhyyhhyyyyyssoossyhddhhhhddysyyddmmy:``````.........`
+:bot!bot@localhost 372 bot :- ```````````.:++yhddhho/yhdhhyyyhhhhhhyssooyyhdmmmdhhhhdhhddhhdh-`````...........
+:bot!bot@localhost 372 bot :- ```.....``.-/++ymmmmmdyhdhyyyhhhdmmmmdhyssydmmNNNmmmdhhhhhhddy+.```.............
+:bot!bot@localhost 372 bot :- .....--....-/+osdmdhhhhhhhhhhdmNNNMNNmddhhhdmNNNmdhdmdddhddhh/..................
+:bot!bot@localhost 372 bot :- ...........-/++oyhhhdddhhhddmmdhsshmNNNmddddmNms-:``:hdddddddy:.................
+:bot!bot@localhost 372 bot :- ...........:+sosyhdmddddhdddhy+-.--:ohmmddhdddmooooymNmdddddddy:................
+:bot!bot@localhost 372 bot :- .........../syosyhdddmmmmmmNNNNmmmmmhhmmdhhhhhddmNNNNNNNNmmmddd+...```..........
+:bot!bot@localhost 372 bot :- .........../ssoyhddmmmmNNMMNNNNNNNMNdmmmmdsoooosdNNMMMMMMMNNmmds-....`.........-
+:bot!bot@localhost 372 bot :- ..........-/o+oyhdmmmNNNMMMMNNMMMMNNNNNNd/.`.-.`.yNNMMMMMMMNNNmy:..............-
+:bot!bot@localhost 372 bot :- `.........-+o+shdmmNNNNMMMMMMMMMMNNNNNNN+`   `   :NNNNNNNMMMNNmh:-..--------...-
+:bot!bot@localhost 372 bot :- ``........:+ooyhdmNNNMMMMMNNNNNNNNNNNNNmy:``    `+dmNmNNNMMNNNmy:-...-..------.-
+:bot!bot@localhost 372 bot :- ``````````:+oshddmNNNMMMNNNNNmdyydmNNNmmho:..``-:+hddhmNNNNNNNmy:...--...-------
+:bot!bot@localhost 372 bot :- .`````````:oosydmmNNNNNNNNNNmmy:`./hhddy+::-:.--::+yhmNNNNNNmmh+-..--------:----
+:bot!bot@localhost 372 bot :- `````````./osyyhddmmNNNNNNNNmmdo```+/-::..`` ``.:..ymNNNNmmmhy+:----------::----
+:bot!bot@localhost 372 bot :- ````.....-/osyyyhdddddmmmNNNNmmmo. -o-`//::-.-:/+::mNNNNmmddhy/---:::------:----
+:bot!bot@localhost 372 bot :- ````.....:++osyyhhdmmmmmmNNNNNmmmy:.--/ossssoosssyhmNNNNNmmdhs/--:::------------
+:bot!bot@localhost 372 bot :- ```.....-/oosyyhhddmmmmNNNNNNNNNmmds:.`.+hhhhyhhhhmNNNNNNNmdho:---::::----------
+:bot!bot@localhost 372 bot :- ``````../ooosyyyhdmmmmNNNNNNNNNNNmddhyo..ohhhhhhhhNNNNNNNNmmhs/:----:----.------
+:bot!bot@localhost 372 bot :- `````..:osoossyhhhddmmNNNNNNNNNNNmmhyhdo:`.+osoo+sNNNNNNNNmdhso:------------::::
+:bot!bot@localhost 372 bot :- ......:oyyoosyyyhhdddmmNNNNNNNNNNNmmmdddhy+:-.-/yNNNNNNNNmmdhys+:-----------::::
+:bot!bot@localhost 372 bot :- ....`./syysosyyyyyhdmmmmNNNNNNNNNNmmmmmmdddhhddmNNNNNNNNmmdhdhhy+::---------:::-
+:bot!bot@localhost 372 bot :- ``..../syyyssyyysoyhdmmmmmNNNNNNNNNNNmmmmmmmmmmmNNNNNNNNmdhhdddhs////:::::::::::
+:bot!bot@localhost 376 bot :End of /MOTD command
+Joined server localhost
+Joined #bot
+:bot!bot@localhost 353 bot = #bot :@bot
+:bot!bot@localhost 366 bot #bot :End of /NAMES list
+:bot!bot@localhost JOIN :#bot
+PING bot
+:ubuntu!ubuntu@localhost JOIN :#bot
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!help
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!flip
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+PING bot
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!quit
+:bot!bot@localhost QUIT :QUIT :#bot has quit
+Connection closed
+make: *** [Makefile:33: run] Error 1
+[33mCompile	src/main.cpp -> objects/main.o
+src/main.cpp:36:16: error: result of comparison against a string literal is unspecified (use an explicit string comparison function instead) [-Werror,-Wstring-compare]
+                if (e.what() == "Connection closed")
+                             ^  ~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make: *** [Makefile:24: objects/main.o] Error 1
+[0mConnecting to localhost:6667
+Connected as bot
+:bot!bot@localhost 001 bot :Welcome to the Internet Relay Network bot!bot@localhost
+:bot!bot@localhost 002 bot :Your host is localhost, running version 1.69
+:bot!bot@localhost 003 bot :This server was created Wed Dec 15 23:46:41 2021
+:bot!bot@localhost 004 bot ShibRC 1.69 aiwro 
+:bot!bot@localhost 251 bot :There are 1 users and 1 invisible on 1 servers
+:bot!bot@localhost 252 bot 0 :operator(s) online
+:bot!bot@localhost 253 bot 0 :unknown connection(s)
+:bot!bot@localhost 254 bot 1 :channels formed
+:bot!bot@localhost 255 bot :I have 2 clients and 0 servers
+:bot!bot@localhost 375 bot :- ShibRC Message of the day - 
+:bot!bot@localhost 372 bot :-  ad88888ba   88           88  88              88888888ba     ,ad8888ba,   
+:bot!bot@localhost 372 bot :- d8"     "8b  88           ""  88              88      "8b   d8"'    `"8b  
+:bot!bot@localhost 372 bot :- Y8,          88               88              88      ,8P  d8'            
+:bot!bot@localhost 372 bot :- `Y8aaaaa,    88,dPPYba,   88  88,dPPYba,      88aaaaaa8P'  88             
+:bot!bot@localhost 372 bot :-   `"""""8b,  88P'    "8a  88  88P'    "8a     88""""88'    88             
+:bot!bot@localhost 372 bot :-         `8b  88       88  88  88       d8     88    `8b    Y8,            
+:bot!bot@localhost 372 bot :- Y8a     a8P  88       88  88  88b,   ,a8"     88     `8b    Y8a.    .a8P  
+:bot!bot@localhost 372 bot :-  "Y88888P"   88       88  88  8Y"Ybbd8"'      88      `8b    `"Y8888Y"'   
+:bot!bot@localhost 372 bot :- 
+:bot!bot@localhost 372 bot :- ```...........-:::--..........---.`````..---------.......-://+o+:..............-
+:bot!bot@localhost 372 bot :- ...........---//+sso+:........---..````.....---------..-/osyyyo/:.......--------
+:bot!bot@localhost 372 bot :- .............:/ohddddho:......----..........--:-::---:/shddddhh+/.......---:----
+:bot!bot@localhost 372 bot :- ......-......:+hdddhdddy+-....-::-.........----..---/osddhhhhhdy/........-------
+:bot!bot@localhost 372 bot :- `````........-sddhhhyhdds+/-..-::-...------::--..-:+osddhyyyyhmh+.........------
+:bot!bot@localhost 372 bot :- ````````..```:sddssssyhdhso+//+ossoooosyyyyyyssoo+++shdhyoooydmd+............---
+:bot!bot@localhost 372 bot :- ````````````.:sddyo++ohddhs/+osssyyhhyyyyyhhhhyyyso+ydhyo/+shddy:...............
+:bot!bot@localhost 372 bot :- ````````````.:ydmho+//shdyosyyyyhhyyyyssosssyhhhhhhhyhhyoosydmdo.``.............
+:bot!bot@localhost 372 bot :- ```````````.:/ohmdys+/ohhyhhhyyhhyyyyyssoossyhddhhhhddysyyddmmy:``````.........`
+:bot!bot@localhost 372 bot :- ```````````.:++yhddhho/yhdhhyyyhhhhhhyssooyyhdmmmdhhhhdhhddhhdh-`````...........
+:bot!bot@localhost 372 bot :- ```.....``.-/++ymmmmmdyhdhyyyhhhdmmmmdhyssydmmNNNmmmdhhhhhhddy+.```.............
+:bot!bot@localhost 372 bot :- .....--....-/+osdmdhhhhhhhhhhdmNNNMNNmddhhhdmNNNmdhdmdddhddhh/..................
+:bot!bot@localhost 372 bot :- ...........-/++oyhhhdddhhhddmmdhsshmNNNmddddmNms-:``:hdddddddy:.................
+:bot!bot@localhost 372 bot :- ...........:+sosyhdmddddhdddhy+-.--:ohmmddhdddmooooymNmdddddddy:................
+:bot!bot@localhost 372 bot :- .........../syosyhdddmmmmmmNNNNmmmmmhhmmdhhhhhddmNNNNNNNNmmmddd+...```..........
+:bot!bot@localhost 372 bot :- .........../ssoyhddmmmmNNMMNNNNNNNMNdmmmmdsoooosdNNMMMMMMMNNmmds-....`.........-
+:bot!bot@localhost 372 bot :- ..........-/o+oyhdmmmNNNMMMMNNMMMMNNNNNNd/.`.-.`.yNNMMMMMMMNNNmy:..............-
+:bot!bot@localhost 372 bot :- `.........-+o+shdmmNNNNMMMMMMMMMMNNNNNNN+`   `   :NNNNNNNMMMNNmh:-..--------...-
+:bot!bot@localhost 372 bot :- ``........:+ooyhdmNNNMMMMMNNNNNNNNNNNNNmy:``    `+dmNmNNNMMNNNmy:-...-..------.-
+:bot!bot@localhost 372 bot :- ``````````:+oshddmNNNMMMNNNNNmdyydmNNNmmho:..``-:+hddhmNNNNNNNmy:...--...-------
+:bot!bot@localhost 372 bot :- .`````````:oosydmmNNNNNNNNNNmmy:`./hhddy+::-:.--::+yhmNNNNNNmmh+-..--------:----
+:bot!bot@localhost 372 bot :- `````````./osyyhddmmNNNNNNNNmmdo```+/-::..`` ``.:..ymNNNNmmmhy+:----------::----
+:bot!bot@localhost 372 bot :- ````.....-/osyyyhdddddmmmNNNNmmmo. -o-`//::-.-:/+::mNNNNmmddhy/---:::------:----
+:bot!bot@localhost 372 bot :- ````.....:++osyyhhdmmmmmmNNNNNmmmy:.--/ossssoosssyhmNNNNNmmdhs/--:::------------
+:bot!bot@localhost 372 bot :- ```.....-/oosyyhhddmmmmNNNNNNNNNmmds:.`.+hhhhyhhhhmNNNNNNNmdho:---::::----------
+:bot!bot@localhost 372 bot :- ``````../ooosyyyhdmmmmNNNNNNNNNNNmddhyo..ohhhhhhhhNNNNNNNNmmhs/:----:----.------
+:bot!bot@localhost 372 bot :- `````..:osoossyhhhddmmNNNNNNNNNNNmmhyhdo:`.+osoo+sNNNNNNNNmdhso:------------::::
+:bot!bot@localhost 372 bot :- ......:oyyoosyyyhhdddmmNNNNNNNNNNNmmmdddhy+:-.-/yNNNNNNNNmmdhys+:-----------::::
+:bot!bot@localhost 372 bot :- ....`./syysosyyyyyhdmmmmNNNNNNNNNNmmmmmmdddhhddmNNNNNNNNmmdhdhhy+::---------:::-
+:bot!bot@localhost 372 bot :- ``..../syyyssyyysoyhdmmmmmNNNNNNNNNNNmmmmmmmmmmmNNNNNNNNmdhhdddhs////:::::::::::
+:bot!bot@localhost 376 bot :End of /MOTD command
+Joined server localhost
+Joined #bot
+:bot!bot@localhost 353 bot = #bot :@bot ubuntu
+:bot!bot@localhost 366 bot #bot :End of /NAMES list
+:bot!bot@localhost JOIN :#bot
+:ubuntu!ubuntu@localhost PRIVMSG #bot :salut
+PING bot
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!help
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!flip
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!roll
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!close
+:ubuntu!ubuntu@localhost PRIVMSG #bot :!quit
+:bot!bot@localhost QUIT :QUIT :#bot has quit
+Connection closed

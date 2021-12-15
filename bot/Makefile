@@ -4,8 +4,10 @@ DIRECTORY_CHECK		=	src
 DIRECTORY_SOURCE	=	src
 DIRECTORY_OBJECT	=	objects
 
-FILES_CHECK			=	bot.hpp
+FILES_CHECK			=	bot.hpp \
+						Utils/Utils.hpp
 FILES_SOURCE		=	bot.cpp \
+						Utils/Utils.cpp \
 						main.cpp
 
 COMPILE				=	clang++

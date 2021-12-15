@@ -15,12 +15,14 @@
 # include <fstream>
 # include <algorithm>
 # include "color.hpp"
+# include "Utils/Utils.hpp"
 
-#define DEBUG true
+#define DEBUG false
 
 class Bot
 {
 	private:
+		bool *sig;
 		std::string addr;
 		int sock;
 		struct sockaddr_in serv_addr;
@@ -40,9 +42,9 @@ class Bot
 
 		std::vector<std::string> split(std::string str, std::string delim);
 	public:
-		Bot(std::string addr, int port = 6667, std::string pass = std::string(), std::string nick = "bot");
+		Bot(bool *sig, std::string addr, int port = 6667, std::string pass = std::string(), std::string nick = "bot");
 		~Bot();
-		
+
 		void run();
 };
 
