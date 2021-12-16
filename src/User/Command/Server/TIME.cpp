@@ -1,10 +1,5 @@
 #include "../Command.hpp"
 #include "../../../Server/Server.hpp"
+#include "../../../Utils/Utils.hpp"
 
-void TIME(irc::Command *command)
-{
-	time_t get_time;
-	time(&get_time);
-
-	command->reply(391, command->getServer().getConfig().get("name"), ctime(&get_time));
-}
+void TIME(irc::Command *command) { command->reply(391, command->getServer().getConfig().get("name"), irc::currentTime()); }

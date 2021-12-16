@@ -1,5 +1,5 @@
 -------------INFO-------------
-Server name : shirc.ml
+Server name : ShibRC / shirc.ml
 Project : ft_irc of 42cursus
 Version : 1.69
 Made with love by :

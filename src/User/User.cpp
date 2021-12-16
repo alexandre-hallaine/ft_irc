@@ -71,8 +71,7 @@ void post_registration(irc::Command *command)
 	command->reply(1, command->getUser().getPrefix());
 	command->reply(2, command->getUser().getHostname(), command->getServer().getConfig().get("version"));
 	command->reply(3, command->getServer().getUpTime());
-	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"),
-				   command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_mode"));
+	command->reply(4, command->getServer().getConfig().get("name"), command->getServer().getConfig().get("version"), command->getServer().getConfig().get("user_mode"), command->getServer().getConfig().get("channel_givemode") + command->getServer().getConfig().get("channel_togglemode") + command->getServer().getConfig().get("channel_setmode"));
 
 	LUSERS(command);
 	MOTD(command);
