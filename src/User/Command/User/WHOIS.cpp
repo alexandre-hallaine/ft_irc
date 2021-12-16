@@ -15,7 +15,7 @@ void WHOIS(class irc::Command *command)
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
 		if (command->getParameters()[0] == (*it)->getNickname())
 		{
-			command->reply(311, command->getParameters()[0], command->getUser().getUsername(), command->getUser().getHostname(), command->getUser().getRealname());
+			command->reply(311, command->getParameters()[0], (*it)->getUsername(), (*it)->getHostname(), (*it)->getRealname());
 			for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
 				if (command->getUser().getMode().find('o') != std::string::npos || ((*it)->isOnChannel(command->getParameters()[0]) && command->getServer().getUser(command->getParameters()[0])->getMode().find('i') == std::string::npos))
 					channels_names += (*it)->getName() + " ";
