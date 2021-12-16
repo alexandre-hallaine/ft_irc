@@ -52,8 +52,9 @@ void PRIVMSG(irc::Command *command)
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+	{
 		if ((*it)->getMode().find('a') != std::string::npos)
 			command->reply(301, (*it)->getNickname(), (*it)->getAwayMessage());
-		else
-			command->getUser().sendTo(*(*it), "PRIVMSG " + recipient + " :" + command->getTrailer());
+		command->getUser().sendTo(*(*it), "PRIVMSG " + recipient + " :" + command->getTrailer());
+	}
 }
