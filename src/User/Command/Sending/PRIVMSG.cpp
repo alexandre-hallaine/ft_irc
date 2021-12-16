@@ -33,7 +33,7 @@ void PRIVMSG(irc::Command *command)
 				else if (channel.getUserMode(command->getUser()).find('v') != std::string::npos)
 					;
 				else
-					return command->reply(404);
+					return command->reply(404, channel.getName());
 			}
 
 			users = channel.getUsers();
