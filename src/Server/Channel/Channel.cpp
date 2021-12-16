@@ -2,7 +2,8 @@
 #include "../../User/User.hpp"
 #include <algorithm>
 
-irc::Channel::Channel() {}
+irc::Channel::Channel()
+	: mode("n") {}
 
 void irc::Channel::setName(std::string name) { this->name = name; }
 std::string irc::Channel::getName() { return name; }
