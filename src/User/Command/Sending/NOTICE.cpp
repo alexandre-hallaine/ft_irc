@@ -52,5 +52,5 @@ void NOTICE(irc::Command *command)
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
-		command->getUser().sendTo(*(*it), "PRIVMSG " + recipient + " :" + command->getTrailer());
+		command->getUser().sendTo(*(*it), "NOTICE " + recipient + " :" + command->getTrailer());
 }
