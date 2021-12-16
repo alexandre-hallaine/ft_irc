@@ -26,7 +26,7 @@ void TOPIC(irc::Command *command)
 		if (!canEdit)
 			return command->reply(482, channel.getName());
 		channel.setTopic(command->getTrailer());
-		return command->getUser().sendTo(command->getUser(), "TOPIC " + channel.getName() + " :" + channel.getTopic());
+		return channel.broadcast(command->getUser(), "TOPIC " + channel.getName() + " :" + channel.getTopic());
 	}
 
 	if (!channel.getTopic().length())
