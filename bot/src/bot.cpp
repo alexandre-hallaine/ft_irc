@@ -8,7 +8,10 @@ Bot::Bot(bool *sig, std::string addr, int port, std::string pass, std::string ni
 	serv_addr.sin_port = htons(port);
 	serv_addr.sin_addr.s_addr = inet_addr(addr == "localhost" ? "127.0.0.1" : addr.c_str());
 	std::cout << "Connecting to " << addr << ":" << port << std::endl;
-	log.open("bot.log");
+	log.open("bot.log", std::ios::out | std::ios::app);
+	if (log.fail())
+		throw std::runtime_error("log file open failed");
+	log << "==========================================================" << std::endl;
 }
 
 Bot::~Bot()
@@ -41,7 +44,6 @@ void Bot::run()
 	}
 	std::cout << "Connected as " << nick << std::endl;
 	send_msg("USER " + nick + " " + nick + " " + addr + " :" + nick);
-	//while (recv_msg().find("376 " + nick) == std::string::npos)
 	while (!*sig)
 	{
 		if (messages.empty())
@@ -54,7 +56,6 @@ void Bot::run()
 			break;
 	}
 	std::cout << "Joined server " << addr << std::endl;
-	//send_msg("MODE " + nick + " +B");
 	send_msg("JOIN #" + nick);
 	std::cout << "Joined #" << nick << std::endl;
 	while (!*sig)
@@ -91,7 +92,7 @@ void Bot::run()
 				else if (values[3] == ":!help")
 					send_msg("NOTICE " + values[2] + " :!flip - flip a coin, !roll - roll a dice", true);
 				else if (values[3] == ":!quit")
-					send_msg("QUIT :" + values[2] + " has quit", true);
+					return;
 				else if (values[3] == ":!nick")
 					send_msg("NICK " + values[2].substr(1), true);
 			}
@@ -129,9 +130,15 @@ void Bot::recv_msg()
 
 	pfd.fd = sock;
 	pfd.events = POLLIN;
-	if (poll(&pfd, 1, 0) == -1)
-		throw std::runtime_error("poll() failed");
-
+	if (poll(&pfd, 1, -1) == -1)
+	{
+		if (pfd.revents & POLLERR)
+			throw std::runtime_error("poll() failed");
+		messages.clear();
+		messages.push_back("");
+		return;
+	}
+	
 	ssize_t len = recv(sock, &buf, 4096, 0);
 	if (len < 0)
 		throw std::runtime_error("recv() failed");
