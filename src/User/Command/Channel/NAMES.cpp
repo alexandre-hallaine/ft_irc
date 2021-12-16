@@ -32,6 +32,8 @@ void NAMES(irc::Command *command)
 			if ((*it)->getName() == command->getParameters()[0])
 			{
 				channel = *it;
+				if (channel != NULL && channel->getMode().find('p') != std::string::npos)
+					channel = NULL;
 				break;
 			}
 		if (channel != NULL)
@@ -46,14 +48,16 @@ void NAMES(irc::Command *command)
 			std::string users_string = getUsersToString(*channel);
 			if (users_string.length())
 				command->reply(353, channel_mode, channel->getName(), getUsersToString(*channel));
-			command->reply(366, channel->getName());
 		}
+		command->reply(366, command->getParameters()[0]);
 	}
 	else
 	{
 		for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
 		{
 			irc::Channel *channel = *it;
+			if (channel->getMode().find('p') != std::string::npos)
+				continue;
 			std::string channel_mode;
 			if (channel->getMode().find('p') != std::string::npos)
 				channel_mode = "*";

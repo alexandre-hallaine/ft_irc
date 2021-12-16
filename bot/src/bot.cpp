@@ -1,4 +1,5 @@
 #include "bot.hpp"
+#include <netdb.h>
 
 Bot::Bot(bool *sig, std::string addr, int port, std::string pass, std::string nick): sig(sig), addr(addr), pass(pass), nick(nick)
 {
@@ -6,7 +7,16 @@ Bot::Bot(bool *sig, std::string addr, int port, std::string pass, std::string ni
 		throw std::runtime_error("socket() failed");
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(port);
-	serv_addr.sin_addr.s_addr = inet_addr(addr == "localhost" ? "127.0.0.1" : addr.c_str());
+
+	struct addrinfo hints, *servinfo;
+	int rv;
+
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	rv = getaddrinfo( addr.c_str() , 0 , &hints , &servinfo);
+
+	serv_addr.sin_addr = ((struct sockaddr_in *) servinfo->ai_addr)->sin_addr;
 	std::cout << "Connecting to " << addr << ":" << port << std::endl;
 	log.open("bot.log", std::ios::out | std::ios::app);
 	if (log.fail())
