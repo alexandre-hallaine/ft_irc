@@ -105,7 +105,10 @@ void irc::User::dispatch()
 
 	for (std::vector<Command *>::iterator it = remove.begin(); it != remove.end(); ++it)
 		if (std::find(commands.begin(), commands.end(), *it) != commands.end())
+		{
 			commands.erase(std::find(commands.begin(), commands.end(), *it));
+			delete *it;
+		}
 
 	if (last_status == REGISTER)
 		if (nickname.length() && realname.length())
