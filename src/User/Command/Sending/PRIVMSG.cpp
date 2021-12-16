@@ -20,7 +20,7 @@ void PRIVMSG(irc::Command *command)
 
 			if (channel.getMode().find('n') != std::string::npos)
 				if (!channel.isUser(command->getUser()))
-					return command->reply(404);
+					return command->reply(404, channel.getName());
 
 			if (channel.getMode().find('m') != std::string::npos)
 			{
@@ -42,7 +42,7 @@ void PRIVMSG(irc::Command *command)
 				users.erase(it);
 		}
 		else
-			return command->reply(404);
+			return command->reply(404, recipient);
 	else
 	{
 		if (command->getServer().getUser(recipient))
