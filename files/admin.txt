@@ -1,2 +1,2 @@
-premiere ligne de la commande ADMIN
-deuxieme ligne de la commande ADMIN
+You're on ShibRC, our server is hosted in France and is accesible with the following url: shirc.ml
+If you need any information relating our project feel free to contact us through our email adresses or using discord / slack.
