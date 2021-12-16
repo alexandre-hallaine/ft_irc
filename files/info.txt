@@ -3,7 +3,7 @@ Server name : shirc.ml
 Project : ft_irc of 42cursus
 Version : 1.69
 Made with love by :
-- ahallain <ahaillain@student.42.fr>
+- ahallain <ahallain@student.42.fr>
 - nsimon <nsimon@student.42.fr>
 - droge <droge@student.42.fr>
 
