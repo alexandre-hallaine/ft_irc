@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			std::cout << "Usage: " << argv[0] << " <bot_name> [<bot_port>] [<bot_ip>] [<bot_password>]" << std::endl;
+			std::cout << "./bot <host> [port] [password] [nick]" << std::endl;
 			return EXIT_FAILURE;
 		}
 		return EXIT_SUCCESS;
