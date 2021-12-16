@@ -1,1 +1,11 @@
-JE SUIS UNE INFORMATION
+-------------INFO-------------
+Server name : shirc.ml
+Project : ft_irc of 42cursus
+Version : 1.69
+Made with love by :
+- ahallain <ahaillain@student.42.fr>
+- nsimon <nsimon@student.42.fr>
+- droge <droge@student.42.fr>
+
+Please read our README.md over at https://github.com/hallainea/ft_irc if you need any information about this project
+Thank you for using ShibRC !
