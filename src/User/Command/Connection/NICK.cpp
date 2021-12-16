@@ -2,6 +2,7 @@
 #include "../../User.hpp"
 #include "../../../Utils/Utils.hpp"
 #include "../../../Server/Server.hpp"
+#include <algorithm>
 
 void NICK(irc::Command *command)
 {
@@ -31,6 +32,21 @@ void NICK(irc::Command *command)
 	if (command->getUser().getNickname().length())
 		command->getUser().setPastnick(" " + command->getUser().getNickname() + " " + command->getUser().getPastnick());
 
-	command->getUser().sendTo(command->getUser(), "NICK " + nickname);
+	std::vector<irc::User *> broadcast_users = std::vector<irc::User *>();
+	broadcast_users.push_back(&command->getUser());
+
+	std::vector<irc::Channel *> channels = command->getServer().getChannels();
+	for (std::vector<irc::Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
+		if ((*it)->isUser(command->getUser()))
+		{
+			std::vector<irc::User *> users = (*it)->getUsers();
+			for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)
+				if (std::find(broadcast_users.begin(), broadcast_users.end(), *it) == broadcast_users.end())
+					broadcast_users.push_back(*it);
+		}
+
+	std::string message = "NICK :" + nickname;
+	for (std::vector<irc::User *>::iterator it = broadcast_users.begin(); it != broadcast_users.end(); ++it)
+		command->getUser().sendTo(*(*it), message);
 	command->getUser().setNickname(nickname);
 }
