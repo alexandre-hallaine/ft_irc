@@ -27,7 +27,7 @@ brew install irssi
 irssi -c shibrc.ml -w password
 ```
 
-> For less typing you could do `/SERVER ADD -auto -network shibrc shibrc.ml 6667 password` inside of **irssi** and then you can simply connect to our server by doing `irssi shibrc`.
+> For less typing you could do `/SERVER ADD -network shibrc shibrc.ml 6667 password` inside of **irssi** and then you can simply connect to our server by doing `irssi -c shibrc`.
 
 > As you may have noticed the `oper_password` specified in the config file doesn't work on our server `shibrc.ml` in order to avoid abuse, if you'd like to try our operator commands and permissions you can connect to our test server instead `test.shibrc.ml` where the `oper_password` is the same (or you can simply build the server locally).
 
