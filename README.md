@@ -1,4 +1,4 @@
-![alt text](https://github.com/hallainea/ft_irc/tree/master/files/shibaicon.jpg?raw=true)
+![Screenshot](/files/shibaicon.jpg)
 # ShibRC
 
 Simple IRC Server based on the RFC (mainly 2812) writen in C++.
@@ -41,13 +41,13 @@ Do `make run` and then do :
 
 Or you could also do `make run` which directly starts the server on the port 6667 and with the password password.
 
-![alt text](https://github.com/hallainea/ft_irc/tree/master/files/makerun.PNG?raw=true)
+![Screenshot](/files/makerun.PNG)
 
 You can modify the config file `default.config` to your convinience as well as the files.
 
 If you'd like to see what packets we received and send you can use `make debug` *make sure that you did a `make clean` before.
 
-![alt text](https://github.com/hallainea/ft_irc/tree/master/files/makedebug.PNG?raw=true)
+![Screenshot](/files/makedebug.PNG)
 
 Finally we added a bot, to run it go inside the bot folder and do `make` and then provide the needed arguments or simply do `make run`, the bot will create / join the #bot channel and you will be able to use the commands from there by using the prefix `!`. The bot handles a few commands such as :
 ```
