@@ -45,7 +45,7 @@ Or you could also do `make run` which directly starts the server on the port 666
 
 You can modify the config file `default.config` to your convinience as well as the files.
 
-If you'd like to see what packets we received and send you can use `make debug` *make sure that you did a `make clean` before.
+If you'd like to see what packets we received and send you can use `make debug` *make sure that you did a `make clean` before.*
 
 ![Screenshot](/files/makedebug.PNG)
 
