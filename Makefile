@@ -102,7 +102,7 @@ re: fclean all
 debugflags:
 	$(eval COMPILATION_FLAG=-D DEBUG)
 
-debug: debugflags run
+debug: debugflags all
 
 leaks: debugflags all
 	@printf "\e[0m"

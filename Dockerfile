@@ -6,8 +6,8 @@ COPY . /irc
 
 WORKDIR /irc
 
-RUN make
+RUN make debug
 
 EXPOSE 6667
 
-ENTRYPOINT [ "/irc/ircserv" "$PORT", "$PASSWORD" ]
+ENTRYPOINT [ "/irc/ircserv", "$PORT", "$PASSWORD" ]
