@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  irc-prod:
+    build: .
+    environment:
+      - PORT=6667
+      - PASSWORD=password
+    volumes:
+      - ./configs/prod.config:/irc/configs/default.config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse_proxy"
+      - "traefik.http.routers.irc-prod.entrypoints=irc"
+      - "traefik.http.routers.irc-prod.rule=Host(`shibrc.ml`)"
+      - "traefik.http.routers.irc-prod.service=irc-prod-svc"
+      - "traefik.http.services.irc-prod-svc.loadbalancer.server.port=6667"
+    networks:
+      - reverse_proxy
+  irc-dev:
+    build: .
+    environment:
+      - PORT=6667
+      - PASSWORD=password
+    volumes:
+      - ./configs/default.config:/irc/configs/default.config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse_proxy"
+      - "traefik.http.routers.irc-dev.entrypoints=irc"
+      - "traefik.http.routers.irc-dev.rule=Host(`test.shibrc.ml`)"
+      - "traefik.http.routers.irc-dev.service=irc-dev-svc"
+      - "traefik.http.services.irc-dev-svc.loadbalancer.server.port=6667"
+    networks:
+      - reverse_proxy
+  traefik:
+    image: traefik:latest
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.irc.address=:6667"
+    ports:
+      - "8080:8080"
+      - "6667:6667"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+networks:
+  reverse_proxy:
+    external: false

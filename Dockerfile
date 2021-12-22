@@ -10,4 +10,4 @@ RUN make
 
 EXPOSE 6667
 
-ENTRYPOINT [ "/irc/ircserv", "6667", "password" ]
+ENTRYPOINT [ "/irc/ircserv" "$PORT", "$PASSWORD" ]
