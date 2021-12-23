@@ -24,14 +24,11 @@ services:
       - ./configs/prod.config:/irc/configs/default.config
     labels:
       - "traefik.enable=true"
-    #  - "traefik.docker.network=traefik-net"
+      - "traefik.docker.network=traefik-net"
       - "traefik.tcp.routers.irc-prod.entrypoints=irc"
-      - "traefik.tcp.routers.irc-prod.rule=HostSNI(`shibrc.ml`)"
+      - "traefik.tcp.routers.irc-prod.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.irc-prod.service=irc-prod-svc"
-      - "traefik.tcp.routers.irc-prod.tls.passthrough=true"
       - "traefik.tcp.services.irc-prod-svc.loadbalancer.server.port=6667"
-    ports:
-      - "6677:6667"
     #networks:
     #  - traefik-net
   irc-dev:
@@ -45,15 +42,12 @@ services:
       - "traefik.enable=true"
     #  - "traefik.docker.network=traefik-net"
       - "traefik.tcp.routers.irc-dev.entrypoints=irc"
-      - "traefik.tcp.routers.irc-dev.rule=HostSNI(`test.shibrc.ml`)"
+      - "traefik.tcp.routers.irc-dev.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.irc-dev.service=irc-dev-svc"
-      - "traefik.tcp.routers.irc-dev.tls.passthrough=true"
       - "traefik.tcp.services.irc-dev-svc.loadbalancer.server.port=6667"
-    ports:
-      - "6678:6667"
     #networks:
     #  - traefik-net
 
-#networks:
-#  traefik-net:
-#    external: false
+networks:
+  traefik-net:
+    external: false
