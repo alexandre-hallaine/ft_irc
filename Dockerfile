@@ -8,6 +8,9 @@ WORKDIR /irc
 
 RUN make debug
 
+ENV PORT 6667
+ENV PASSWORD password
+
 EXPOSE 6667
 
-ENTRYPOINT [ "/irc/ircserv", "$PORT", "$PASSWORD" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/irc/ircserv $PORT $PASSWORD" ]
