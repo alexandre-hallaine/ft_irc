@@ -1,20 +1,5 @@
 version: '3.9'
 services:
-  traefik:
-    image: traefik:latest
-    command:
-      - "--log.Level=DEBUG"
-      - "--accesslog=true"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.irc.address=:6667"
-      - "--providers.docker.network=traefik-net"
-    ports:
-      - "8080:8080"
-      - "6667:6667"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   irc-prod:
     build: .
     environment:
@@ -22,32 +7,3 @@ services:
       - "PASSWORD=password"
     volumes:
       - ./configs/prod.config:/irc/configs/default.config
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-net"
-      - "traefik.tcp.routers.irc-prod.entrypoints=irc"
-      - "traefik.tcp.routers.irc-prod.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.irc-prod.service=irc-prod-svc"
-      - "traefik.tcp.services.irc-prod-svc.loadbalancer.server.port=6667"
-    #networks:
-    #  - traefik-net
-  irc-dev:
-    build: .
-    environment:
-      - "PORT=6667"
-      - "PASSWORD=password"
-    volumes:
-      - ./configs/default.config:/irc/configs/default.config
-    labels:
-      - "traefik.enable=true"
-    #  - "traefik.docker.network=traefik-net"
-      - "traefik.tcp.routers.irc-dev.entrypoints=irc"
-      - "traefik.tcp.routers.irc-dev.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.irc-dev.service=irc-dev-svc"
-      - "traefik.tcp.services.irc-dev-svc.loadbalancer.server.port=6667"
-    #networks:
-    #  - traefik-net
-
-networks:
-  traefik-net:
-    external: false
