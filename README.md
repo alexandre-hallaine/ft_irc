@@ -33,7 +33,7 @@ irssi -c shibrc.ml -w password
 
 # Run
 
-Do `make run` and then do :
+Do `make` and then run :
 
 ```bash
 ./ircserv <port> <password>
