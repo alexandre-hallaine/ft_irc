@@ -1,7 +1,7 @@
 ![Screenshot](/files/shibaicon.jpg)
 # ShibRC
 
-Simple IRC Server based on the RFC (mainly 2812) writen in C++.
+Simple IRC Server based on the RFC (mainly 2812) written in C++.
 
 ShibRC does not support server-server communication and is best used with **irssi** (or any client that send packets terminated with `\r\n`).
 
@@ -136,6 +136,6 @@ if you need a detailed description of each mode click [HERE](https://www.alien.n
 
 ## MADE WITH LOVE BY :
 
-- [hallainea](https://github.com/hallainea/) aka **ahallain**
+- [execrate0](https://github.com/execrate0/) aka **ahallain**
 - [Assxios](https://github.com/assxios/) aka **droge**
 - [Nimon77](https://github.com/Nimon77/) aka **nsimon**
