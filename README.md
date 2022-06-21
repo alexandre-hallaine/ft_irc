@@ -1,7 +1,7 @@
-![Screenshot](/files/shibaicon.jpg)
+![shiba](/files/shibaicon.jpg)
 # ShibRC
 
-Simple IRC Server based on the RFC (mainly 2812) writen in C++.
+Simple IRC Server based on the RFC (mainly 2812) written in C++.
 
 ShibRC does not support server-server communication and is best used with **irssi** (or any client that send packets terminated with `\r\n`).
 
@@ -33,7 +33,7 @@ irssi -c shibrc.ml -w password
 
 # Run
 
-Do `make run` and then do :
+Do `make` and then run :
 
 ```bash
 ./ircserv <port> <password>
@@ -41,13 +41,13 @@ Do `make run` and then do :
 
 Or you could also do `make run` which directly starts the server on the port 6667 and with the password password.
 
-![Screenshot](/files/makerun.PNG)
+![makerun](/files/makerun.PNG)
 
 You can modify the config file `default.config` to your convinience as well as the files.
 
 If you'd like to see what packets we received and send you can use `make debug` *make sure that you did a `make clean` before.*
 
-![Screenshot](/files/makedebug.PNG)
+![makedebug](/files/makedebug.PNG)
 
 Finally we added a bot, to run it go inside the bot folder and do `make` and then provide the needed arguments or simply do `make run`, the bot will create / join the #bot channel and you will be able to use the commands from there by using the prefix `!`. The bot handles a few commands such as :
 ```
@@ -136,6 +136,6 @@ if you need a detailed description of each mode click [HERE](https://www.alien.n
 
 ## MADE WITH LOVE BY :
 
-- [hallainea](https://github.com/hallainea/) aka **ahallain**
+- [execrate0](https://github.com/execrate0/) aka **ahallain**
 - [Assxios](https://github.com/assxios/) aka **droge**
 - [Nimon77](https://github.com/Nimon77/) aka **nsimon**

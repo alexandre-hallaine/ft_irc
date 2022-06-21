@@ -98,8 +98,13 @@ void irc::User::dispatch()
 		}
 		if (command_function.count((*it)->getPrefix()))
 			command_function[(*it)->getPrefix()]((*it));
-		else if (DEBUG)
-			std::cout << "Unknown command: " << (*it)->getPrefix() << std::endl;
+		else if (DEBUG) {
+			time_t t = time(0);
+			struct tm * now = localtime( & t );
+			char buffer[80];
+			strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", now);
+			std::cout << "[" << buffer << "] " << "Unknown command: " << (*it)->getPrefix() << std::endl;
+		}
 		remove.push_back((*it));
 	}
 
@@ -149,7 +154,13 @@ void irc::User::receive(Server *server)
 			continue;
 
 		if (DEBUG)
-			std::cout << fd << " < " << message << std::endl;
+		{
+			time_t t = time(0);
+			struct tm * now = localtime( & t );
+			char buffer[80];
+			strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", now);
+			std::cout << "[" << buffer << "] " << fd << " < " << message << std::endl;
+		}
 		commands.push_back(new Command(this, server, message));
 	}
 	dispatch();
@@ -164,7 +175,13 @@ void irc::User::push()
 	for (std::vector<std::string>::iterator it = waitingToSend.begin(); it != waitingToSend.end(); ++it)
 	{
 		if (DEBUG)
-			std::cout << fd << " > " << *it << std::endl;
+		{
+			time_t t = time(0);
+			struct tm * now = localtime( & t );
+			char buffer[80];
+			strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", now);
+			std::cout << "[" << buffer << "] " << fd << " > " << *it << std::endl;
+		}
 		buffer += *it + MESSAGE_END;
 	}
 	waitingToSend.clear();
