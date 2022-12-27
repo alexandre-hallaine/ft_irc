@@ -1,4 +1,7 @@
-![shiba](/files/shibaicon.jpg)
+<p align="center">
+  <image alt="shiba" src="files/shibaicon.jpg">
+</p>
+
 # ShibRC
 
 Simple IRC Server based on the RFC (mainly 2812) written in C++.
