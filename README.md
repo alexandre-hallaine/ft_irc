@@ -10,7 +10,7 @@ ShibRC does not support server-server communication and is best used with **irss
 
 # Connect
 
-### :warning: Our URL to connect as changed, it's now: shibrc.fr :warning:
+### :warning: Our URL to connect has changed, it's now: shibrc.fr :warning:
 
 If you'd like to try our server without having to build it you can connect to our public server `shibrc.fr` using the password `password` with the following commands :
 
