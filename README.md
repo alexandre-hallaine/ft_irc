@@ -10,7 +10,9 @@ ShibRC does not support server-server communication and is best used with **irss
 
 # Connect
 
-If you'd like to try our server without having to build it you can connect to our public server `shibrc.ml` using the password `password` with the following commands :
+### :warning: Our URL to connect as changed, it's now: shibrc.fr :warning:
+
+If you'd like to try our server without having to build it you can connect to our public server `shibrc.fr` using the password `password` with the following commands :
 
 - First install a client, here we'll use **irssi** since it is the one we chose to do the project with :
 
@@ -27,12 +29,12 @@ brew install irssi
 - Then simply connect to the server using this command :
 
 ```bash
-irssi -c shibrc.ml -w password
+irssi -c shibrc.fr -w password
 ```
 
-> For less typing you could do `/SERVER ADD -network shibrc shibrc.ml 6667 password` inside of **irssi** and then you can simply connect to our server by doing `irssi -c shibrc`.
+> For less typing you could do `/SERVER ADD -network shibrc shibrc.fr 6667 password` inside of **irssi** and then you can simply connect to our server by doing `irssi -c shibrc`.
 
-> As you may have noticed the `oper_password` specified in the config file doesn't work on our server `shibrc.ml` in order to avoid abuse, if you'd like to try our operator commands and permissions you can simply build the server locally.
+> As you may have noticed the `oper_password` specified in the config file doesn't work on our server `shibrc.fr` in order to avoid abuse, if you'd like to try our operator commands and permissions you can simply build the server locally.
 
 # Run
 
