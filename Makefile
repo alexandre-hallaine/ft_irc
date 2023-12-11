@@ -16,6 +16,7 @@ FILES_SOURCE		=	Utils/Utils.cpp \
 						Server/Display/Display.cpp \
 						Server/Channel/Channel.cpp \
 						Server/Server.cpp \
+						User/Command/Connection/CAP.cpp \
 						User/Command/Connection/PASS.cpp \
 						User/Command/Connection/NICK.cpp \
 						User/Command/Connection/USER.cpp \

@@ -11,6 +11,7 @@ namespace irc
 {
 	enum UserStatus
 	{
+		CAPLS,
 		PASSWORD,
 		REGISTER,
 		ONLINE,

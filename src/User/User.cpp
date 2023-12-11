@@ -14,6 +14,7 @@
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
 
+void CAP(irc::Command *command);
 void PASS(irc::Command *command);
 void NICK(irc::Command *command);
 void USER(irc::Command *command);
@@ -86,7 +87,12 @@ void irc::User::dispatch()
 	std::vector<Command *> remove = std::vector<Command *>();
 	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
 	{
-		if (last_status == PASSWORD)
+		if (last_status == CAPLS)
+		{
+			if ((*it)->getPrefix() != "CAP")
+				continue;
+		}
+		else if (last_status == PASSWORD)
 		{
 			if ((*it)->getPrefix() != "PASS")
 				continue;
@@ -198,7 +204,7 @@ irc::User::User(int fd, struct sockaddr_in address) : command_function(),
 													  commands(),
 													  waitingToSend(),
 
-													  status(PASSWORD),
+													  status(CAPLS),
 													  last_ping(std::time(0)),
 													  hostaddr(),
 													  hostname(),
@@ -221,6 +227,7 @@ irc::User::User(int fd, struct sockaddr_in address) : command_function(),
 	else
 		this->hostname = hostname;
 
+	command_function["CAP"] = CAP;
 	command_function["PASS"] = PASS;
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
@@ -289,7 +296,7 @@ irc::UserStatus irc::User::getStatus() { return status; }
 time_t irc::User::getLastPing() { return last_ping; }
 std::string irc::User::getPrefix()
 {
-	if (status == PASSWORD || status == REGISTER)
+	if (status == CAPLS || status == PASSWORD || status == REGISTER)
 		return std::string("");
 
 	std::string prefix = nickname;

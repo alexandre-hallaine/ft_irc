@@ -55,11 +55,11 @@ void irc::Server::sendPing()
 void irc::Server::displayUsers()
 {
 	char buffer[42];
-	sprintf(buffer, "%-4s %-9s %s", "FD", "Nickname", "Host");
+	snprintf(buffer, 20, "%-4s %-9s %s", "FD", "Nickname", "Host");
 	display.set(fd, std::string("\n") + buffer);
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); ++it)
 	{
-		sprintf(buffer, "\033[34m%-4i \033[33m%-9s \033[35m", (*it).second->getFd(), (*it).second->getNickname().c_str());
+		snprintf(buffer, 20, "\033[34m%-4i \033[33m%-9s \033[35m", (*it).second->getFd(), (*it).second->getNickname().c_str());
 		display.set((*it).second->getFd(), buffer + (*it).second->getHost());
 	}
 }
