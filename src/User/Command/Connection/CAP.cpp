@@ -8,6 +8,13 @@ void CAP(irc::Command *command)
     {
         return command->getUser().sendTo(command->getUser(), "CAP * NAK :");
     }
-    command->getUser().sendTo(command->getUser(), "CAP * " + command->getParameters()[0] + " :");
-    command->getUser().setStatus(irc::PASSWORD);
+    else if (command->getParameters()[0] == "LS")
+    {
+        command->getUser().sendTo(command->getUser(), "CAP * LS :");
+    }
+    else if (command->getParameters()[0] == "END")
+    {
+        command->getUser().sendTo(command->getUser(), "CAP * END :");
+        command->getUser().setStatus(irc::PASSWORD);
+    }
 }
