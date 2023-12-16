@@ -16,6 +16,7 @@ FILES_SOURCE		=	Utils/Utils.cpp \
 						Server/Display/Display.cpp \
 						Server/Channel/Channel.cpp \
 						Server/Server.cpp \
+						User/Command/Connection/CAP.cpp \
 						User/Command/Connection/PASS.cpp \
 						User/Command/Connection/NICK.cpp \
 						User/Command/Connection/USER.cpp \
@@ -102,7 +103,7 @@ re: fclean all
 debugflags:
 	$(eval COMPILATION_FLAG=-D DEBUG)
 
-debug: debugflags run
+debug: debugflags all
 
 leaks: debugflags all
 	@printf "\e[0m"

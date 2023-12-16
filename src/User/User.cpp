@@ -14,6 +14,7 @@
 #define BUFFER_SIZE 4096
 #define MESSAGE_END "\r\n"
 
+void CAP(irc::Command *command);
 void PASS(irc::Command *command);
 void NICK(irc::Command *command);
 void USER(irc::Command *command);
@@ -86,7 +87,12 @@ void irc::User::dispatch()
 	std::vector<Command *> remove = std::vector<Command *>();
 	for (std::vector<Command *>::iterator it = commands.begin(); it != commands.end(); ++it)
 	{
-		if (last_status == PASSWORD)
+		if (last_status == CAPLS)
+		{
+			if ((*it)->getPrefix() != "CAP")
+				continue;
+		}
+		else if (last_status == PASSWORD)
 		{
 			if ((*it)->getPrefix() != "PASS")
 				continue;
@@ -114,6 +120,7 @@ void irc::User::dispatch()
 			commands.erase(std::find(commands.begin(), commands.end(), *it));
 			delete *it;
 		}
+	remove.clear();
 
 	if (last_status == REGISTER)
 		if (nickname.length() && realname.length())
@@ -121,12 +128,15 @@ void irc::User::dispatch()
 
 	if (last_status != status)
 	{
-		if (status == ONLINE)
-			post_registration(*commands.begin());
+		if (status == ONLINE) {
+			Command *command = new Command(this, server, "");
+			post_registration(command);
+			delete command;
+		}
 		dispatch();
 	}
 }
-void irc::User::receive(Server *server)
+void irc::User::receive()
 {
 	{
 		char buffer[BUFFER_SIZE + 1];
@@ -191,14 +201,15 @@ void irc::User::push()
 			error("send", false);
 }
 
-irc::User::User(int fd, struct sockaddr_in address) : command_function(),
+irc::User::User(int fd, Server *server, struct sockaddr_in address): command_function(),
 
 													  fd(fd),
 													  buffer(),
 													  commands(),
 													  waitingToSend(),
 
-													  status(PASSWORD),
+													  server(server),
+													  status(CAPLS),
 													  last_ping(std::time(0)),
 													  hostaddr(),
 													  hostname(),
@@ -221,6 +232,7 @@ irc::User::User(int fd, struct sockaddr_in address) : command_function(),
 	else
 		this->hostname = hostname;
 
+	command_function["CAP"] = CAP;
 	command_function["PASS"] = PASS;
 	command_function["NICK"] = NICK;
 	command_function["USER"] = USER;
@@ -276,7 +288,12 @@ irc::User::User(int fd, struct sockaddr_in address) : command_function(),
 }
 irc::User::~User() { close(fd); }
 
-void irc::User::sendTo(irc::User &toUser, std::string message) { toUser.write(":" + this->getPrefix() + " " + message); }
+void irc::User::sendTo(irc::User &toUser, std::string message, std::string delimiter)
+{
+	if (!delimiter.length())
+		return toUser.write(message);
+	toUser.write(delimiter + this->getPrefix() + " " + message);
+}
 
 void irc::User::setStatus(UserStatus status) { this->status = status; }
 void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
@@ -289,7 +306,7 @@ irc::UserStatus irc::User::getStatus() { return status; }
 time_t irc::User::getLastPing() { return last_ping; }
 std::string irc::User::getPrefix()
 {
-	if (status == PASSWORD || status == REGISTER)
+	if (status == CAPLS || status == PASSWORD || status == REGISTER)
 		return std::string("");
 
 	std::string prefix = nickname;
