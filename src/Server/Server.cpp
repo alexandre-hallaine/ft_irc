@@ -26,7 +26,7 @@ void irc::Server::acceptUser()
 	int fd = accept(this->fd, (struct sockaddr *)&address, &csin_len);
 	if (fd == -1)
 		return;
-	users[fd] = new User(fd, address);
+	users[fd] = new User(fd, this, address);
 	if (!config.get("password").length())
 		users[fd]->setStatus(REGISTER);
 
@@ -130,7 +130,7 @@ void irc::Server::execute()
 		else
 			for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it)
 				if ((*it).revents == POLLIN)
-					this->users[(*it).fd]->receive(this);
+					this->users[(*it).fd]->receive();
 	}
 
 	for (std::vector<irc::User *>::iterator it = users.begin(); it != users.end(); ++it)

@@ -33,6 +33,7 @@ namespace irc
 		std::vector<Command *> commands;
 		std::vector<std::string> waitingToSend;
 
+		Server *server;
 		UserStatus status;
 		time_t last_ping;
 		std::string hostaddr;
@@ -48,15 +49,15 @@ namespace irc
 		std::string awayMessage;
 
 		void dispatch();
-		void receive(Server *server);
+		void receive();
 		void write(std::string message);
 		void push();
 
 	public:
-		User(int fd, struct sockaddr_in address);
+		User(int fd, Server *server, struct sockaddr_in address);
 		~User();
 
-		void sendTo(User &toUser, std::string message);
+		void sendTo(User &toUser, std::string message, std::string delimiter = ":");
 
 		void setStatus(UserStatus status);
 		void setLastPing(time_t last_ping);

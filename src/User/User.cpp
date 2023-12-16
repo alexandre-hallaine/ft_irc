@@ -120,6 +120,7 @@ void irc::User::dispatch()
 			commands.erase(std::find(commands.begin(), commands.end(), *it));
 			delete *it;
 		}
+	remove.clear();
 
 	if (last_status == REGISTER)
 		if (nickname.length() && realname.length())
@@ -127,12 +128,15 @@ void irc::User::dispatch()
 
 	if (last_status != status)
 	{
-		if (status == ONLINE)
-			post_registration(*commands.begin());
+		if (status == ONLINE) {
+			Command *command = new Command(this, server, "");
+			post_registration(command);
+			delete command;
+		}
 		dispatch();
 	}
 }
-void irc::User::receive(Server *server)
+void irc::User::receive()
 {
 	{
 		char buffer[BUFFER_SIZE + 1];
@@ -197,13 +201,14 @@ void irc::User::push()
 			error("send", false);
 }
 
-irc::User::User(int fd, struct sockaddr_in address) : command_function(),
+irc::User::User(int fd, Server *server, struct sockaddr_in address): command_function(),
 
 													  fd(fd),
 													  buffer(),
 													  commands(),
 													  waitingToSend(),
 
+													  server(server),
 													  status(CAPLS),
 													  last_ping(std::time(0)),
 													  hostaddr(),
@@ -283,7 +288,12 @@ irc::User::User(int fd, struct sockaddr_in address) : command_function(),
 }
 irc::User::~User() { close(fd); }
 
-void irc::User::sendTo(irc::User &toUser, std::string message) { toUser.write(":" + this->getPrefix() + " " + message); }
+void irc::User::sendTo(irc::User &toUser, std::string message, std::string delimiter)
+{
+	if (!delimiter.length())
+		return toUser.write(message);
+	toUser.write(delimiter + this->getPrefix() + " " + message);
+}
 
 void irc::User::setStatus(UserStatus status) { this->status = status; }
 void irc::User::setLastPing(time_t last_ping) { this->last_ping = last_ping; }
