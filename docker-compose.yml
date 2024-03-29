@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  irc-prod:
+    build: .
+    environment:
+      - "PORT=6667"
+      - "PASSWORD=password"
+    volumes:
+      - ./configs/prod.config:/irc/configs/default.config
